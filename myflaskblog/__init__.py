@@ -1,0 +1,1 @@
+from .myflaskblog import app
