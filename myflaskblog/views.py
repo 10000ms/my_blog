@@ -4,22 +4,12 @@
 __author__ = 'Victor Lai'
 
 '''
-flask project entrance.
+路由模块
 '''
 
-# 导入flask扩展
-from flask import Flask
+from myflaskblog import app
 
 
-app = Flask(__name__)
-
-
-# 创建Flask应用程序实例
-# 需要传入__name__，作用是确定资源所在的路径
-app = Flask(__name__)
-
-# 定义路由及视图函数
-# Flask中定义路由是由专门的路由装饰器实现的
 @app.route("/")
 def index():
     return "Hello World!"
@@ -47,8 +37,3 @@ def index():
     博文
     '''
     pass
-
-
-# 启动程序
-if __name__ == '__main__':
-    app.run()
