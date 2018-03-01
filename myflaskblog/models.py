@@ -4,9 +4,8 @@
 __author__ = 'Victor Lai'
 
 '''
-配置模块
+数据库模型模块
 '''
 
-config ={
-        'SQLALCHEMY_DATABASE_URI': '',
-        }
+#导入模型模块
+from myflaskblog import db
