@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    {% block meta %}<!-- block meta  -->{% endblock %}
+    <title>{% block title %}<!-- block title  -->{% endblock %}</title>
+    {% block beforehead %}<!-- before head  -->{% endblock %}
 </head>
 <body>
-
+    <!-- nav part  -->
+    {% block content %}<!-- block content  -->{% endblock %}
+    <!-- bottom part  -->
 </body>
 </html>
