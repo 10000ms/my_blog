@@ -24,6 +24,7 @@ class DevelopmentConfig(Config_Default):
     SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost:3306/test'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    BOOTSTRAP_SERVE_LOCAL = True  # 使用本地的bootstrap源
 
 
 
