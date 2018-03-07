@@ -9,13 +9,16 @@ from flask import Flask
 # 导入Flask-SQLAlchemy模块
 from flask_sqlalchemy import SQLAlchemy
 
+# 导入Flask-bootstrap模块
+from flask_bootstrap import Bootstrap
+
 # 导入配置模块
 from config import config
 
 app = Flask(__name__)
 app.config.from_object(config['config'])  #从config.py读入配置
 db = SQLAlchemy(app)
-
+bootstrap = Bootstrap(app)
 
 # 最后引入防止循环引用
 from myflaskblog import main

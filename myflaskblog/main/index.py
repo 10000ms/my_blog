@@ -10,12 +10,15 @@ __author__ = 'Victor Lai'
 # 导入蓝图模块
 from flask import Blueprint
 
+# 导入模板模块
+from flask import render_template
+
 index = Blueprint('index', __name__)
 
 
 @index.route('/')
 def index_page():
-    return 'this is index page'
+    return render_template("/index/index.html")
 
 
 
