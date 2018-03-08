@@ -1,6 +1,23 @@
 {% extends "bootstrap/base.html" %}
-{% block meta %}<!-- block meta  -->{% endblock %}
-{% block beforehead %}<!-- before head  -->{% endblock %}
+
+{% block head -%}
+    {{ super() }}
+    <style>
+        footer{height:100px;
+            bottom:0;
+            width:100%;
+            height:100px;
+            background-color:#000000;
+        }
+    </style>
+{% endblock head -%}
+
+
+
+{% block body_attribs %}
+    background="static/img/background.png" background-repeat="repeat"
+{% endblock body_attribs %}
+
 
 {% block navbar %}
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -21,4 +38,14 @@
             </div>
         </div>
     </nav>
-{% endblock %}
+{% endblock navbar %}
+
+
+{% block body -%}
+    {{ super() }}
+    <footer class="footer">
+          <div class="container">
+            <p>Designed by Victor Lai</p>
+          </div>
+    </footer>
+{% endblock body -%}
