@@ -1,25 +1,62 @@
-{% extends "bootstrap/base.html" %}
+<!DOCTYPE html>
+<html lang="cn">
+{%- block html %}
+  <head>
+    {%- block head %}
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
 
-{% block head -%}
-    {{ super() }}
+    {%- block metas %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+
+    {%- block styles %}
+    <!-- Bootstrap -->
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+
     <style>
-        footer{height:100px;
-            bottom:0;
+
+        html,body{
+            height:100%
+        }
+
+        .footer{
+            bottom:100;
             width:100%;
             height:100px;
-            background-color:#000000;
+            background-color:#333333;
+            margin-top: -30px;
+            box-shadow:0px 0px 10px 1px #1f1f1f;
         }
+
+        .wrap{
+            min-height:100%
+        }
+
+        .main{
+            padding-bottom:30px;
+            overflow:hidden;
+        }
+
+        .footer-div{
+            color:#FFFFFF;
+            text-align:center;
+            font-size:16px;
+        }
+
+        .footer-p-firstline{
+            margin-top: 10px;
+        }
+
     </style>
-{% endblock head -%}
 
+    {%- endblock styles %}
+    {%- endblock head %}
+  </head>
+  <body background="static/img/background.png" background-repeat="repeat">
+    {% block body -%}
+    {% block navbar %}
 
-
-{% block body_attribs %}
-    background="static/img/background.png" background-repeat="repeat"
-{% endblock body_attribs %}
-
-
-{% block navbar %}
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container text-center">
             <div class="navbar-header">
@@ -38,14 +75,31 @@
             </div>
         </div>
     </nav>
-{% endblock navbar %}
+
+    {%- endblock navbar %}
+
+    <div class="wrap">
+        <div class="main">
+            {% block content -%}
+            {%- endblock content %}
+        </div>
+    </div>
 
 
-{% block body -%}
-    {{ super() }}
-    <footer class="footer">
-          <div class="container">
-            <p>Designed by Victor Lai</p>
-          </div>
-    </footer>
-{% endblock body -%}
+
+    {% block footer -%}
+        <div class="footer">
+              <div class="container footer-div">
+                <p class="footer-p-firstline">Designed by Victor Lai</p>
+              </div>
+        </div>
+    {% endblock footer -%}
+
+    {% block scripts %}
+    <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+    {%- endblock scripts %}
+    {%- endblock body %}
+  </body>
+{%- endblock html %}
+</html>
