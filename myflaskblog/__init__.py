@@ -20,5 +20,8 @@ app.config.from_object(config['config'])  #从config.py读入配置
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 
+# 创建所有数据库表格
+db.create_all()
+
 # 最后引入防止循环引用
 from myflaskblog import main
