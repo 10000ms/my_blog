@@ -8,6 +8,7 @@ __author__ = 'Victor Lai'
 '''
 
 
+
 class Config_Default(object):
     DEBUG = False
     TESTING = False
@@ -21,11 +22,12 @@ class ProductionConfig(Config_Default):
 
 class DevelopmentConfig(Config_Default):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost:3306/test'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root@localhost:3306/test?charset=utf8'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    #跟踪修改，耗费资源，后期将会取消，False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     BOOTSTRAP_SERVE_LOCAL = True  # 使用本地的bootstrap源
-
+    IS_DEVELOPMENT = True
 
 
 class TestingConfig(Config_Default):

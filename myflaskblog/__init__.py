@@ -20,8 +20,14 @@ app.config.from_object(config['config'])  #从config.py读入配置
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 
-# 创建所有数据库表格
-db.create_all()
+
+# 检测当前环境是否处于开发环境，后期改进该测试功能
+if app.config['IS_DEVELOPMENT'] and app.config['IS_DEVELOPMENT'] == True :
+    # 创建所有数据库表格
+    from myflaskblog import models
+    db.drop_all()
+    db.create_all()
+    # TODO:后期改进该测试功能
 
 # 最后引入防止循环引用
 from myflaskblog import main
