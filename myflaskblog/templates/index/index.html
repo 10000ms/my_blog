@@ -2,3 +2,10 @@
 
 {% block title %}1000ms的小站{% endblock title %}
 
+{% block center_bar %}
+    <button type="button" class="btn btn-default">
+        <a href="{{url_for('article.article_detail_page', article_id = 1)}}">
+            文章
+        </a>
+    </button>
+{% endblock center_bar %}

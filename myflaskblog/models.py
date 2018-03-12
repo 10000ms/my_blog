@@ -40,11 +40,13 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
 
-    def __init__(self, username, password, email):
+    def __init__(self, account, password, username, email, is_admin=0):
+        self.account = account
         self.username = username
         self.email = email
         self.password = hashlib.md5(str(password).encode('utf-8')).hexdigest()
         self.create_datetime = datetime.now()
+        self.is_admin = is_admin
 
         # TODO:密码使用更合理的方式进行保存，+salt等。
 

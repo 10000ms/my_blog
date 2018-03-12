@@ -10,9 +10,15 @@ __author__ = 'Victor Lai'
 # 导入蓝图模块
 from flask import Blueprint
 
+# 导入必要模块
+from myflaskblog.models import Article
+
 article = Blueprint('article', __name__)
 
 
-@article.route('/')
-def index_page():
+@article.route('/<int:article_id>')
+def article_detail_page(article_id):
+    get_article = Article.query.filter_by(id=article_id).first()
+    if not get_article:
+        return '找不到该文章'
     return 'this is article page'

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "__base__.html" %}
 
-</body>
-</html>
+{% block title %} 这是管理员页面 {% endblock title %}
+
+{% block center_bar %}
+    <button type="button" class="btn btn-default">
+        <a href="{{url_for('user.logout')}}">
+            退出登陆
+        </a>
+    </button>
+{% endblock center_bar %}

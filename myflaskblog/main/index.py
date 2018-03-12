@@ -13,6 +13,9 @@ from flask import Blueprint
 # 导入模板模块
 from flask import render_template
 
+# 导入必要的模块
+from myflaskblog.models import User, Article
+
 index = Blueprint('index', __name__)
 
 

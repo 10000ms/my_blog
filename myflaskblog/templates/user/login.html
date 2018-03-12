@@ -2,14 +2,17 @@
 
 {% block title %}用户登陆{% endblock title %}
 
-{% block content %}
+{% block center_bar %}
     <div>
-        <form method="POST" action="/">
+        <form method="POST" action="{{url_for('user.login_page')}}">
             {{ form.csrf_token }}
-            {{ form.username.label }} {{ form.username(size=20) }}
+            {{ form.account.label }} {{ form.account(size=20) }}
+            <br/>
             {{ form.password.label }} {{ form.password(size=20) }}
+            <br/>
             {{ form.confirm.label }} {{ form.confirm(size=20) }}
-            <input type="submit" value="Go">
+            <br/>
+            <input type="submit" value="提交">
         </form>
     </div>
-{% endblock content %}
+{% endblock center_bar %}

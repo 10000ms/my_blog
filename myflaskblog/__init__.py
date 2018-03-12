@@ -18,6 +18,9 @@ from flask_login import LoginManager
 # 导入配置模块
 from config import config
 
+# 导入其他必要模块
+import hashlib
+
 
 app = Flask(__name__)
 app.config.from_object(config['config'])  # 从项目目录的config.py读入配置
@@ -35,6 +38,11 @@ if app.config['IS_DEVELOPMENT'] and app.config['IS_DEVELOPMENT'] == True :
     from myflaskblog import models
     db.drop_all()
     db.create_all()
+    test_user1 = models.User('123456', '123456', 'VL', '123456@qq.com', 1)
+    test_user2 = models.User('111111', '111111', 'VL2', '111111@qq.com')
+    db.session.add(test_user1)
+    db.session.add(test_user2)
+    db.session.commit()
     # TODO:后期改进该测试功能
 
 
