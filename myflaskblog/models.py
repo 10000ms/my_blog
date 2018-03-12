@@ -16,12 +16,26 @@ import hashlib
 # 导入datetime时间包
 from datetime import datetime
 
+# 导入flask_login的UserMixin类，让login正确工作
+from flask_login import UserMixin
+
+
 # 用户模型
-class User(db.Model):
-    __tablename__ = 'users'
+class User(db.Model, UserMixin):
+    '''
+    创建类的时候继承UserMixin ,有一些用户相关属性 
+ 
+    * is_authenticated ：是否被验证 
+    * is_active ： 是否被激活 
+    * is_anonymous : 是否是匿名用户 
+    * get_id() : 获得用户的id，并转换为 Unicode 类型 
+    
+    '''
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
+    account = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(32))
+    username = db.Column(db.String(80))
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)

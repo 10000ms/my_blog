@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="cn">
-{%- block html %}
+{% block html %}
   <head>
-    {%- block head %}
+    {% block head %}
     <title>{% block title %}{{title|default}}{% endblock title %}</title>
 
-    {%- block metas %}
+    {% block metas %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {%- endblock metas %}
+    {% endblock metas %}
 
-    {%- block styles %}
+    {% block styles %}
     <!-- Bootstrap -->
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 
+    {% block background_styles %}
     <style>
 
         html,body{
@@ -76,12 +77,17 @@
         }
 
     </style>
+    {% endblock background_styles %}
 
-    {%- endblock styles %}
-    {%- endblock head %}
+    {% block other_styles %}
+    {% endblock other_styles %}
+
+    {% endblock styles %}
+
+    {% endblock head %}
   </head>
   <body background="static/img/background.png" background-repeat="repeat">
-    {% block body -%}
+    {% block body %}
     {% block navbar %}
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -97,48 +103,51 @@
                     <button type="submit" class="btn btn-default">提交按钮</button>
                 </form>
                 <button type="button" class="btn btn-default navbar-btn">
+                    <a href="/user/login">
                     用户
+                    </a>
                 </button>
             </div>
         </div>
     </nav>
 
-    {%- endblock navbar %}
+    {% endblock navbar %}
 
     <div class="wrap">
         <div class="main">
             <canvas id="c" width="300" height="150"></canvas>
-            {% block sidebar -%}
+            {% block sidebar %}
             <div class="sidebar col-md-2 col-md-offset-8">
 
             </div>
-            {%- endblock sidebar %}
+            {% endblock sidebar %}
 
-            {% block content -%}
+            {% block content %}
 
             <div class="content-block col-md-6 col-md-offset-2">
 
             </div>
 
 
-            {%- endblock content %}
+            {% endblock content %}
         </div>
     </div>
 
 
 
-    {% block footer -%}
+    {% block footer %}
         <div class="footer">
               <div class="container footer-div">
                 <p class="footer-p-firstline">Designed by Victor Lai</p>
               </div>
         </div>
-    {% endblock footer -%}
+    {% endblock footer %}
 
     {% block scripts %}
     <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
     <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
 
+    {% block background_scripts %}
     <script>
         $(document).ready(function() {
             var canvas = document.getElementById("c");
@@ -249,9 +258,35 @@
         });
 
     </script>
+    {% endblock background_scripts %}
 
-    {%- endblock scripts %}
-    {%- endblock body %}
+    {% block other_scripts %}
+    {% endblock other_scripts %}
+
+    {% endblock scripts %}
+    {% endblock body %}
   </body>
-{%- endblock html %}
+{% endblock html %}
 </html>
+
+
+{#
+
+包含以下block
+html：整个html文档
+# head：整个head部分
+# title：网页标题
+# metas：整个meta部分
+# styles：整个style部分
+# background_styles：背景部分的css文件
+# other_styles：空白styles部分
+# body：整个body部分
+# navbar：导航条部分
+# sidebar：边条部分
+# content：内容部分
+# footer：页脚部分
+# scripts：所有scripts部分
+# background_scripts：背景scripts部分
+# other_scripts：空白scripts部分
+
+#}

@@ -1,0 +1,15 @@
+{% extends "__base__.html" %}
+
+{% block title %}用户登陆{% endblock title %}
+
+{% block content %}
+    <div>
+        <form method="POST" action="/">
+            {{ form.csrf_token }}
+            {{ form.username.label }} {{ form.username(size=20) }}
+            {{ form.password.label }} {{ form.password(size=20) }}
+            {{ form.confirm.label }} {{ form.confirm(size=20) }}
+            <input type="submit" value="Go">
+        </form>
+    </div>
+{% endblock content %}

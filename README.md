@@ -14,6 +14,8 @@ Flask-SQLAlchemy ==> 2.3.2
 
 Flask-bootstarp ==> 3.3.7.1
 
+Flask-login ==> 0.4.1
+
 # 处理ImportError: No module named MySQLdb问题
 1.easy_install mysql-python (mix os)
 
