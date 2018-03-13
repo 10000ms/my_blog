@@ -1,0 +1,13 @@
+{% extends "__base__.html" %}
+
+{% block title %} 这是文章页面 {% endblock title %}
+
+{% block center_bar %}
+    <div>
+        <h1>文章标题：{{article.title}}</h1>
+        <p>创建时间：{{article.create_datetime}}</p>
+        <p>关键词：{{article.keyword}}</p>
+        <p>关键词：{{article.keyword}}</p>
+        <p>作者：{{article.user_id}}</p>
+    </div>
+{% endblock center_bar %}

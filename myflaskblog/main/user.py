@@ -64,6 +64,11 @@ def logout():
     return redirect(url_for('index.index_page'))
 
 
+@user.route('/register')
+def register_page():
+    return '用户注册页面'
+
+
 class UserRegisterForm(FlaskForm):
     account = StringField('帐号', [DataRequired('用户名必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
     password = PasswordField('密码', [DataRequired('密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])

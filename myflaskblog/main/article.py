@@ -10,6 +10,9 @@ __author__ = 'Victor Lai'
 # 导入蓝图模块
 from flask import Blueprint
 
+# 导入模板模块
+from flask import render_template
+
 # 导入必要模块
 from myflaskblog.models import Article
 
@@ -21,4 +24,5 @@ def article_detail_page(article_id):
     get_article = Article.query.filter_by(id=article_id).first()
     if not get_article:
         return '找不到该文章'
-    return 'this is article page'
+
+    return render_template("/article/article.html", article=get_article)

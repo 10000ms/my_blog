@@ -40,8 +40,10 @@ if app.config['IS_DEVELOPMENT'] and app.config['IS_DEVELOPMENT'] == True :
     db.create_all()
     test_user1 = models.User('123456', '123456', 'VL', '123456@qq.com', 1)
     test_user2 = models.User('111111', '111111', 'VL2', '111111@qq.com')
+    test_article = models.Article('A1', 'kw', 'not', '这是一篇博文')
     db.session.add(test_user1)
     db.session.add(test_user2)
+    db.session.add(test_article)
     db.session.commit()
     # TODO:后期改进该测试功能
 

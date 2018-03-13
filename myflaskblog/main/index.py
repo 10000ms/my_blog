@@ -24,4 +24,9 @@ def index_page():
     return render_template("/index/index.html")
 
 
+@index.route('/search')
+def search_page():
+    return '这是搜索页面'
+
+
 
