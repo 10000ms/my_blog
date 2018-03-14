@@ -18,6 +18,8 @@
         var E = window.wangEditor
         // 或者 var editor = new E('#editor')
         var editor = new E( document.getElementById('editor') )
+        editor.customConfig.uploadImgServer = '{{url_for('article.get_img')}}'  //上传文章图片配置
+
         editor.create()
 
         document.getElementById('btn1').addEventListener('click', function () {

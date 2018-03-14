@@ -16,7 +16,7 @@ from myflaskblog.models import User
 import hashlib
 
 # 导入flask_login模块
-from flask_login import login_user, login_required, logout_user,current_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 # 导入WTF模块
 from flask_wtf import FlaskForm

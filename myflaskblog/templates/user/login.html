@@ -5,7 +5,7 @@
 {% block center_bar %}
     <div>
         <form method="POST" action="{{url_for('user.login_page')}}">
-            {{ form.csrf_token }}
+
             {{ form.account.label }} {{ form.account(size=20) }}
             <br/>
             {{ form.password.label }} {{ form.password(size=20) }}
