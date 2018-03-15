@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% endblock metas %}
 
+
+     <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}" >
     {% block styles %}
     <!-- Bootstrap -->
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
@@ -93,7 +95,10 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container text-center">
             <div class="navbar-header">
-                <a href="{{url_for('index.index_page')}}" class="navbar-brand">1000ms的小站</a>
+                <img src="{{url_for('static', filename='img/favicon_black.png')}}" width="50px" height="50px" class="navbar-left">
+                <a href="{{url_for('index.index_page')}}" class="navbar-brand">
+                    1000ms的小站
+                </a>
             </div>
             <div class = "navbar-right">
                 <form class="navbar-form navbar-left" role="search" action="{{url_for('index.search_page')}}">
@@ -168,6 +173,13 @@
     {% block footer %}
         <div class="footer">
               <div class="container footer-div">
+
+                  <a href="http://flask.pocoo.org/"><img
+                   src="{{url_for('static', filename='img/flask-powered.png')}}"
+                   border="0"
+                   alt="Flask powered"
+                   title="Flask powered"></a>
+
                 <p class="footer-p-firstline">Designed by Victor Lai</p>
               </div>
         </div>
