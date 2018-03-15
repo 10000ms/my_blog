@@ -28,7 +28,7 @@
         var editor = new E( document.getElementById('editor') )
         editor.customConfig.uploadImgServer = '{{url_for('article.get_img')}}'  //上传文章图片配置服务器地址
         editor.customConfig.uploadFileName = 'file'   //上传文章图片配置文件名
-        editor.customConfig.debug = true  //debug
+        editor.customConfig.debug = false  //debug
         editor.create()
 
         document.getElementById('btn1').addEventListener('click', function () {

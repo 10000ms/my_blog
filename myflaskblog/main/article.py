@@ -41,7 +41,6 @@ def article_detail_page(article_id):
 # 文章上传图片部分
 
 UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/TmageUploads/'
-GET_ROUTE = '/static/TmageUploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
@@ -59,7 +58,7 @@ def get_img():
         if file and allowed_file(file.filename):
             filename = file.filename
             file.save(UPLOAD_FOLDER+filename)
-            img_url = GET_ROUTE + filename
+            img_url = url_for('static', filename='TmageUploads/'+filename)
             jsonres = json.dumps({'errno': 0, 'data': [img_url]})
             res = Response(jsonres)
             res.headers["ContentType"] = "text/x-json"
