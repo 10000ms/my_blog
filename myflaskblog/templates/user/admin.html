@@ -3,6 +3,14 @@
 {% block title %} 这是管理员页面 {% endblock title %}
 
 {% block center_bar %}
+<div>
+    <form method="POST" enctype="multipart/form-data" action="{{url_for('article.get_img')}}">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+</form>
+</div>
+
+
     <div id="editor">
         <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
     </div>
@@ -13,13 +21,14 @@
 {% endblock center_bar %}
 
 {% block other_scripts %}
-    <script type="text/javascript" src="/static/wangEditor/js/wangEditor.min.js"></script>
+    <script type="text/javascript" src="/static/wangEditor/js/wangEditor.js"></script>
     <script type="text/javascript">
         var E = window.wangEditor
         // 或者 var editor = new E('#editor')
         var editor = new E( document.getElementById('editor') )
-        editor.customConfig.uploadImgServer = '{{url_for('article.get_img')}}'  //上传文章图片配置
-
+        editor.customConfig.uploadImgServer = '{{url_for('article.get_img')}}'  //上传文章图片配置服务器地址
+        editor.customConfig.uploadFileName = 'file'   //上传文章图片配置文件名
+        editor.customConfig.debug = true  //debug
         editor.create()
 
         document.getElementById('btn1').addEventListener('click', function () {

@@ -23,6 +23,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import os
 from flask import request, Response, url_for
 import json
+from myflaskblog import app
 
 article = Blueprint('article', __name__)
 
@@ -39,14 +40,15 @@ def article_detail_page(article_id):
 
 # 文章上传图片部分
 
-UPLOAD_FOLDER = '/TmageUploads'
+UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/TmageUploads/'
+GET_ROUTE = '/static/TmageUploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
 @article.route('/img', methods=['POST'])
 @login_required
 def get_img():
-    file = request.files[0]
+    file = request.files['file']
     if file == None:
         result = r"error|未成功获取文件，上传失败"
         res = Response(result)
@@ -56,16 +58,16 @@ def get_img():
     else:
         if file and allowed_file(file.filename):
             filename = file.filename
-            print(filename)
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-            img_url = url_for('article.get_img') + filename
+            file.save(UPLOAD_FOLDER+filename)
+            img_url = GET_ROUTE + filename
             jsonres = json.dumps({'errno': 0, 'data': [img_url]})
-            res = Response(img_url)
+            res = Response(jsonres)
             res.headers["ContentType"] = "text/x-json"
             res.headers["Charset"] = "utf-8"
             return res
-    # TODO:后期重新封装并实现检查
+    # TODO:后期重新封装并实现检查,对于static的使用亦要处理，wangediotr传过来多张图片亦要想办法处理
 
+# TODO：增加对无用图片的检查功能
 
 # 文件名合法性验证
 def allowed_file(filename):
