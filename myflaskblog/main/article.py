@@ -37,10 +37,19 @@ def article_detail_page(article_id):
     return render_template("/article/article.html", article=get_article)
 
 
+@article.route('/new_article')
+@login_required
+def new_article_page():
+    now_login_user = current_user
+    if now_login_user.is_admin == 1:
+        return render_template('/article/new_article.html')
+    elif now_login_user.is_admin == 0:
+        return '没有权限'
+
 
 # 文章上传图片部分
 
-UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/TmageUploads/'
+UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/ImageUploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
@@ -58,7 +67,7 @@ def get_img():
         if file and allowed_file(file.filename):
             filename = file.filename
             file.save(UPLOAD_FOLDER+filename)
-            img_url = url_for('static', filename='TmageUploads/'+filename)
+            img_url = url_for('static', filename='ImageUploads/'+filename)
             jsonres = json.dumps({'errno': 0, 'data': [img_url]})
             res = Response(jsonres)
             res.headers["ContentType"] = "text/x-json"

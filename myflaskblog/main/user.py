@@ -42,7 +42,7 @@ def login_page():
             login_user(check_login_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
-        form = UserRegisterForm(request.form)
+        form = UserloginForm(request.form)
         return render_template('/user/login.html', form=form)
     # TODO：优化错误显示
 
@@ -52,7 +52,7 @@ def login_page():
 def login_user_page():
     now_login_user = current_user
     if now_login_user.is_admin == 1:
-        return render_template('/user/admin.html')
+        return redirect(url_for('admin.admin_index_page'))
     elif now_login_user.is_admin == 0:
         return render_template('/user/user.html')
 
@@ -64,13 +64,25 @@ def logout():
     return redirect(url_for('index.index_page'))
 
 
-@user.route('/register')
+@user.route('/register', methods=['GET', 'POST'])
 def register_page():
-    return '用户注册页面'
+    if request.method == 'POST':
+        # TODO:检验用户注册并加入数据库
+        pass
+    else:
+        form = UserregisterForm(request.form)
+        return render_template('/user/register.html', form=form)
 
 
-class UserRegisterForm(FlaskForm):
-    account = StringField('帐号', [DataRequired('用户名必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
+class UserloginForm(FlaskForm):
+    account = StringField('帐号', [DataRequired('帐号必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
     password = PasswordField('密码', [DataRequired('密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
     confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
 
+
+class UserregisterForm(FlaskForm):
+    account = StringField('帐号', [DataRequired('帐号必填！'), Length(min=6, max=20, message='帐号必须介于6-20字符！')])
+    password = PasswordField('密码', [DataRequired('密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
+    confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
+    username = StringField('用户名', [DataRequired('重复密码必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
+    email = StringField('email', [DataRequired('email必填！'), Length(min=3, max=20, message='email必须介于3-20字符！')])

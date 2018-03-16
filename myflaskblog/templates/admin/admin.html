@@ -1,0 +1,16 @@
+{% extends "__base__.html" %}
+
+{% block title %} 这是管理员页面 {% endblock title %}
+
+{% block center_bar %}
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('article.new_article_page')}}">
+        发表文章
+    </a>
+</bottom>
+<bottom  type="button" class="btn btn-default">文章管理</bottom>
+<bottom  type="button" class="btn btn-default">用户管理</bottom>
+<bottom  type="button" class="btn btn-default">网站设置</bottom>
+<bottom  type="button" class="btn btn-default">个人设置</bottom>
+{% endblock center_bar %}
+
