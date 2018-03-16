@@ -13,6 +13,7 @@ from flask import Blueprint
 # 导入必须的模块
 from flask import request, flash, url_for, render_template, redirect
 from myflaskblog.models import User
+from myflaskblog import db
 import hashlib
 
 # 导入flask_login模块
@@ -67,8 +68,21 @@ def logout():
 @user.route('/register', methods=['GET', 'POST'])
 def register_page():
     if request.method == 'POST':
-        # TODO:检验用户注册并加入数据库
-        pass
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+        if password != confirm:
+            return '两次输入密码不一致'
+        elif User.query.filter_by(account=request.form.get('account')).first():
+            return '用户已存在'
+        else:
+            account = request.form.get('account')
+            username = request.form.get('username')
+            email = request.form.get('email')
+            new_user = User(account, password, username, email)
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=True)
+            return redirect(url_for('user.login_user_page'))
     else:
         form = UserregisterForm(request.form)
         return render_template('/user/register.html', form=form)

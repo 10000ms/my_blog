@@ -23,4 +23,4 @@ admin = Blueprint('admin', __name__)
 @admin.route('/')
 @login_required
 def admin_index_page():
-    return render_template('/user/admin.html')
+    return render_template('/admin/admin.html')

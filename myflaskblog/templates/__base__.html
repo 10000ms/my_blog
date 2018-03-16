@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% endblock metas %}
 
+      {% block other_metas %}
+      {% endblock other_metas %}
 
      <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}" >
     {% block styles %}
@@ -319,6 +321,7 @@ html：整个html文档
 # head：整个head部分
 # title：网页标题
 # metas：整个meta部分
+# other_metas:空白meta部分
 # styles：整个style部分
 # background_styles：背景部分的css文件
 # other_styles：空白styles部分

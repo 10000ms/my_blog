@@ -19,6 +19,11 @@ from myflaskblog.models import Article
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
 
+# 导入WTF模块
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField
+from wtforms.validators import DataRequired, Length, EqualTo
+
 # 上传图片所需要的模块
 import os
 from flask import request, Response, url_for
@@ -37,14 +42,19 @@ def article_detail_page(article_id):
     return render_template("/article/article.html", article=get_article)
 
 
-@article.route('/new_article')
+@article.route('/new_article', methods=['GET', 'POST'])
 @login_required
 def new_article_page():
-    now_login_user = current_user
-    if now_login_user.is_admin == 1:
-        return render_template('/article/new_article.html')
-    elif now_login_user.is_admin == 0:
-        return '没有权限'
+    if request.method == 'POST':
+        new_article = request.form.get('title')
+        # TODO;正确处理收到的文章，并返回信息
+    else:
+        now_login_user = current_user
+        if now_login_user.is_admin == 1:
+            form = ArticleForm(request.form)
+            return render_template('/article/new_article.html', form=form)
+        elif now_login_user.is_admin == 0:
+            return '没有权限'
 
 
 # 文章上传图片部分
@@ -77,7 +87,15 @@ def get_img():
 
 # TODO：增加对无用图片的检查功能
 
+
 # 文件名合法性验证
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+class ArticleForm(FlaskForm):
+    title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
+    keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
+    description = StringField('描述', [DataRequired('描述必填！'), Length(min=6, max=100, message='密码必须介于6-20字符！')])
+    content = StringField('正文', [DataRequired('正文必填！')])

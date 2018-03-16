@@ -2,22 +2,26 @@
 
 {% block title %} 这是管理员页面 {% endblock title %}
 
+
+
 {% block center_bar %}
-<div>
-    <form method="POST" enctype="multipart/form-data" action="{{url_for('article.get_img')}}">
-      <input type="file" name="file">
-      <input type="submit" value="Upload">
-</form>
-</div>
+    <div>
+        <form method="POST" action="{{url_for('user.login_page')}}">
+            {{ form.csrf_token }}
+            {{ form.title.label }} {{ form.title(size=20) }}
+            <br/>
+            {{ form.keyword.label }} {{ form.keyword(size=20) }}
+            <br/>
+            {{ form.description.label }} {{ form.description(size=20) }}
+            <br/>
+        </form>
+    </div>
 
 
     <div id="editor">
-        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+        <p>请在此框中输入正文</p>
     </div>
-    <button id="btn1">获取html</button>
-    <div id="aaa">
-        待读取
-    </div>
+    <button id="btn1">提交</button>
 {% endblock center_bar %}
 
 {% block other_scripts %}
@@ -33,8 +37,15 @@
 
         document.getElementById('btn1').addEventListener('click', function () {
             // 读取 html
-            var html = editor.txt.html()
-            $('#aaa').html(html)
+            // var html = editor.txt.html()
+            // $('#aaa').html(html)
+            var title = $('#title').val()
+            var keyword = $('#keyword').val()
+            var description = $('#description').val()
+            var content = editor.txt.html()
+            var csrf_token = $('#csrf_token').val()
+            jQuery.post(url='{{url_for('article.new_article_page')}}',data = {name:'new_article',csrf_token:csrf_token, title:title, keyword:keyword, description:description,content:content})
         }, false)
+
     </script>
 {% endblock other_scripts %}
