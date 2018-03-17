@@ -15,6 +15,8 @@ from flask import render_template
 
 # 导入必要模块
 from myflaskblog.models import Article
+from myflaskblog import db
+from flask import redirect
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -46,8 +48,16 @@ def article_detail_page(article_id):
 @login_required
 def new_article_page():
     if request.method == 'POST':
-        new_article = request.form.get('title')
-        # TODO;正确处理收到的文章，并返回信息
+        new_article_title = request.form.get('title')
+        if not new_article_title:
+            return '出错了'
+        new_article_keyword = request.form.get('title')
+        new_article_description = request.form.get('title')
+        new_article_content = request.form.get('title')
+        new_article = Article(new_article_title, new_article_keyword, new_article_description, new_article_content)
+        db.session.add(new_article)
+        db.session.commit()
+        return redirect(url_for('index.index_page'))
     else:
         now_login_user = current_user
         if now_login_user.is_admin == 1:
