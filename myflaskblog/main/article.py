@@ -14,7 +14,7 @@ from flask import Blueprint
 from flask import render_template
 
 # 导入必要模块
-from myflaskblog.models import Article
+from myflaskblog.models import Article, Comment
 from myflaskblog import db
 from flask import redirect
 
@@ -40,8 +40,8 @@ def article_detail_page(article_id):
     get_article = Article.query.filter_by(id=article_id).first()
     if not get_article:
         return '找不到该文章'
-
-    return render_template("/article/article.html", article=get_article)
+    form = CommentForm(request.form)
+    return render_template("/article/article.html", article=get_article, form=form, article_id=article_id)
 
 
 @article.route('/new_article', methods=['GET', 'POST'])
@@ -65,6 +65,21 @@ def new_article_page():
             return render_template('/article/new_article.html', form=form)
         elif now_login_user.is_admin == 0:
             return '没有权限'
+
+
+@article.route('/add_comment', methods=['POST'])
+@login_required
+def add_comment_page():
+    title = request.form.get('title')
+    comment = request.form.get('comment')
+    user_id = current_user.id
+    article_id = request.form.get('article_id')
+    new_comment = Comment(title, comment, user_id, article_id)
+    db.session.add(new_comment)
+    db.session.commit()
+    return redirect(url_for('article.article_detail_page', article_id=article_id))
+
+
 
 
 # 文章上传图片部分
@@ -109,3 +124,8 @@ class ArticleForm(FlaskForm):
     keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
     description = StringField('描述', [DataRequired('描述必填！'), Length(min=6, max=100, message='密码必须介于6-20字符！')])
     content = StringField('正文', [DataRequired('正文必填！')])
+
+
+class CommentForm(FlaskForm):
+    title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
+    comment = StringField('评论', [DataRequired('评论必填！')])

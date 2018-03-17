@@ -84,14 +84,16 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     create_datetime = db.Column(db.DateTime)
     title = db.Column(db.String(128))
-    content = db.Column(db.Text)
+    comment = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     article_id = db.Column(db.Integer, db.ForeignKey('article.id'))
 
-    def __init__(self, title, content):
+    def __init__(self, title, comment, user_id, article_id):
         self.create_datetime = datetime.now()
         self.title = title
-        self.content = content
+        self.comment = comment
+        self.user_id = user_id
+        self.article_id = article_id
 
         # TODO:正确的处理评论模块
 

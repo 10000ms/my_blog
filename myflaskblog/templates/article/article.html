@@ -10,4 +10,21 @@
         <p>关键词：{{article.keyword}}</p>
         <p>作者：{{article.user_id}}</p>
     </div>
+{% if current_user.is_authenticated %}
+    <div>
+        <form method="POST" action="{{url_for('article.add_comment_page')}}">
+            {{ form.csrf_token }}
+            {{ form.title.label }} {{ form.title(size=20) }}
+            <br/>
+            {{ form.comment.label }} {{ form.comment(size=20) }}
+            <br/>
+            <input name="article_id" type="hidden" value="{{article_id}}">
+            <input type="submit" value="提交">
+        </form>
+    </div>
+{% else %}
+<div>
+    <p>请登陆后使用评论功能</p>
+</div>
+{% endif %}
 {% endblock center_bar %}
