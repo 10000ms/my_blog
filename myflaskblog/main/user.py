@@ -36,7 +36,7 @@ def login_page():
         if not check_login_user:
             # flash('该用户不存在')
             return '该用户不存在'
-        elif hashlib.md5(str(request.form.get('password')).encode('utf-8')).hexdigest() != check_login_user.password:
+        elif not check_login_user.verify_password(request.form.get('password')):
             #  flash('密码错误')
             return '密码错误'
         else:

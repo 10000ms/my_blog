@@ -10,14 +10,15 @@ __author__ = 'Victor Lai'
 # 导入模型模块
 from myflaskblog import db
 
-# 导入md5包
-import hashlib
+# 导入加密用包
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # 导入datetime时间包
 from datetime import datetime
 
 # 导入flask_login的UserMixin类，让login正确工作
 from flask_login import UserMixin
+
 
 
 # 用户模型
@@ -34,21 +35,26 @@ class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     account = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(32))
+    password_hash = db.Column(db.String(128))
     username = db.Column(db.String(80))
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
 
-    def __init__(self, account, password, username, email, is_admin=0):
+    def __init__(self, account, password_hash, username, email, is_admin=0):
         self.account = account
         self.username = username
         self.email = email
-        self.password = hashlib.md5(str(password).encode('utf-8')).hexdigest()
+        self.password_hash = generate_password_hash(password_hash)
         self.create_datetime = datetime.now()
         self.is_admin = is_admin
 
-        # TODO:密码使用更合理的方式进行保存，+salt等。
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 # 常规配置模块
