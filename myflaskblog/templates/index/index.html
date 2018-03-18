@@ -1,4 +1,5 @@
 {% extends "__base__.html" %}
+{% import "__macros__.html" as macros %}
 
 {% block title %}1000ms的小站{% endblock title %}
 
@@ -8,4 +9,15 @@
             文章
         </a>
     </button>
+
+{% for article in articles %}
+<p>{{article.title}}</p><br/>
+{% endfor %}
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'index.index_page') }}
+</div>
+{% endif %}
+
 {% endblock center_bar %}
