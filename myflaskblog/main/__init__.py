@@ -16,6 +16,7 @@ from .index import index
 from .admin import admin
 from .article import article
 from .user import user
+from .error import error_handler
 
 
 # 注册蓝图
@@ -23,7 +24,8 @@ app.register_blueprint(index)  # url_prefix='/admin' 是以/admin或者/user的�
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(article, url_prefix='/article')
 app.register_blueprint(user, url_prefix='/user')
+app.register_blueprint(error_handler)
 
 
 # 导入错误处理模块
-import myflaskblog.main.error
+# import myflaskblog.main.error
