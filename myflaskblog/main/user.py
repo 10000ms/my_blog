@@ -30,7 +30,8 @@ user = Blueprint('user', __name__)
 
 @user.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if request.method == 'POST':
+    form = UserloginForm(request.form)
+    if form.validate_on_submit():
         account = request.form.get('account')
         check_login_user = User.query.filter_by(account=account).first()
         if not check_login_user:
@@ -43,7 +44,6 @@ def login_page():
             login_user(check_login_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
-        form = UserloginForm(request.form)
         return render_template('/user/login.html', form=form)
     # TODO：优化错误显示
 
