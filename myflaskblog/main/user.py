@@ -21,7 +21,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 # 导入WTF模块
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 
@@ -32,20 +32,20 @@ user = Blueprint('user', __name__)
 def login_page():
     form = UserloginForm(request.form)
     if form.validate_on_submit():
-        account = request.form.get('account')
+        account = form.account.data
         check_login_user = User.query.filter_by(account=account).first()
         if not check_login_user:
-            # flash('该用户不存在')
-            return '该用户不存在'
+            flash('该用户不存在')
+            return redirect(url_for('user.login_page'))
         elif not check_login_user.verify_password(request.form.get('password')):
-            #  flash('密码错误')
-            return '密码错误'
+            flash('密码错误')
+            return redirect(url_for('user.login_page'))
         else:
             login_user(check_login_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
         return render_template('/user/login.html', form=form)
-    # TODO：优化错误显示
+    # TODO：优化错误显示，ajax闪现返回
 
 
 @user.route('/user_page')
@@ -67,31 +67,29 @@ def logout():
 
 @user.route('/register', methods=['GET', 'POST'])
 def register_page():
-    if request.method == 'POST':
-        password = request.form.get('password')
-        confirm = request.form.get('confirm')
-        if password != confirm:
-            return '两次输入密码不一致'
-        elif User.query.filter_by(account=request.form.get('account')).first():
-            return '用户已存在'
+    form = UserregisterForm(request.form)
+    if form.validate_on_submit():
+        if User.query.filter_by(account=form.account.data).first():
+            flash('用户已存在')
+            return redirect(url_for('user.register_page'))
         else:
-            account = request.form.get('account')
-            username = request.form.get('username')
-            email = request.form.get('email')
+            account = form.account.data
+            password = form.password.data
+            username = form.username.data
+            email = form.email.data
             new_user = User(account, password, username, email)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
-        form = UserregisterForm(request.form)
         return render_template('/user/register.html', form=form)
 
 
 class UserloginForm(FlaskForm):
     account = StringField('帐号', [DataRequired('帐号必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
     password = PasswordField('密码', [DataRequired('密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
-    confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
+    submit = SubmitField('提交')
 
 
 class UserregisterForm(FlaskForm):
@@ -100,3 +98,4 @@ class UserregisterForm(FlaskForm):
     confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
     username = StringField('用户名', [DataRequired('重复密码必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
     email = StringField('email', [DataRequired('email必填！'), Length(min=3, max=20, message='email必须介于3-20字符！')])
+    submit = SubmitField('提交')

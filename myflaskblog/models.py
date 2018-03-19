@@ -20,7 +20,6 @@ from datetime import datetime
 from flask_login import UserMixin
 
 
-
 # 用户模型
 class User(db.Model, UserMixin):
     '''

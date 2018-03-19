@@ -16,14 +16,14 @@ from flask import render_template
 # 导入必要模块
 from myflaskblog.models import Article, Comment
 from myflaskblog import db
-from flask import redirect
+from flask import redirect, abort
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
 
 # 导入WTF模块
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 # 上传图片所需要的模块
@@ -40,7 +40,7 @@ def article_detail_page(article_id):
     get_article = Article.query.filter_by(id=article_id).first()
     if not get_article:
         return '找不到该文章'
-    form = CommentForm(request.form)
+    form = CommentForm(article_id)
     return render_template("/article/article.html", article=get_article, form=form, article_id=article_id)
 
 
@@ -70,14 +70,18 @@ def new_article_page():
 @article.route('/add_comment', methods=['POST'])
 @login_required
 def add_comment_page():
-    title = request.form.get('title')
-    comment = request.form.get('comment')
-    user_id = current_user.id
-    article_id = request.form.get('article_id')
-    new_comment = Comment(title, comment, user_id, article_id)
-    db.session.add(new_comment)
-    db.session.commit()
-    return redirect(url_for('article.article_detail_page', article_id=article_id))
+    form = CommentForm(request.form)
+    if form.validate_on_submit():
+        title = form.title.data
+        comment = form.comment.data
+        user_id = current_user.id
+        article_id = form.article_id.data
+        new_comment = Comment(title, comment, user_id, article_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for('article.article_detail_page', article_id=article_id))
+    else:
+        abort(404)
 
 
 
@@ -120,12 +124,21 @@ def allowed_file(filename):
 
 
 class ArticleForm(FlaskForm):
-    title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
-    keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
-    description = StringField('描述', [DataRequired('描述必填！'), Length(min=6, max=100, message='密码必须介于6-20字符！')])
+    title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='标题必须介于6-20字符！')])
+    keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='关键词必须介于6-20字符！')])
+    description = StringField('描述', [DataRequired('描述必填！'), Length(min=6, max=100, message='描述必须介于6-20字符！')])
     content = StringField('正文', [DataRequired('正文必填！')])
 
 
 class CommentForm(FlaskForm):
     title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
     comment = StringField('评论', [DataRequired('评论必填！')])
+    article_id = HiddenField(default=1)
+    submit = SubmitField('提交')
+    # TODO：article_id字段正确获取
+
+
+
+
+
+
