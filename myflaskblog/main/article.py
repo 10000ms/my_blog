@@ -40,8 +40,9 @@ def article_detail_page(article_id):
     get_article = Article.query.filter_by(id=article_id).first()
     if not get_article:
         return '找不到该文章'
-    form = CommentForm(article_id)
-    return render_template("/article/article.html", article=get_article, form=form, article_id=article_id)
+    form = CommentForm()
+    form.article_id.data = article_id
+    return render_template("/article/article.html", article=get_article, form=form)
 
 
 @article.route('/new_article', methods=['GET', 'POST'])
@@ -61,7 +62,7 @@ def new_article_page():
     else:
         now_login_user = current_user
         if now_login_user.is_admin == 1:
-            form = ArticleForm(request.form)
+            form = ArticleForm()
             return render_template('/article/new_article.html', form=form)
         elif now_login_user.is_admin == 0:
             return '没有权限'
@@ -70,7 +71,7 @@ def new_article_page():
 @article.route('/add_comment', methods=['POST'])
 @login_required
 def add_comment_page():
-    form = CommentForm(request.form)
+    form = CommentForm()
     if form.validate_on_submit():
         title = form.title.data
         comment = form.comment.data
@@ -79,6 +80,7 @@ def add_comment_page():
         new_comment = Comment(title, comment, user_id, article_id)
         db.session.add(new_comment)
         db.session.commit()
+        form.article_id.data = article_id
         return redirect(url_for('article.article_detail_page', article_id=article_id))
     else:
         abort(404)
@@ -131,11 +133,11 @@ class ArticleForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
+    title = StringField('标题', [DataRequired('标题必填！'), Length(min=2, max=20, message='账户必须介于2-20字符！')])
     comment = StringField('评论', [DataRequired('评论必填！')])
-    article_id = HiddenField(default=1)
+    article_id = HiddenField()
     submit = SubmitField('提交')
-    # TODO：article_id字段正确获取
+
 
 
 

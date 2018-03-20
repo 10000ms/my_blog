@@ -30,14 +30,14 @@ user = Blueprint('user', __name__)
 
 @user.route('/login', methods=['GET', 'POST'])
 def login_page():
-    form = UserloginForm(request.form)
+    form = UserloginForm()
     if form.validate_on_submit():
         account = form.account.data
         check_login_user = User.query.filter_by(account=account).first()
         if not check_login_user:
             flash('该用户不存在')
             return redirect(url_for('user.login_page'))
-        elif not check_login_user.verify_password(request.form.get('password')):
+        elif not check_login_user.verify_password(form.password.data):
             flash('密码错误')
             return redirect(url_for('user.login_page'))
         else:
@@ -67,7 +67,7 @@ def logout():
 
 @user.route('/register', methods=['GET', 'POST'])
 def register_page():
-    form = UserregisterForm(request.form)
+    form = UserregisterForm()
     if form.validate_on_submit():
         if User.query.filter_by(account=form.account.data).first():
             flash('用户已存在')
