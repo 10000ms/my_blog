@@ -16,7 +16,7 @@ from flask import render_template
 # 导入必要模块
 from myflaskblog.models import Article, Comment
 from myflaskblog import db
-from flask import redirect, abort
+from flask import redirect, abort, flash
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -35,14 +35,29 @@ from myflaskblog import app
 article = Blueprint('article', __name__)
 
 
-@article.route('/<int:article_id>')
+@article.route('/<int:article_id>', methods=['GET', 'POST'])
 def article_detail_page(article_id):
     get_article = Article.query.filter_by(id=article_id).first()
+    form = CommentForm()
     if not get_article:
         return '找不到该文章'
-    form = CommentForm()
-    form.article_id.data = article_id
-    return render_template("/article/article.html", article=get_article, form=form)
+    elif form.validate_on_submit():
+        title = form.title.data
+        comment = form.comment.data
+        user_id = current_user.id
+        article_id = article_id
+        new_comment = Comment(title, comment, user_id, article_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        flash('评论成功')
+        return redirect(url_for('article.article_detail_page', article_id=article_id))
+    else:
+        page = request.args.get('page', 1, type=int)
+        pagination = Comment.query.order_by(Comment.create_datetime.desc()).paginate(
+            page, per_page=5, error_out=True)
+        comments = pagination.items
+        return render_template("/article/article.html", article=get_article, form=form, comments=comments,\
+                               pagination=pagination)
 
 
 @article.route('/new_article', methods=['GET', 'POST'])
@@ -66,26 +81,6 @@ def new_article_page():
             return render_template('/article/new_article.html', form=form)
         elif now_login_user.is_admin == 0:
             return '没有权限'
-
-
-@article.route('/add_comment', methods=['POST'])
-@login_required
-def add_comment_page():
-    form = CommentForm()
-    if form.validate_on_submit():
-        title = form.title.data
-        comment = form.comment.data
-        user_id = current_user.id
-        article_id = form.article_id.data
-        new_comment = Comment(title, comment, user_id, article_id)
-        db.session.add(new_comment)
-        db.session.commit()
-        form.article_id.data = article_id
-        return redirect(url_for('article.article_detail_page', article_id=article_id))
-    else:
-        abort(404)
-
-
 
 
 # 文章上传图片部分
@@ -129,13 +124,11 @@ class ArticleForm(FlaskForm):
     title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='标题必须介于6-20字符！')])
     keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='关键词必须介于6-20字符！')])
     description = StringField('描述', [DataRequired('描述必填！'), Length(min=6, max=100, message='描述必须介于6-20字符！')])
-    content = StringField('正文', [DataRequired('正文必填！')])
 
 
 class CommentForm(FlaskForm):
     title = StringField('标题', [DataRequired('标题必填！'), Length(min=2, max=20, message='账户必须介于2-20字符！')])
     comment = StringField('评论', [DataRequired('评论必填！')])
-    article_id = HiddenField()
     submit = SubmitField('提交')
 
 

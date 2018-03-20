@@ -39,6 +39,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
+    commetns = db.relationship('Comment', backref='user', lazy='dynamic')
 
     def __init__(self, account, password_hash, username, email, is_admin=0):
         self.account = account

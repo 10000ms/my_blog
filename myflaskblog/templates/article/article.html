@@ -1,5 +1,6 @@
 {% extends "__base__.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "__macros__.html" as macros %}
 
 {% block title %} 这是文章页面 {% endblock title %}
 
@@ -11,10 +12,28 @@
         <p>关键词：{{article.keyword}}</p>
         <p>作者：{{article.user_id}}</p>
     </div>
+
+
+{% for comment in comments %}
+<p>{{comment.user.username}}:</p>
+<p>{{comment.comment}}</p>
+{% endfor %}
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'index.index_page') }}
+</div>
+{% endif %}
+
 {% if current_user.is_authenticated %}
 <div>
-{{ wtf.quick_form(form, action=url_for('article.add_comment_page')) }}
+{{ wtf.quick_form(form) }}
 </div>
+{% else %}
+<div>
+    <p>请登陆后使用评论功能</p>
+</div>
+{% endif %}
 
 {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
@@ -22,9 +41,5 @@
         {{ message }}
     </div>
 {% endfor %}
-{% else %}
-<div>
-    <p>请登陆后使用评论功能</p>
-</div>
-{% endif %}
+
 {% endblock center_bar %}
