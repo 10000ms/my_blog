@@ -1,0 +1,51 @@
+{% extends "__base__.html" %}
+{% import "__macros__.html" as macros %}
+
+{% block title %} 这是文章管理页面 {% endblock title %}
+
+{% block center_bar %}
+
+<table class="table table-striped">
+    <tr>
+        <th>文章名</th>
+        <th>作者</th>
+        <th>创建时间</th>
+        <th>关键字</th>
+        <th>描述</th>
+        <th>操作</th>
+    </tr>
+    {% for article in articles %}
+    <tr>
+        <td>{{article.title}}</td>
+        <td>{{article.user.username}}</td>
+        <td>{{article.create_datetime}}</td>
+        <td>{{article.keyword}}</td>
+        <td>{{article.description}}</td>
+        <td>
+            <button type="button" class="btn btn-default">
+                <a href="{{url_for('article.article_detail_page', article_id = article.id)}}">
+                    查看本文
+                </a>
+            </button>
+            <button type="button" class="btn btn-default">
+                <a href="#">
+                    修改
+                </a>
+            </button>
+            <button type="button" class="btn btn-default">
+                <a href="#">
+                    删除
+                </a>
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'article.manage_article_page') }}
+</div>
+{% endif %}
+
+{% endblock center_bar %}

@@ -39,7 +39,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
-    commetns = db.relationship('Comment', backref='user', lazy='dynamic')
+    comments = db.relationship('Comment', backref='user', lazy='dynamic')
+    articles = db.relationship('Article', backref='user', lazy='dynamic')
 
     def __init__(self, account, password_hash, username, email, is_admin=0):
         self.account = account
@@ -74,12 +75,13 @@ class Article(db.Model):
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, keyword, description, content):
+    def __init__(self, title, keyword, description, content, user_id):
         self.create_datetime = datetime.now()
         self.title = title
         self.keyword = keyword
         self.description = description
         self.content = content
+        self.user_id = user_id
 
         # TODO:正确的处理新文章简历的模块
 

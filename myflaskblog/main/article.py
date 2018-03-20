@@ -63,24 +63,37 @@ def article_detail_page(article_id):
 @article.route('/new_article', methods=['GET', 'POST'])
 @login_required
 def new_article_page():
-    if request.method == 'POST':
+    if request.method == 'POST' and current_user.is_admin == 1:
         new_article_title = request.form.get('title')
         if not new_article_title:
             return '出错了'
         new_article_keyword = request.form.get('title')
-        new_article_description = request.form.get('title')
-        new_article_content = request.form.get('title')
-        new_article = Article(new_article_title, new_article_keyword, new_article_description, new_article_content)
+        new_article_description = request.form.get('description')
+        new_article_content = request.form.get('content')
+        new_article_user_id = current_user.id
+        new_article = Article(new_article_title, new_article_keyword, new_article_description, new_article_content, \
+                              new_article_user_id)
         db.session.add(new_article)
         db.session.commit()
         return redirect(url_for('index.index_page'))
+    elif current_user.is_admin == 1:
+        form = ArticleForm()
+        return render_template('/article/new_article.html', form=form)
     else:
-        now_login_user = current_user
-        if now_login_user.is_admin == 1:
-            form = ArticleForm()
-            return render_template('/article/new_article.html', form=form)
-        elif now_login_user.is_admin == 0:
-            return '没有权限'
+        abort(403)
+
+
+@article.route('/manage_article')
+@login_required
+def manage_article_page():
+    if current_user.is_admin == 1:
+        page = request.args.get('page', 1, type=int)
+        pagination = Article.query.order_by(Article.create_datetime.desc()).paginate(
+            page, per_page=10, error_out=True)
+        articles = pagination.items
+        return render_template("/article/manage_article.html", articles=articles, pagination=pagination)
+    else:
+        abort(403)
 
 
 # 文章上传图片部分

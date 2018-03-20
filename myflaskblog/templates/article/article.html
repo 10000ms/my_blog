@@ -9,8 +9,11 @@
         <h1>文章标题：{{article.title}}</h1>
         <p>创建时间：{{article.create_datetime}}</p>
         <p>关键词：{{article.keyword}}</p>
-        <p>关键词：{{article.keyword}}</p>
-        <p>作者：{{article.user_id}}</p>
+        <p>描述：{{article.description}}</p>
+        <p>作者：{{article.user.username}}</p>
+        {% autoescape false %}
+        {{article.content}}
+        {% endautoescape %}
     </div>
 
 
@@ -21,7 +24,7 @@
 
 {% if pagination %}
 <div class="pagination">
-    {{ macros.pagination_widget(pagination, 'index.index_page') }}
+    {{ macros.pagination_widget(pagination, 'article.article_detail_page',article_id=article.id) }}
 </div>
 {% endif %}
 
@@ -43,3 +46,4 @@
 {% endfor %}
 
 {% endblock center_bar %}
+

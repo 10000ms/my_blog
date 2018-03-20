@@ -8,7 +8,11 @@
         发表文章
     </a>
 </bottom>
-<bottom  type="button" class="btn btn-default">文章管理</bottom>
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('article.manage_article_page')}}">
+        文章管理
+    </a>
+</bottom>
 <bottom  type="button" class="btn btn-default">用户管理</bottom>
 <bottom  type="button" class="btn btn-default">网站设置</bottom>
 <bottom  type="button" class="btn btn-default">个人设置</bottom>
