@@ -28,14 +28,12 @@
                 </a>
             </button>
             <button type="button" class="btn btn-default">
-                <a href="#">
+                <a href="{{url_for('article.change_article_page', article_id = article.id)}}">
                     修改
                 </a>
             </button>
-            <button type="button" class="btn btn-default">
-                <a href="#">
+            <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_article_page',article_id = article.id)}}">
                     删除
-                </a>
             </button>
         </td>
     </tr>
@@ -49,3 +47,20 @@
 {% endif %}
 
 {% endblock center_bar %}
+
+{% block other_scripts %}
+    <script>
+        $(document).ready(function() {
+            var delete_button = document.getElementsByClassName('delete-button')
+            for (i = 0; i < delete_button.length; i++) {
+                delete_button[i].addEventListener('click', function () {
+                    var url = event.target.id
+                    jQuery.post(url=url,function() {
+                        alert("删除成功");
+                        window.location.href = '{{url_for('article.manage_article_page')}}'
+                    })
+                })
+            }
+        })
+    </script>
+{% endblock other_scripts %}

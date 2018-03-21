@@ -1,7 +1,7 @@
 {% extends "__base__.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 这是新文章编辑页面 {% endblock title %}
+{% block title %} 这是文章修改页面 {% endblock title %}
 
 
 
@@ -29,6 +29,11 @@
         editor.customConfig.uploadFileName = 'file'   //上传文章图片配置文件名
         editor.customConfig.debug = false  //debug
         editor.create()
+        editor.txt.html('{% autoescape false %}{{article.content}}{% endautoescape %}')
+
+        $('#title').val('{{article.title}}')
+        $('#keyword').val('{{article.keyword}}')
+        $('#description').val('{{article.description}}')
 
         document.getElementById('btn1').addEventListener('click', function () {
             // 读取 html
@@ -39,8 +44,8 @@
             var description = $('#description').val()
             var content = editor.txt.html()
             var csrf_token = $('#csrf_token').val()
-            jQuery.post(url='{{url_for('article.new_article_page')}}',data = {name:'new_article',csrf_token:csrf_token, title:title, keyword:keyword, description:description,content:content},function(url) {
-                alert("提交成功");
+            jQuery.post(url='{{url_for('article.change_article_page', article_id = article.id)}}',data = {name:'new_article',csrf_token:csrf_token, title:title, keyword:keyword, description:description,content:content},function(url) {
+                alert("修改成功");
                 window.location.href = url
             })
         }, false)

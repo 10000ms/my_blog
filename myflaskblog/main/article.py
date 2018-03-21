@@ -75,7 +75,7 @@ def new_article_page():
                               new_article_user_id)
         db.session.add(new_article)
         db.session.commit()
-        return redirect(url_for('index.index_page'))
+        return url_for('article.article_detail_page', article_id=new_article.id)
     elif current_user.is_admin == 1:
         form = ArticleForm()
         return render_template('/article/new_article.html', form=form)
@@ -92,6 +92,40 @@ def manage_article_page():
             page, per_page=10, error_out=True)
         articles = pagination.items
         return render_template("/article/manage_article.html", articles=articles, pagination=pagination)
+    else:
+        abort(403)
+
+
+@article.route('/change_article/<int:article_id>', methods=['GET', 'POST'])
+@login_required
+def change_article_page(article_id):
+    if request.method == 'POST' and current_user.is_admin == 1:
+        new_article_title = request.form.get('title')
+        if not new_article_title:
+            return '出错了'
+        need_change_article = Article.query.filter_by(id=article_id).first()
+        need_change_article.title = request.form.get('title')
+        need_change_article.keyword = request.form.get('keyword')
+        need_change_article.description = request.form.get('description')
+        need_change_article.content = request.form.get('content')
+        db.session.commit()
+        return url_for('article.article_detail_page', article_id=article_id)
+    elif current_user.is_admin == 1:
+        need_change_article = Article.query.filter_by(id=article_id).first()
+        form = ArticleForm()
+        return render_template('/article/change_article.html', article=need_change_article, form=form)
+    else:
+        abort(403)
+
+
+@article.route('/delete_article/<int:article_id>', methods=['POST'])
+@login_required
+def delete_article_page(article_id):
+    if current_user.is_admin == 1:
+        delete_article = Article.query.filter_by(id=article_id).first()
+        db.session.delete(delete_article)
+        db.session.commit()
+        return '删除成功'
     else:
         abort(403)
 
@@ -117,8 +151,8 @@ def get_img():
             filename = file.filename
             file.save(UPLOAD_FOLDER+filename)
             img_url = url_for('static', filename='ImageUploads/'+filename)
-            jsonres = json.dumps({'errno': 0, 'data': [img_url]})
-            res = Response(jsonres)
+            json_res = json.dumps({'errno': 0, 'data': [img_url]})
+            res = Response(json_res)
             res.headers["ContentType"] = "text/x-json"
             res.headers["Charset"] = "utf-8"
             return res
