@@ -1,0 +1,21 @@
+{% extends "__base__.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 这是评论修改页面 {% endblock title %}
+
+{% block center_bar %}
+
+<div>
+    {{ wtf.quick_form(form) }}
+</div>
+
+{% endblock center_bar %}
+
+{% block other_scripts %}
+<script>
+    $(document).ready(function() {
+        $('#title').val('{{comment.title}}')
+        $('#comment').val('{{comment.comment}}')
+    })
+</script>
+{% endblock other_scripts %}

@@ -53,10 +53,11 @@ def article_detail_page(article_id):
         return redirect(url_for('article.article_detail_page', article_id=article_id))
     else:
         page = request.args.get('page', 1, type=int)
-        pagination = Comment.query.order_by(Comment.create_datetime.desc()).paginate(
+        get_comment = Comment.query.filter_by(article_id=article_id)
+        pagination = get_comment.order_by(Comment.create_datetime.desc()).paginate(
             page, per_page=5, error_out=True)
         comments = pagination.items
-        return render_template("/article/article.html", article=get_article, form=form, comments=comments,\
+        return render_template("/article/article.html", article=get_article, form=form, comments=comments, \
                                pagination=pagination)
 
 
@@ -127,25 +128,46 @@ def delete_article_page(article_id):
         db.session.commit()
         return '删除成功'
     else:
-        abort(403)
+        return abort(403)
 
 
 @article.route('/comment_detail/<int:comment_id>')
 @login_required
 def comment_detail_page(comment_id):
-    pass
+    get_comment = Comment.query.filter_by(id=comment_id).first()
+    if get_comment.user.id != current_user.id and current_user.is_admin == 0:
+        abort(403)
+    else:
+        return render_template('/article/comment_detail.html', comment=get_comment)
 
 
 @article.route('/change_comment/<int:comment_id>', methods=['GET', 'POST'])
 @login_required
 def change_comment_page(comment_id):
-    pass
+    get_comment = Comment.query.filter_by(id=comment_id).first()
+    form = CommentForm()
+    if form.validate_on_submit() and get_comment.user.id == current_user.id:
+        get_comment.title = form.title.data
+        get_comment.comment = form.comment.data
+        db.session.commit()
+        flash('修改成功')
+        return redirect(url_for('article.comment_detail_page', comment_id=comment_id))
+    elif get_comment.user.id == current_user.id:
+        return render_template('/article/change_comment.html', comment=get_comment, form=form)
+    else:
+        abort(403)
 
 
 @article.route('/delete_comment/<int:comment_id>', methods=['POST'])
 @login_required
 def delete_comment_page(comment_id):
-    pass
+    get_comment = Comment.query.filter_by(id=comment_id).first()
+    if get_comment.user.id != current_user.id and current_user.is_admin == 0:
+        abort(403)
+    else:
+        db.session.delete(get_comment)
+        db.session.commit()
+    return '删除成功'
 
 
 # 文章上传图片部分
@@ -158,7 +180,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 @login_required
 def get_img():
     file = request.files['file']
-    if file == None:
+    if file is None:
         result = r"error|未成功获取文件，上传失败"
         res = Response(result)
         res.headers["ContentType"] = "text/x-json"

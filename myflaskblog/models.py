@@ -74,6 +74,7 @@ class Article(db.Model):
     description = db.Column(db.String(250))
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comments = db.relationship('Comment', backref='article', lazy='dynamic')
 
     def __init__(self, title, keyword, description, content, user_id):
         self.create_datetime = datetime.now()

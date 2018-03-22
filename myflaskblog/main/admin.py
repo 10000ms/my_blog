@@ -15,7 +15,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 # 导入必须的模块
 from flask import request, flash, url_for, render_template, redirect, abort
-from myflaskblog.models import User
+from myflaskblog.models import User, Comment
 from myflaskblog import db
 
 admin = Blueprint('admin', __name__)
@@ -61,3 +61,14 @@ def blog_setting_page():
         abort(403)
 
 
+@admin.route('/manage_comment')
+@login_required
+def manage_comment_page():
+    if current_user.is_admin == 1:
+        page = request.args.get('page', 1, type=int)
+        pagination = Comment.query.order_by(Comment.create_datetime.desc()).paginate(
+            page, per_page=10, error_out=True)
+        comments = pagination.items
+        return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination)
+    else:
+        abort(403)

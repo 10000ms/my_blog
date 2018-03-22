@@ -1,0 +1,52 @@
+{% extends "__base__.html" %}
+
+{% block title %} 评论：{{comment.title}} {% endblock title %}
+
+{% block center_bar %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div>
+    <h1>文章标题：{{comment.article.title}}</h1>
+    <p>描述：{{comment.article.description}}</p>
+    <br/>
+    {% if current_user.id == comment.user.id %}
+        <button type="button" class="btn btn-default">
+            <a href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
+                修改
+            </a>
+        </button>
+    {% endif %}
+        <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
+            删除
+        </button>
+    <br/>
+    <p>评论标题：{{comment.title}}</p>
+    <p>创建时间：{{comment.create_datetime}}</p>
+    <p>作者：{{comment.user.username}}</p>
+    <p>评论内容：{{comment.comment}}</p>
+</div>
+
+{% endblock center_bar %}
+
+{% block other_scripts %}
+<script>
+    $(document).ready(function() {
+        var delete_button = document.getElementsByClassName('delete-button')
+        for (i = 0; i < delete_button.length; i++) {
+            delete_button[i].addEventListener('click', function () {
+                var url = event.target.id
+                jQuery.post(url=url,function() {
+                    alert("删除成功");
+                    window.location.href = '{{url_for('user.person_setting_page')}}'
+                 })
+            })
+        }
+    })
+</script>
+{% endblock other_scripts %}
