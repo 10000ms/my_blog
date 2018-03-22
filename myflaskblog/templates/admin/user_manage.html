@@ -1,0 +1,53 @@
+{% extends "__base__.html" %}
+{% import "__macros__.html" as macros %}
+
+{% block title %} 这是用户管理页面 {% endblock title %}
+
+{% block center_bar %}
+
+<table class="table table-striped">
+    <tr>
+        <th>用户名</th>
+        <th>email</th>
+        <th>创建时间</th>
+        <th>操作</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.create_datetime}}</td>
+        <td>
+            <button type="button" class="btn btn-default delete-button" id="{{url_for('admin.delete_user_page',user_id = user.id)}}">
+                    删除用户
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'admin.user_manage_page') }}
+</div>
+{% endif %}
+
+{% endblock center_bar %}
+
+{% block other_scripts %}
+    <script>
+        $(document).ready(function() {
+            var delete_button = document.getElementsByClassName('delete-button')
+            for (i = 0; i < delete_button.length; i++) {
+                delete_button[i].addEventListener('click', function () {
+                    var url = event.target.id
+                    jQuery.post(url=url,function() {
+                        alert("删除成功");
+                        window.location.href = '{{url_for('admin.user_manage_page')}}'
+                    })
+                })
+            }
+        })
+    </script>
+{% endblock other_scripts %}
