@@ -1,0 +1,83 @@
+{% extends "__base__.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "__macros__.html" as macros %}
+
+{% block title %} 这是个人设置页面 {% endblock title %}
+
+{% block center_bar %}
+
+<bottom  type="button" class="btn btn-default">
+    <a href="#">
+        我的头像
+    </a>
+</bottom>
+<br/>
+<div>
+{{ wtf.quick_form(form) }}
+</div>
+<br/>
+
+
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+{% endfor %}
+
+
+<p>评论管理</p>
+<table class="table table-striped">
+    <tr>
+        <th>文章</th>
+        <th>评论标题</th>
+        <th>创建时间</th>
+        <th>操作</th>
+    </tr>
+    {% for comment in comments %}
+    <tr>
+        <td>{{comment.title}}</td>
+        <td>{{comment.title}}</td>
+        <td>{{comment.create_datetime}}</td>
+        <td>
+             <button type="button" class="btn btn-default">
+                <a href="{{url_for('article.comment_detail_page', comment_id = comment.id)}}">
+                    查看评论
+                </a>
+            </button>
+            <button type="button" class="btn btn-default">
+                <a href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
+                    修改
+                </a>
+            </button>
+            <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
+                    删除
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock center_bar %}
+
+
+
+{% block other_scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#username').val('{{current_user.username}}')
+
+            var delete_button = document.getElementsByClassName('delete-button')
+            for (i = 0; i < delete_button.length; i++) {
+                delete_button[i].addEventListener('click', function () {
+                    var url = event.target.id
+                    jQuery.post(url=url,function() {
+                        alert("删除成功");
+                        window.location.href = '{{url_for('user.person_setting_page')}}'
+                    })
+                })
+            }
+        })
+    </script>
+{% endblock other_scripts %}

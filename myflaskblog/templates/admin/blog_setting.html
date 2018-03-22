@@ -1,11 +1,14 @@
 {% extends "__base__.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 这是普通用户页面 {% endblock title %}
+{% block title %} 这是网站设置页面 {% endblock title %}
 
 {% block center_bar %}
+
 <bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.person_setting_page')}}">
-        个人管理
+    <a href="#">
+        网站名称
     </a>
 </bottom>
+
 {% endblock center_bar %}

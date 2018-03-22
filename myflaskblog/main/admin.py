@@ -50,3 +50,14 @@ def delete_user_page(user_id):
         return '删除成功'
     else:
         abort(403)
+
+
+@admin.route('/blog_setting')
+@login_required
+def blog_setting_page():
+    if current_user.is_admin == 1:
+        return render_template('/admin/blog_setting.html')
+    else:
+        abort(403)
+
+

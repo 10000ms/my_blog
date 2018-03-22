@@ -130,6 +130,24 @@ def delete_article_page(article_id):
         abort(403)
 
 
+@article.route('/comment_detail/<int:comment_id>')
+@login_required
+def comment_detail_page(comment_id):
+    pass
+
+
+@article.route('/change_comment/<int:comment_id>', methods=['GET', 'POST'])
+@login_required
+def change_comment_page(comment_id):
+    pass
+
+
+@article.route('/delete_comment/<int:comment_id>', methods=['POST'])
+@login_required
+def delete_comment_page(comment_id):
+    pass
+
+
 # 文章上传图片部分
 
 UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/ImageUploads/'

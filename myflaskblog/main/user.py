@@ -11,8 +11,8 @@ __author__ = 'Victor Lai'
 from flask import Blueprint
 
 # 导入必须的模块
-from flask import request, flash, url_for, render_template, redirect
-from myflaskblog.models import User
+from flask import request, flash, url_for, render_template, redirect, abort
+from myflaskblog.models import User, Comment
 from myflaskblog import db
 import hashlib
 
@@ -86,6 +86,24 @@ def register_page():
         return render_template('/user/register.html', form=form)
 
 
+@user.route('/person_setting', methods=['GET', 'POST'])
+@login_required
+def person_setting_page():
+    form = UsernameForm()
+    if form.validate_on_submit():
+        rename_user = User.query.filter_by(id=current_user.id).first()
+        rename_user.username = form.username.data
+        db.session.commit()
+        flash('修改成功')
+        return redirect(url_for('user.person_setting_page'))
+    else:
+        page = request.args.get('page', 1, type=int)
+        user_comment = Comment.query.filter_by(user_id=current_user.id)
+        pagination = user_comment.paginate(page, per_page=10, error_out=True)
+        comments = pagination.items
+        return render_template('/user/person_setting.html', form=form, comments=comments, pagination=pagination)
+
+
 class UserloginForm(FlaskForm):
     account = StringField('帐号', [DataRequired('帐号必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
     password = PasswordField('密码', [DataRequired('密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
@@ -98,4 +116,9 @@ class UserregisterForm(FlaskForm):
     confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
     username = StringField('用户名', [DataRequired('重复密码必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
     email = StringField('email', [DataRequired('email必填！'), Length(min=3, max=20, message='email必须介于3-20字符！')])
+    submit = SubmitField('提交')
+
+
+class UsernameForm(FlaskForm):
+    username = StringField('用户名', [DataRequired('重复密码必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
     submit = SubmitField('提交')

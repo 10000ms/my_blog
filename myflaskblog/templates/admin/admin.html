@@ -14,11 +14,24 @@
     </a>
 </bottom>
 <bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('article.manage_article_page')}}">
+        评论管理
+    </a>
+</bottom>
+<bottom  type="button" class="btn btn-default">
     <a href="{{url_for('admin.user_manage_page')}}">
         用户管理
     </a>
 </bottom>
-<bottom  type="button" class="btn btn-default">网站设置</bottom>
-<bottom  type="button" class="btn btn-default">个人设置</bottom>
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('admin.blog_setting_page')}}">
+        网站设置
+    </a>
+</bottom>
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('user.person_setting_page')}}">
+        个人设置
+    </a>
+</bottom>
 {% endblock center_bar %}
 
