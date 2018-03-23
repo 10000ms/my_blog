@@ -12,6 +12,7 @@ from myflaskblog import db
 
 # 导入加密用包
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # 导入datetime时间包
 from datetime import datetime
@@ -19,6 +20,9 @@ from datetime import datetime
 # 导入flask_login的UserMixin类，让login正确工作
 from flask_login import UserMixin
 
+# 导入必要模块
+from myflaskblog import app
+from flask import current_app
 
 # 用户模型
 class User(db.Model, UserMixin):
@@ -41,6 +45,7 @@ class User(db.Model, UserMixin):
     create_datetime = db.Column(db.DateTime)
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     articles = db.relationship('Article', backref='user', lazy='dynamic')
+    confirmed = db.Column(db.Integer, default=1)
 
     def __init__(self, account, password_hash, username, email, is_admin=0):
         self.account = account
@@ -56,6 +61,23 @@ class User(db.Model, UserMixin):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    # 注意重启app的时候SECRET_KEY会重置
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.id})
+
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = 1
+        db.session.add(self)
+        return True
 
 
 # 常规配置模块
