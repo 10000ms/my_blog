@@ -14,7 +14,7 @@ from flask import Blueprint
 from flask import request, flash, url_for, render_template, redirect, abort
 from myflaskblog.models import User, Comment
 from myflaskblog import db
-import hashlib
+from myflaskblog.email import send_email
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -80,10 +80,23 @@ def register_page():
             new_user = User(account, password, username, email)
             db.session.add(new_user)
             db.session.commit()
+            token = user.generate_confirmation_token()
+            send_email(user.email, 'Confirm Your Account', 'email/confirm', user=user, token=token)
             login_user(new_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
         return render_template('/user/register.html', form=form)
+
+
+@user.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('index.index_page'))
+    elif current_user.confirm(token):
+        return '激活成功'
+    else:
+        return '邮箱激活失败，请重试'
 
 
 @user.route('/person_setting', methods=['GET', 'POST'])
@@ -122,3 +135,4 @@ class UserregisterForm(FlaskForm):
 class UsernameForm(FlaskForm):
     username = StringField('用户名', [DataRequired('重复密码必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
     submit = SubmitField('提交')
+

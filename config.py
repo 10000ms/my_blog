@@ -32,6 +32,9 @@ class DevelopmentConfig(Config_Default):
     SECRET_KEY = os.urandom(24)  # 配置密匙值，session、cookies及部分其他应用会用到
     PROJECT_PATH = sys.path[0]  # 项目路径
 
+    FLASKY_MAIL_SUBJECT_PREFIX = '1000ms'  # 邮件标题名前缀
+    FLASKY_MAIL_SENDER = '1000ms'  # 发邮件的人
+
 class TestingConfig(Config_Default):
     TESTING = True
 

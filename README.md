@@ -16,6 +16,8 @@ Flask-bootstarp ==> 3.3.7.1
 
 Flask-login ==> 0.4.1
 
+Flask-mail ==> 0.9.1
+
 # 处理ImportError: No module named MySQLdb问题
 1.easy_install mysql-python (mix os)
 
@@ -34,5 +36,6 @@ Flask-login ==> 0.4.1
 mysql+driver://username:password@host:port/database?charset=utf8
 
 driver为：python2, 为'mysqldb'；python3, 为'pymysql'。安装mysql官方库如'python-mysql',如无法解决问题可能由于不支持python版本或mysql驱动BUG，可尝试使用第三方库如 'PyMySQL3' 'MySQLdb'等
+
 
  

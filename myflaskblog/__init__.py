@@ -18,6 +18,9 @@ from flask_login import LoginManager
 # 导入配置模块
 from config import config
 
+# 导入Mail模块
+from flask_mail import Mail
+
 # 导入其他必要模块
 import hashlib
 
@@ -26,6 +29,7 @@ app = Flask(__name__)
 app.config.from_object(config['config'])  # 从项目目录的config.py读入配置
 db = SQLAlchemy(app)  # 在项目中导入SQLAlchemy模块
 bootstrap = Bootstrap(app)  # 在项目中导入bootstrap模块
+mail = Mail(app)
 
 # 在项目中导入login模块
 login_manager = LoginManager()
