@@ -43,9 +43,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
+    confirmed = db.Column(db.Boolean, default=True)
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     articles = db.relationship('Article', backref='user', lazy='dynamic')
-    confirmed = db.Column(db.Integer, default=1)
 
     def __init__(self, account, password_hash, username, email, is_admin=0):
         self.account = account
@@ -75,7 +75,7 @@ class User(db.Model, UserMixin):
             return False
         if data.get('confirm') != self.id:
             return False
-        self.confirmed = 1
+        self.confirmed = True
         db.session.add(self)
         return True
 

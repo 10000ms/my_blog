@@ -35,6 +35,13 @@ class DevelopmentConfig(Config_Default):
     FLASKY_MAIL_SUBJECT_PREFIX = '1000ms'  # 邮件标题名前缀
     FLASKY_MAIL_SENDER = '1000ms'  # 发邮件的人
 
+    MAIL_SERVER = 'smtp.qq.com'  # 发送邮件服务器
+    MAIL_PORT = 587  # 使用端口
+    MAIL_USE_TLS = True  # 启用安全套接层TLS协议
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
+
 class TestingConfig(Config_Default):
     TESTING = True
 

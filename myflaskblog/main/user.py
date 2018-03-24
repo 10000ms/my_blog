@@ -80,8 +80,8 @@ def register_page():
             new_user = User(account, password, username, email)
             db.session.add(new_user)
             db.session.commit()
-            token = user.generate_confirmation_token()
-            send_email(user.email, 'Confirm Your Account', 'email/confirm', user=user, token=token)
+            token = new_user.generate_confirmation_token()
+            send_email(new_user.email, 'Confirm Your Account', 'email/confirm', user=user, token=token)
             login_user(new_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
@@ -97,6 +97,22 @@ def confirm(token):
         return '激活成功'
     else:
         return '邮箱激活失败，请重试'
+
+
+@user.before_app_request
+def before_request():
+    if current_user.is_authenticated \
+            and not current_user.confirmed \
+            and request.endpoint[:5] != 'user.'\
+            and request.endpoint != 'static':
+        return redirect(url_for('user.unconfirmed'))
+
+
+@user.route('/unconfirmed')
+def unconfirmed():
+    if current_user.is_anonymous() or current_user.confirmed:
+        return redirect(url_for('index.index_page'))
+    return render_template('auth/unconfirmed.html')
 
 
 @user.route('/person_setting', methods=['GET', 'POST'])
