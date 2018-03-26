@@ -33,7 +33,7 @@ class DevelopmentConfig(Config_Default):
     PROJECT_PATH = sys.path[0]  # 项目路径
 
     FLASKY_MAIL_SUBJECT_PREFIX = '1000ms'  # 邮件标题名前缀
-    FLASKY_MAIL_SENDER = '1000ms'  # 发邮件的人
+    FLASKY_MAIL_SENDER = os.environ.get('MAIL_USERNAME')  # 发邮件的人
 
     MAIL_SERVER = 'smtp.qq.com'  # 发送邮件服务器
     MAIL_PORT = 587  # 使用端口

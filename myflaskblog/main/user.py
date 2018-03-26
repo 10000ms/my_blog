@@ -81,7 +81,7 @@ def register_page():
             db.session.add(new_user)
             db.session.commit()
             token = new_user.generate_confirmation_token()
-            send_email(new_user.email, 'Confirm Your Account', 'email/confirm', user=user, token=token)
+            send_email(new_user.email, '请确认您的帐号', 'email/confirm', user=new_user, token=token)
             login_user(new_user, remember=True)
             return redirect(url_for('user.login_user_page'))
     else:
@@ -97,22 +97,35 @@ def confirm(token):
         return '激活成功'
     else:
         return '邮箱激活失败，请重试'
+    # TODO:未登陆用户同样可以激活，使用正确跳转
 
 
 @user.before_app_request
 def before_request():
     if current_user.is_authenticated \
             and not current_user.confirmed \
-            and request.endpoint[:5] != 'user.'\
+            and str(request.endpoint)[:5] != 'user.'\
             and request.endpoint != 'static':
         return redirect(url_for('user.unconfirmed'))
 
 
 @user.route('/unconfirmed')
+@login_required
 def unconfirmed():
-    if current_user.is_anonymous() or current_user.confirmed:
+    if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('index.index_page'))
-    return render_template('auth/unconfirmed.html')
+    return render_template('/user/unconfirmed.html')
+    # TODO:增加是否需要修改邮箱
+
+
+@user.route('/send_email_again')
+@login_required
+def unconfirmed():
+    token = current_user.generate_confirmation_token()
+    send_email(current_user.email, '请确认您的帐号', 'email/confirm', user=current_user, token=token)
+    flash('已重发验证邮件')
+    return redirect(url_for('user.unconfirmed'))
+    # TODO:检测重发间隔
 
 
 @user.route('/person_setting', methods=['GET', 'POST'])

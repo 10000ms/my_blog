@@ -4,5 +4,5 @@
 
 请使用一下链接激活您的帐号:
 
-#
+{{ url_for('user.confirm', token=token, _external=True) }}
 

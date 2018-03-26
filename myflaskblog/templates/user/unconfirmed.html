@@ -1,0 +1,23 @@
+{% extends "__base__.html" %}
+
+{% block title %} 用户未验证 {% endblock title %}
+
+{% block center_bar %}
+
+{% if current_user.is_authenticated %}
+
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('user.person_setting_page')}}">
+        重新发送验证邮件
+    </a>
+</bottom>
+
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% endblock center_bar %}

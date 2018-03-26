@@ -43,7 +43,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
-    confirmed = db.Column(db.Boolean, default=True)
+    confirmed = db.Column(db.Boolean, default=False)
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     articles = db.relationship('Article', backref='user', lazy='dynamic')
 
