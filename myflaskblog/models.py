@@ -55,6 +55,10 @@ class User(db.Model, UserMixin):
         self.create_datetime = datetime.now()
         self.is_admin = is_admin
 
+    def change_password(self, new_password):
+        self.password_hash = generate_password_hash(new_password)
+        db.session.commit()
+
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -67,8 +71,6 @@ class User(db.Model, UserMixin):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         if function_module == 'confirm':
             fm_name = 'c'
-        elif function_module == 'resetemail':
-            fm_name = 're'
         elif function_module == 'resetpassword':
             fm_name = 'rp'
         return s.dumps({fm_name: self.id})
@@ -84,12 +86,7 @@ class User(db.Model, UserMixin):
             if data.get(fm_name) != self.id:
                 return False
             self.confirmed = True
-            db.session.add(self)
-            return True
-        elif function_module == 'resetemail':
-            fm_name = 're'
-            if data.get(fm_name) != self.id:
-                return False
+            db.session.commit()
             return True
         elif function_module == 'resetpassword':
             fm_name = 'rp'

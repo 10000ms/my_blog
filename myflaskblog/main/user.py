@@ -14,7 +14,9 @@ from flask import Blueprint
 from flask import request, flash, url_for, render_template, redirect, abort
 from myflaskblog.models import User, Comment
 from myflaskblog import db
-from myflaskblog.email import send_email
+from myflaskblog.email_sender import send_email
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -128,28 +130,90 @@ def send_email_again():
     # TODO:检测重发间隔
 
 
-@user.route('/reset_email')
+@user.route('/reset_email', methods=['GET', 'POST'])
 @login_required
 def reset_email():
+    form = ResetemailForm()
+    if form.validate_on_submit():
+        if form.email.data == current_user.email:
+            flash('新邮箱与旧邮箱重复')
+            return redirect(url_for('user.reset_email'))
+        reset_email_user = User.query.filter_by(id=current_user.id).first()
+        reset_email_user.email = form.email.data
+        reset_email_user.confirmed = False
+        db.session.commit()
+        token = current_user.generate_token('confirm')
+        send_email(current_user.email, '请确认您的新邮箱', 'email/resetemail', user=current_user, token=token)
+        flash('提交成功，请留意新邮箱的信息')
+        return redirect(url_for('user.reset_email'))
+    else:
+        return render_template('/user/reset_email.html', form=form)
+
+
+@user.route('/forget_password', methods=['GET', 'POST'])
+def forget_password():
+    form = forgetpasswordForm()
+    if current_user.is_authenticated:
+        flash('已登陆用户请勿进行此操作')
+        return redirect(url_for('index.index_page'))
+    elif form.validate_on_submit():
+        if not User.query.filter_by(account=form.account.data).first():
+            flash('未找到该用户')
+            return redirect(url_for('user.forget_password'))
+        need_resetpassword_user = User.query.filter_by(account=form.account.data).first()
+        if need_resetpassword_user.email != form.email.data:
+            flash('用户email错误')
+            return redirect(url_for('user.forget_password'))
+        token = need_resetpassword_user.generate_token('resetpassword')
+        send_email(need_resetpassword_user.email, '请重置您的密码', 'email/resetpassword', user=need_resetpassword_user, token=token)
+        flash('重置密码邮件已发送，请登陆邮箱根据提示进行密码修改')
+        return redirect(url_for('user.forget_password'))
+    else:
+        return render_template('/user/forget_password.html', form=form)
+    # TODO:注册未激活用户忘记密码
+
+
+@user.route('/forget_password_setting/<token>', methods=['GET', 'POST'])
+def forget_password_setting(token):
+    form = resetforgetpasswordForm()
+    if form.validate_on_submit():
+        ss = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            get_data = ss.loads(token)
+        except:
+            return '出错了'
+        user_id = get_data.get('rp')
+        forget_password_user = User.query.filter_by(id=user_id).first()
+        forget_password_user.change_password(form.password.data)
+        flash('密码修改成功')
+        return redirect(url_for('user.forget_password_setting'))
+    else:
+        return render_template('/user/forget_password_setting.html', form=form, token_url=token)
+    # TODO:忘记密码部分更加合理
+
+
+@user.route('/forget_password_setting_password/<user_id>')
+def forget_password_setting_password(user_id):
     pass
 
 
-@user.route('/reset_email_check')
-@login_required
-def reset_email_check():
-    pass
-
-
-@user.route('/reset_password')
+@user.route('/reset_password', methods=['GET', 'POST'])
 @login_required
 def reset_password():
-    pass
-
-
-@user.route('/reset_password_check')
-@login_required
-def reset_password_check():
-    pass
+    form = ResetpasswordForm()
+    if form.validate_on_submit():
+        if not current_user.verify_password(form.old_password.data):
+            flash('密码错误')
+            return redirect(url_for('user.reset_password'))
+        if form.old_password.data == form.password.data:
+            flash('新旧密码重复')
+            return redirect(url_for('user.reset_password'))
+        reset_password_user = User.query.filter_by(id=current_user.id).first()
+        reset_password_user.change_password(form.password.data)
+        flash('密码修改成功')
+        return redirect(url_for('user.reset_password'))
+    else:
+        return render_template('/user/reset_password.html', form=form)
 
 
 @user.route('/person_setting', methods=['GET', 'POST'])
@@ -189,3 +253,26 @@ class UsernameForm(FlaskForm):
     username = StringField('用户名', [DataRequired('重复密码必填！'), Length(min=6, max=20, message='用户名必须介于6-20字符！')])
     submit = SubmitField('提交')
 
+
+class ResetemailForm(FlaskForm):
+    email = StringField('email', [DataRequired('email必填！'), Length(min=3, max=20, message='email必须介于3-20字符！')])
+    submit = SubmitField('提交')
+
+
+class ResetpasswordForm(FlaskForm):
+    old_password = PasswordField('旧密码', [DataRequired('旧密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
+    password = PasswordField('新密码', [DataRequired('新密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
+    confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
+    submit = SubmitField('提交')
+
+
+class forgetpasswordForm(FlaskForm):
+    account = StringField('帐号', [DataRequired('帐号必填！'), Length(min=6, max=20, message='帐号必须介于6-20字符！')])
+    email = StringField('email', [DataRequired('email必填！'), Length(min=3, max=20, message='email必须介于3-20字符！')])
+    submit = SubmitField('提交')
+
+
+class resetforgetpasswordForm(FlaskForm):
+    password = PasswordField('新密码', [DataRequired('新密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
+    confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
+    submit = SubmitField('提交')
