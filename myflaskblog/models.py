@@ -63,21 +63,39 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
     # 注意重启app的时候SECRET_KEY会重置
-    def generate_confirmation_token(self, expiration=3600):
+    def generate_token(self, function_module, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': self.id})
+        if function_module == 'confirm':
+            fm_name = 'c'
+        elif function_module == 'resetemail':
+            fm_name = 're'
+        elif function_module == 'resetpassword':
+            fm_name = 'rp'
+        return s.dumps({fm_name: self.id})
 
-    def confirm(self, token):
+    def check_token(self, token, function_module):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except:
             return False
-        if data.get('confirm') != self.id:
-            return False
-        self.confirmed = True
-        db.session.add(self)
-        return True
+        if function_module == 'confirm':
+            fm_name = 'c'
+            if data.get(fm_name) != self.id:
+                return False
+            self.confirmed = True
+            db.session.add(self)
+            return True
+        elif function_module == 'resetemail':
+            fm_name = 're'
+            if data.get(fm_name) != self.id:
+                return False
+            return True
+        elif function_module == 'resetpassword':
+            fm_name = 'rp'
+            if data.get(fm_name) != self.id:
+                return False
+            return True
 
 
 # 常规配置模块

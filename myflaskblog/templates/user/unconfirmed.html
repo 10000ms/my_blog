@@ -4,11 +4,15 @@
 
 {% block center_bar %}
 
-{% if current_user.is_authenticated %}
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('user.send_email_again')}}">
+        重新发送验证邮件
+    </a>
+</bottom>
 
 <bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.person_setting_page')}}">
-        重新发送验证邮件
+    <a href="{{url_for('user.reset_email')}}">
+        修改验证邮箱
     </a>
 </bottom>
 

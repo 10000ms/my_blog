@@ -80,7 +80,7 @@ def register_page():
             new_user = User(account, password, username, email)
             db.session.add(new_user)
             db.session.commit()
-            token = new_user.generate_confirmation_token()
+            token = new_user.generate_token('confirm')
             send_email(new_user.email, '请确认您的帐号', 'email/confirm', user=new_user, token=token)
             login_user(new_user, remember=True)
             return redirect(url_for('user.login_user_page'))
@@ -93,7 +93,7 @@ def register_page():
 def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('index.index_page'))
-    elif current_user.confirm(token):
+    elif current_user.check_token(token, 'confirm'):
         return '激活成功'
     else:
         return '邮箱激活失败，请重试'
@@ -120,12 +120,36 @@ def unconfirmed():
 
 @user.route('/send_email_again')
 @login_required
-def unconfirmed():
-    token = current_user.generate_confirmation_token()
+def send_email_again():
+    token = current_user.generate_token('confirm')
     send_email(current_user.email, '请确认您的帐号', 'email/confirm', user=current_user, token=token)
     flash('已重发验证邮件')
     return redirect(url_for('user.unconfirmed'))
     # TODO:检测重发间隔
+
+
+@user.route('/reset_email')
+@login_required
+def reset_email():
+    pass
+
+
+@user.route('/reset_email_check')
+@login_required
+def reset_email_check():
+    pass
+
+
+@user.route('/reset_password')
+@login_required
+def reset_password():
+    pass
+
+
+@user.route('/reset_password_check')
+@login_required
+def reset_password_check():
+    pass
 
 
 @user.route('/person_setting', methods=['GET', 'POST'])

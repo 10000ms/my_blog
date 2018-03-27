@@ -11,6 +11,19 @@
         我的头像
     </a>
 </bottom>
+
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('user.reset_email')}}">
+        修改验证邮箱
+    </a>
+</bottom>
+
+<bottom  type="button" class="btn btn-default">
+    <a href="{{url_for('user.reset_password')}}">
+        修改密码
+    </a>
+</bottom>
+
 <br/>
 <div>
 {{ wtf.quick_form(form) }}
