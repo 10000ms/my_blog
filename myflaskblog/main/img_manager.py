@@ -95,6 +95,6 @@ def allowed_file(filename):
 # 生成上传文件夹
 def upload_folder(func):
     if func == 'article_img':
-        return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'article_img\\'
+        return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'article_img/'
     elif func == 'profile_photo':
-        return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'profile_photo\\'
+        return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'profile_photo/'
