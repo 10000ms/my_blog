@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'Victor Lai'
+
+'''
+email发送功能
+'''
+
 from threading import Thread
 from flask import current_app, render_template
 from flask_mail import Message

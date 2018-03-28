@@ -40,6 +40,7 @@ class User(db.Model, UserMixin):
     account = db.Column(db.String(80), unique=True)
     password_hash = db.Column(db.String(128))
     username = db.Column(db.String(80))
+    profile_photo = db.Column(db.String(128))
     email = db.Column(db.String(32))
     is_admin = db.Column(db.Integer)
     create_datetime = db.Column(db.DateTime)
@@ -142,4 +143,12 @@ class Comment(db.Model):
         self.article_id = article_id
 
         # TODO:正确的处理评论模块
+
+
+# 图片模块
+class Img(db.Model):
+    __tablename__ = 'Img'
+    id = db.Column(db.Integer, primary_key=True)
+    create_datetime = db.Column(db.DateTime)
+    img_name = db.Column(db.String(128))
 

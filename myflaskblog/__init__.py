@@ -37,7 +37,7 @@ login_manager.init_app(app)
 
 
 # 检测当前环境是否处于开发环境，后期改进该测试功能
-if app.config['IS_DEVELOPMENT'] and app.config['IS_DEVELOPMENT'] == True :
+if app.config['IS_DEVELOPMENT']:
     # 创建所有数据库表格
     from myflaskblog import models
     db.drop_all()

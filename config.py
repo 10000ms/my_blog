@@ -8,6 +8,7 @@ __author__ = 'Victor Lai'
 '''
 
 import os, sys
+from flask import current_app
 
 
 class Config_Default(object):
@@ -38,8 +39,11 @@ class DevelopmentConfig(Config_Default):
     MAIL_SERVER = 'smtp.qq.com'  # 发送邮件服务器
     MAIL_PORT = 587  # 使用端口
     MAIL_USE_TLS = True  # 启用安全套接层TLS协议
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')  # 邮箱登陆用户名，从环境变量中获取
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')  # 邮箱登陆密码，从环境变量中获取
+
+    IMG_UPLOAD_FOLDER = '/img/'  # 文件上传相关，目录配置
+    IMG_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])  # 文件上传相关，允许文件名
 
 
 class TestingConfig(Config_Default):

@@ -236,6 +236,12 @@ def person_setting_page():
         return render_template('/user/person_setting.html', form=form, comments=comments, pagination=pagination)
 
 
+@user.route('/set_profile_photo')
+@login_required
+def set_profile_photo():
+    pass
+
+
 class UserloginForm(FlaskForm):
     account = StringField('帐号', [DataRequired('帐号必填！'), Length(min=6, max=20, message='账户必须介于6-20字符！')])
     password = PasswordField('密码', [DataRequired('密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
