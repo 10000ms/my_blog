@@ -23,7 +23,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 # 导入WTF模块
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 
@@ -176,25 +176,27 @@ def forget_password():
 @user.route('/forget_password_setting/<token>', methods=['GET', 'POST'])
 def forget_password_setting(token):
     form = resetforgetpasswordForm()
+    form.reset_password_token.data = token
+    return render_template('/user/forget_password_setting.html', form=form)
+    # TODO:忘记密码部分更加合理
+
+
+@user.route('/forget_password_setting_password', methods=['POST'])
+def forget_password_setting_password():
+    form = resetforgetpasswordForm()
     if form.validate_on_submit():
         ss = Serializer(current_app.config['SECRET_KEY'])
         try:
-            get_data = ss.loads(token)
+            get_data = ss.loads(form.reset_password_token.data)
         except:
             return '出错了'
         user_id = get_data.get('rp')
         forget_password_user = User.query.filter_by(id=user_id).first()
         forget_password_user.change_password(form.password.data)
         flash('密码修改成功')
-        return redirect(url_for('user.forget_password_setting'))
+        return render_template('/user/forget_password_setting.html', form=form)
     else:
-        return render_template('/user/forget_password_setting.html', form=form, token_url=token)
-    # TODO:忘记密码部分更加合理
-
-
-@user.route('/forget_password_setting_password/<user_id>')
-def forget_password_setting_password(user_id):
-    pass
+        abort(404)
 
 
 @user.route('/reset_password', methods=['GET', 'POST'])
@@ -273,6 +275,7 @@ class forgetpasswordForm(FlaskForm):
 
 
 class resetforgetpasswordForm(FlaskForm):
+    reset_password_token = HiddenField()
     password = PasswordField('新密码', [DataRequired('新密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
     confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
     submit = SubmitField('提交')
