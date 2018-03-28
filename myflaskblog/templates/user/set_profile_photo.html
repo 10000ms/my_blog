@@ -1,0 +1,35 @@
+{% extends "__base__.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 设置头像 {% endblock title %}
+
+{% block center_bar %}
+
+<div>
+{{ wtf.quick_form(form)}}
+</div>
+
+<button id="btn1">提交</button>
+
+{% endblock center_bar %}
+
+{% block other_scripts %}
+<script>
+    $(document).ready(function() {
+        document.getElementById('btn1').addEventListener('click', function () {
+            var formData = new FormData()
+            formData.append('profilephoto', $('#profilephoto')[0].files[0]);
+            $.ajax({
+                   url : '{{url_for('img.get_profile_photo')}}',
+                   type : 'POST',
+                   data : formData,
+                   processData: false,  // tell jQuery not to process the data
+                   contentType: false,  // tell jQuery not to set contentType
+                   success : function(data) {
+                       alert("提交成功")
+                   }
+            });
+        })
+    })
+</script>
+{% endblock other_scripts %}

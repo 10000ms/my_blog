@@ -42,7 +42,7 @@ if app.config['IS_DEVELOPMENT']:
     from myflaskblog import models
     db.drop_all()
     db.create_all()
-    test_user1 = models.User('123456', '123456', 'VL', '123456@qq.com', 1)
+    test_user1 = models.User('123456', '123456', 'VL', '111111@qq.com', True, True)
     test_user2 = models.User('111111', '111111', 'VL2', '111111@qq.com')
     test_user3 = models.User('111112', '111111', 'VL3', '111111@qq.com')
     test_user4 = models.User('111114', '111111', 'VL4', '111111@qq.com')

@@ -70,7 +70,18 @@ def get_article_img():
 @login_required
 def get_profile_photo():
     if current_user.is_admin == 1:
-        pass
+        file = request.files['profilephoto']
+        if file is None:
+            result = r"error|未成功获取文件，上传失败"
+            res = Response(result)
+            res.headers["ContentType"] = "text/x-json"
+            res.headers["Charset"] = "utf-8"
+            return res
+        else:
+            if file and allowed_file(file.filename):
+                filename = file.filename
+                file.save(upload_folder('profile_photo') + filename)
+                return '上传成功'
     else:
         abort(403)
 
@@ -84,6 +95,6 @@ def allowed_file(filename):
 # 生成上传文件夹
 def upload_folder(func):
     if func == 'article_img':
-        return current_app.static_folder + current_app.config['IMG_ALLOWED_EXTENSIONS'] + '/article_img/'
+        return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'article_img\\'
     elif func == 'profile_photo':
-        return current_app.static_folder + current_app.config['IMG_ALLOWED_EXTENSIONS'] + '/profile_photo/'
+        return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'profile_photo\\'

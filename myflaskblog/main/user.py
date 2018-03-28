@@ -23,7 +23,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 # 导入WTF模块
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, HiddenField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField, FileField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 
@@ -239,7 +239,8 @@ def person_setting_page():
 @user.route('/set_profile_photo')
 @login_required
 def set_profile_photo():
-    pass
+    form = profilephotoForm()
+    return render_template('/user/set_profile_photo.html', form=form)
 
 
 class UserloginForm(FlaskForm):
@@ -285,3 +286,7 @@ class resetforgetpasswordForm(FlaskForm):
     password = PasswordField('新密码', [DataRequired('新密码必填！'), Length(min=6, max=20, message='密码必须介于6-20字符！')])
     confirm = PasswordField('重复密码', [DataRequired('重复密码必填！'), EqualTo('password', message='两次密码输入不一致！')])
     submit = SubmitField('提交')
+
+
+class profilephotoForm(FlaskForm):
+    profilephoto = FileField('图片', [DataRequired()])

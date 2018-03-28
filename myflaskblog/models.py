@@ -48,13 +48,14 @@ class User(db.Model, UserMixin):
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     articles = db.relationship('Article', backref='user', lazy='dynamic')
 
-    def __init__(self, account, password_hash, username, email, is_admin=0):
+    def __init__(self, account, password_hash, username, email, is_admin=False, confirmed=False):
         self.account = account
         self.username = username
         self.email = email
         self.password_hash = generate_password_hash(password_hash)
         self.create_datetime = datetime.now()
         self.is_admin = is_admin
+        self.confirmed = confirmed
 
     def change_password(self, new_password):
         self.password_hash = generate_password_hash(new_password)
