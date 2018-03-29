@@ -43,7 +43,7 @@ class DevelopmentConfig(Config_Default):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')  # 邮箱登陆密码，从环境变量中获取
 
     IMG_UPLOAD_FOLDER = '/img/'  # 文件上传相关，目录配置
-    IMG_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])  # 文件上传相关，允许文件名
+    IMG_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'bmp'])  # 文件上传相关，允许文件名
 
 
 class TestingConfig(Config_Default):

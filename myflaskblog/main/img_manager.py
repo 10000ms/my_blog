@@ -22,6 +22,7 @@ import os
 from flask import request, Response, url_for
 import json
 from myflaskblog import app
+import uuid
 
 img = Blueprint('img', __name__)
 
@@ -71,17 +72,17 @@ def get_article_img():
 def get_profile_photo():
     if current_user.is_admin == 1:
         file = request.files['profilephoto']
+        size = len(file.read())
         if file is None:
             result = r"error|未成功获取文件，上传失败"
             res = Response(result)
             res.headers["ContentType"] = "text/x-json"
             res.headers["Charset"] = "utf-8"
             return res
-        else:
-            if file and allowed_file(file.filename):
-                filename = file.filename
-                file.save(upload_folder('profile_photo') + filename)
-                return '上传成功'
+        elif file and allowed_file(file.filename) and size < 1024*1024:
+            filename = create_name(file.filename)
+            file.save(upload_folder('profile_photo') + filename)
+            return '上传成功'
     else:
         abort(403)
 
@@ -98,3 +99,9 @@ def upload_folder(func):
         return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'article_img/'
     elif func == 'profile_photo':
         return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'profile_photo/'
+
+
+# 生成随机文件名
+def create_name(filename):
+    return str(uuid.uuid1()) + '.' + filename.rsplit('.', 1)[1]
+
