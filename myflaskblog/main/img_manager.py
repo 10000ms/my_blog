@@ -23,6 +23,7 @@ from flask import request, Response, url_for
 import json
 from myflaskblog import app
 import uuid
+from PIL import Image
 
 img = Blueprint('img', __name__)
 
@@ -81,7 +82,8 @@ def get_profile_photo():
             return res
         elif file and allowed_file(file.filename) and size < 1024*1024:
             filename = create_name(file.filename)
-            file.save(upload_folder('profile_photo') + filename)
+            profile_photo_img = change_size(file)
+            profile_photo_img.save(upload_folder('profile_photo') + filename)
             return '上传成功'
     else:
         abort(403)
@@ -105,3 +107,8 @@ def upload_folder(func):
 def create_name(filename):
     return str(uuid.uuid1()) + '.' + filename.rsplit('.', 1)[1]
 
+
+# 生产合适尺寸的图片
+def change_size(img_file):
+    img1 = Image.open(img_file)
+    return img1.resize((250, 250), Image.ANTIALIAS)

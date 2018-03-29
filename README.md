@@ -18,6 +18,8 @@ Flask-login ==> 0.4.1
 
 Flask-mail ==> 0.9.1
 
+Pillow ==> 5.0.0
+
 # 处理ImportError: No module named MySQLdb问题
 1.easy_install mysql-python (mix os)
 
