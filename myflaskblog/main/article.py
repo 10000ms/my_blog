@@ -170,43 +170,6 @@ def delete_comment_page(comment_id):
     return '删除成功'
 
 
-# 文章上传图片部分
-
-UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/ImageUploads/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
-
-@article.route('/img', methods=['POST'])
-@login_required
-def get_img():
-    file = request.files['file']
-    if file is None:
-        result = r"error|未成功获取文件，上传失败"
-        res = Response(result)
-        res.headers["ContentType"] = "text/x-json"
-        res.headers["Charset"] = "utf-8"
-        return res
-    else:
-        if file and allowed_file(file.filename):
-            filename = file.filename
-            file.save(UPLOAD_FOLDER+filename)
-            img_url = url_for('static', filename='ImageUploads/'+filename)
-            json_res = json.dumps({'errno': 0, 'data': [img_url]})
-            res = Response(json_res)
-            res.headers["ContentType"] = "text/x-json"
-            res.headers["Charset"] = "utf-8"
-            return res
-    # TODO:后期重新封装并实现检查,对于static的使用亦要处理，wangediotr传过来多张图片亦要想办法处理
-
-# TODO：增加对无用图片的检查功能
-
-
-# 文件名合法性验证
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-
 class ArticleForm(FlaskForm):
     title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='标题必须介于6-20字符！')])
     keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='关键词必须介于6-20字符！')])

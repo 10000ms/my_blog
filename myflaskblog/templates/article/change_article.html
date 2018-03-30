@@ -25,7 +25,7 @@
         var E = window.wangEditor
         // 或者 var editor = new E('#editor')
         var editor = new E( document.getElementById('editor') )
-        editor.customConfig.uploadImgServer = '{{url_for('article.get_img')}}'  //上传文章图片配置服务器地址
+        editor.customConfig.uploadImgServer = '{{url_for('img.get_article_img')}}'  //上传文章图片配置服务器地址
         editor.customConfig.uploadFileName = 'file'   //上传文章图片配置文件名
         editor.customConfig.debug = false  //debug
         editor.create()

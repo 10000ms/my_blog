@@ -27,18 +27,6 @@ from PIL import Image
 
 img = Blueprint('img', __name__)
 
-UPLOAD_FOLDER = app.config['PROJECT_PATH'] + '/myflaskblog/static/ImageUploads/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
-
-@img.route('/', methods=['GET', 'POST'])
-@login_required
-def img_page():
-    if current_user.is_admin == 1:
-        pass
-    else:
-        abort(403)
-
 
 @img.route('/article_img', methods=['POST'])
 @login_required
@@ -46,16 +34,12 @@ def get_article_img():
     if current_user.is_admin == 1:
         file = request.files['file']
         if file is None:
-            result = r"error|未成功获取文件，上传失败"
-            res = Response(result)
-            res.headers["ContentType"] = "text/x-json"
-            res.headers["Charset"] = "utf-8"
-            return res
+            abort(404)
         else:
             if file and allowed_file(file.filename):
-                filename = file.filename
-                file.save(UPLOAD_FOLDER+filename)
-                img_url = url_for('static', filename='ImageUploads/'+filename)
+                filename = create_name(file.filename)
+                file.save(upload_folder('article_img')+filename)
+                img_url = create_img_url('article_img', filename)
                 json_res = json.dumps({'errno': 0, 'data': [img_url]})
                 res = Response(json_res)
                 res.headers["ContentType"] = "text/x-json"
@@ -75,15 +59,16 @@ def get_profile_photo():
         file = request.files['profilephoto']
         size = len(file.read())
         if file is None:
-            result = r"error|未成功获取文件，上传失败"
-            res = Response(result)
-            res.headers["ContentType"] = "text/x-json"
-            res.headers["Charset"] = "utf-8"
-            return res
+            abort(404)
         elif file and allowed_file(file.filename) and size < 1024*1024:
             filename = create_name(file.filename)
             profile_photo_img = change_size(file)
             profile_photo_img.save(upload_folder('profile_photo') + filename)
+            if current_user.profile_photo != 'Default.jpg':
+                old_profile_photo = current_user.profile_photo
+                os.remove(upload_folder('profile_photo') + old_profile_photo)
+            current_user.profile_photo = filename
+            db.session.commit()
             return '上传成功'
     else:
         abort(403)
@@ -108,7 +93,15 @@ def create_name(filename):
     return str(uuid.uuid1()) + '.' + filename.rsplit('.', 1)[1]
 
 
-# 生产合适尺寸的图片
+# 生成合适尺寸的图片
 def change_size(img_file):
     img1 = Image.open(img_file)
     return img1.resize((250, 250), Image.ANTIALIAS)
+
+
+# 生成链接地址
+def create_img_url(func, filename):
+    if func == 'article_img':
+        return url_for('static', filename='img/article_img/'+filename)
+    elif func == 'profile_photo':
+        return url_for('static', filename='img/profile_photo/' + filename)
