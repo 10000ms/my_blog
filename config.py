@@ -46,6 +46,16 @@ class DevelopmentConfig(Config_Default):
     IMG_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'bmp'])  # 文件上传相关，允许文件名
 
 
+    JOBS = [
+        {
+            'id': 'job1',
+            'func': show_users,
+            'trigger': 'interval',
+            'seconds': 2
+        }
+    ]
+
+
 class TestingConfig(Config_Default):
     TESTING = True
 

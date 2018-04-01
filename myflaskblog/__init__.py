@@ -21,6 +21,9 @@ from config import config
 # 导入Mail模块
 from flask_mail import Mail
 
+# 导入定时任务模块
+from flask_apscheduler import APScheduler
+
 # 导入其他必要模块
 import hashlib
 
@@ -34,6 +37,11 @@ mail = Mail(app)
 # 在项目中导入login模块
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# 在项目中创建定时任务
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 
 # 检测当前环境是否处于开发环境，后期改进该测试功能

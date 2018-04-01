@@ -17,6 +17,7 @@ from flask import render_template
 from myflaskblog.models import Article, Comment
 from myflaskblog import db
 from flask import redirect, abort, flash
+from myflaskblog import img_manage
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -76,6 +77,7 @@ def new_article_page():
                               new_article_user_id)
         db.session.add(new_article)
         db.session.commit()
+        img_manage.img_add_article_id(new_article.id, new_article.content)
         return url_for('article.article_detail_page', article_id=new_article.id)
     elif current_user.is_admin == 1:
         form = ArticleForm()
@@ -110,6 +112,7 @@ def change_article_page(article_id):
         need_change_article.description = request.form.get('description')
         need_change_article.content = request.form.get('content')
         db.session.commit()
+        img_manage.img_change_article_id(article_id, need_change_article.content)
         return url_for('article.article_detail_page', article_id=article_id)
     elif current_user.is_admin == 1:
         need_change_article = Article.query.filter_by(id=article_id).first()
