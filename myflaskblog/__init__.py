@@ -72,6 +72,8 @@ if app.config['IS_DEVELOPMENT']:
     test_article9 = models.Article('A9', 'kw', 'not', '这是一篇博文', 1)
     test_article10 = models.Article('A10', 'kw', 'not', '这是一篇博文', 1)
     test_article11 = models.Article('A12', 'kw', 'not', '这是一篇博文', 1)
+    test_config1 = models.Config('WEB_SITE_PROFILE_PHOTO', '111.jpg')
+    test_config2 = models.Config('WEB_SITE_NAME', '1000ms')
     db.session.add(test_user1)
     db.session.add(test_user2)
     db.session.add(test_user3)
@@ -94,6 +96,8 @@ if app.config['IS_DEVELOPMENT']:
     db.session.add(test_article9)
     db.session.add(test_article10)
     db.session.add(test_article11)
+    db.session.add(test_config1)
+    db.session.add(test_config2)
     db.session.commit()
     # TODO:后期改进该测试功能
 

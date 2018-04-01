@@ -8,7 +8,7 @@ __author__ = 'Victor Lai'
 '''
 
 # 引入数据库
-from myflaskblog import db
+from myflaskblog import db, app
 from myflaskblog.models import Article, Img
 
 # 导入html解析器，解析富文本
@@ -49,3 +49,17 @@ def img_change_article_id(article, html):
         if old_img.img_name not in new_img_name:
             os.remove(upload_folder + old_img.img_name)
             db.session.delete(old_img)
+            db.session.commit()
+
+
+# 定时清理图片
+def clear_useless_img():
+    if not app.config['APSCHEDULER_LOCK']:
+        app.config.update(APSCHEDULER_LOCK=True)
+        need_clear_imgs = Img.query.filter_by(article_id=None).all()
+        upload_folder = app.static_folder + app.config['IMG_UPLOAD_FOLDER'] + 'article_img/'
+        for need_clear_img in need_clear_imgs:
+            os.remove(upload_folder + need_clear_img.img_name)
+            db.session.delete(need_clear_img)
+            db.session.commit()
+        app.config.update(APSCHEDULER_LOCK=False)

@@ -45,15 +45,17 @@ class DevelopmentConfig(Config_Default):
     IMG_UPLOAD_FOLDER = '/img/'  # 文件上传相关，目录配置
     IMG_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'bmp'])  # 文件上传相关，允许文件名
 
-
     JOBS = [
         {
-            'id': 'job1',
-            'func': show_users,
-            'trigger': 'interval',
-            'seconds': 2
+            'id': 'clear_useless_img',
+            'func': 'myflaskblog.img_manage:clear_useless_img',
+            'trigger': {'type': 'cron', 'hour': '4'},   #定时凌晨4点清理无用图片
         }
     ]
+    APSCHEDULER_LOCK = False  # 防止定时任务被同时执行多次
+
+    WEB_SITE_PROFILE_PHOTO = 'Default.jpg'  # 默认网站头像
+    WEB_SITE_NAME = '1000ms的小站'  # 默认网站名
 
 
 class TestingConfig(Config_Default):

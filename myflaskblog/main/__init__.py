@@ -29,5 +29,3 @@ app.register_blueprint(img, url_prefix='/img')
 app.register_blueprint(error_handler)
 
 
-# 导入错误处理模块
-# import myflaskblog.main.error

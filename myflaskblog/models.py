@@ -101,6 +101,12 @@ class User(db.Model, UserMixin):
 class Config(db.Model):
     __tablename__ = 'config'
     id = db.Column(db.Integer, primary_key=True)
+    item = db.Column(db.String(128))
+    value = db.Column(db.String(128))
+
+    def __init__(self, item, value):
+        self.item = item
+        self.value = value
 
 
 # blog文章模块
