@@ -16,7 +16,7 @@ from .index import index
 from .admin import admin
 from .article import article
 from .user import user
-from .img_manager import img
+from .img_handler import img
 from .error import error_handler
 
 

@@ -39,6 +39,9 @@ def get_article_img():
             if file and allowed_file(file.filename):
                 filename = create_name(file.filename)
                 file.save(upload_folder('article_img')+filename)
+                new_img = Img(filename)
+                db.session.add(new_img)
+                db.session.commit()
                 img_url = create_img_url('article_img', filename)
                 json_res = json.dumps({'errno': 0, 'data': [img_url]})
                 res = Response(json_res)

@@ -152,4 +152,10 @@ class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     create_datetime = db.Column(db.DateTime)
     img_name = db.Column(db.String(128))
+    article_id = db.Column(db.Integer, default=None)
+
+    def __init__(self, img_name, article_id=None):
+        self.create_datetime = datetime.now()
+        self.img_name = img_name
+        self.article_id = article_id
 
