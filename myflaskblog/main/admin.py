@@ -40,6 +40,23 @@ def user_manage_page():
         abort(403)
 
 
+@admin.route('/search_user', methods=['POST'])
+@login_required
+def search_user_page():
+    if current_user.is_admin == 1:
+        if request.method == 'POST' and request.form.get('name'):
+            search_name = request.form.get('name')
+            search_user = User.query.filter(User.is_admin != 1, User.username.ilike('%'+search_name+'%'))
+            page = request.args.get('page', 1, type=int)
+            pagination = search_user.paginate(page, per_page=10, error_out=True)
+            users = pagination.items
+            return render_template("/admin/user_manage.html", users=users, pagination=pagination)
+        else:
+            return redirect(url_for('admin.user_manage_page'))
+    else:
+        abort(403)
+
+
 @admin.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
 def delete_user_page(user_id):
@@ -70,5 +87,22 @@ def manage_comment_page():
             page, per_page=10, error_out=True)
         comments = pagination.items
         return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination)
+    else:
+        abort(403)
+
+
+@admin.route('/search_comment', methods=['POST'])
+@login_required
+def search_comment_page():
+    if current_user.is_admin == 1:
+        if request.method == 'POST' and request.form.get('name'):
+            search_name = request.form.get('name')
+            search_comment = Comment.query.filter(Comment.title.ilike('%'+search_name+'%'))
+            page = request.args.get('page', 1, type=int)
+            pagination = search_comment.paginate(page, per_page=10, error_out=True)
+            comments = pagination.items
+            return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination)
+        else:
+            return redirect(url_for('admin.manage_comment_page'))
     else:
         abort(403)

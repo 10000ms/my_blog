@@ -103,9 +103,9 @@
                 </a>
             </div>
             <div class = "navbar-right">
-                <form class="navbar-form navbar-left" role="search" action="{{url_for('index.search_page')}}">
+                <form class="navbar-form navbar-left" method="post" role="search" action="{{url_for('index.search_page')}}">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="搜索">
+                        <input type="text" class="form-control" name="name" placeholder="搜索">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                         </span>

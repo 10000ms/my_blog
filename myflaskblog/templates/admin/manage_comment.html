@@ -4,6 +4,16 @@
 {% block title %}评论管理{% endblock title %}
 
 {% block center_bar %}
+<div>
+    <form method="post" action="{{url_for('admin.search_comment_page')}}">
+        <div class="input-group">
+            <input type="text" class="form-control" name="name" placeholder="搜索">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            </span>
+        </div>
+    </form>
+</div>
 
 <table class="table table-striped">
     <tr>

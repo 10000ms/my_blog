@@ -109,5 +109,11 @@ def user_loader(id):  # 这个id参数的值是在 login_user(user)中传入的 
     return user  # 没查到的时候filter_by会返回None，符合flask-login要求
 
 
+# 设置模板全局变量
+app.add_template_global(app.config['WEB_SITE_NAME'], 'WEB_SITE_NAME')
+app.add_template_global(app.static_folder + app.config['IMG_UPLOAD_FOLDER']+app.config['WEB_SITE_PROFILE_PHOTO'], \
+                        'WEB_SITE_PROFILE_PHOTO')
+
+
 # 最后引入防止循环引用
 from myflaskblog import main

@@ -5,6 +5,17 @@
 
 {% block center_bar %}
 
+<div>
+    <form method="post" action="{{url_for('admin.search_user_page')}}">
+        <div class="input-group">
+            <input type="text" class="form-control" name="name" placeholder="搜索">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            </span>
+        </div>
+    </form>
+</div>
+
 <table class="table table-striped">
     <tr>
         <th>用户名</th>

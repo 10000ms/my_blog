@@ -49,7 +49,7 @@ class DevelopmentConfig(Config_Default):
         {
             'id': 'clear_useless_img',
             'func': 'myflaskblog.img_manage:clear_useless_img',
-            'trigger': {'type': 'cron', 'hour': '4'},   #定时凌晨4点清理无用图片
+            'trigger': {'type': 'cron', 'hour': '4'},   # 定时凌晨4点清理无用图片
         }
     ]
     APSCHEDULER_LOCK = False  # 防止定时任务被同时执行多次

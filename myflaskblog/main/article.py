@@ -99,6 +99,22 @@ def manage_article_page():
         abort(403)
 
 
+@article.route('/search', methods=['POST'])
+def search_article_page():
+    if current_user.is_admin == 1:
+        if request.method == 'POST'and request.form.get('name'):
+            search_name = request.form.get('name')
+            search_articles = Article.query.filter(Article.title.ilike('%'+search_name+'%'))
+            page = request.args.get('page', 1, type=int)
+            pagination = search_articles.paginate(page, per_page=10, error_out=True)
+            articles = pagination.items
+            return render_template("/article/manage_article.html", articles=articles, pagination=pagination)
+        else:
+            return redirect(url_for('article.manage_article_page'))
+    else:
+        abort(403)
+
+
 @article.route('/change_article/<int:article_id>', methods=['GET', 'POST'])
 @login_required
 def change_article_page(article_id):
