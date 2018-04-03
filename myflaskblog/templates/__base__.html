@@ -65,7 +65,7 @@
             margin-top: 10px;
         }
 
-        canvas{
+        .background-img{
            position: absolute;
            z-index: -1;
         }
@@ -150,14 +150,24 @@
 
     <div class="wrap">
         <div class="main">
-            <canvas id="c" width="300" height="150"></canvas>
+            <canvas class="background-img" id="c"></canvas>
+
+            {% block content %}
+
             {% block sidebar %}
             <div class="sidebar col-md-2 col-md-offset-8">
-
+                <div>
+                    <img src="{{url_for('static', filename='img/Default.jpg')}}">
+                </div>
+                <div>
+                    <p>1000ms的小站</p><br/>
+                    <p>Github:</p><br/>
+                    <a href="https://github.com/10000ms"><p>https://github.com/10000ms</p></a>
+                </div>
             </div>
             {% endblock sidebar %}
 
-            {% block content %}
+
 
             <div class="content-block col-md-6 col-md-offset-2">
                 {% block center_bar %}
@@ -168,9 +178,6 @@
 
             {% endblock content %}
         </div>
-    </div>
-
-
 
     {% block footer %}
         <div class="footer">
@@ -182,10 +189,16 @@
                    alt="Flask powered"
                    title="Flask powered"></a>
 
-                <p class="footer-p-firstline">Designed by Victor Lai</p>
+                <p class="footer-p-firstline">Designed by Victor Lai</p><br/>
+                <p>备案号. Copyright © 2018. Victor Lai. All rights reserved.</p>
               </div>
         </div>
     {% endblock footer %}
+    </div>
+
+
+
+
 
     {% block scripts %}
     <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
