@@ -18,20 +18,12 @@ from myflaskblog.models import Article, Comment
 from myflaskblog import db
 from flask import redirect, abort, flash
 from myflaskblog import img_manage
+from myflaskblog.main import _form
+from flask import request, url_for
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
 
-# 导入WTF模块
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField
-from wtforms.validators import DataRequired, Length, EqualTo
-
-# 上传图片所需要的模块
-import os
-from flask import request, Response, url_for
-import json
-from myflaskblog import app
 
 article = Blueprint('article', __name__)
 
@@ -39,7 +31,7 @@ article = Blueprint('article', __name__)
 @article.route('/<int:article_id>', methods=['GET', 'POST'])
 def article_detail_page(article_id):
     get_article = Article.query.filter_by(id=article_id).first()
-    form = CommentForm()
+    form = _form.CommentForm()
     if not get_article:
         return '找不到该文章'
     elif form.validate_on_submit():
@@ -80,7 +72,7 @@ def new_article_page():
         img_manage.img_add_article_id(new_article.id, new_article.content)
         return url_for('article.article_detail_page', article_id=new_article.id)
     elif current_user.is_admin == 1:
-        form = ArticleForm()
+        form = _form.ArticleForm()
         return render_template('/article/new_article.html', form=form)
     else:
         abort(403)
@@ -132,7 +124,7 @@ def change_article_page(article_id):
         return url_for('article.article_detail_page', article_id=article_id)
     elif current_user.is_admin == 1:
         need_change_article = Article.query.filter_by(id=article_id).first()
-        form = ArticleForm()
+        form = _form.ArticleForm()
         return render_template('/article/change_article.html', article=need_change_article, form=form)
     else:
         abort(403)
@@ -164,7 +156,7 @@ def comment_detail_page(comment_id):
 @login_required
 def change_comment_page(comment_id):
     get_comment = Comment.query.filter_by(id=comment_id).first()
-    form = CommentForm()
+    form = _form.CommentForm()
     if form.validate_on_submit() and get_comment.user.id == current_user.id:
         get_comment.title = form.title.data
         get_comment.comment = form.comment.data
@@ -187,22 +179,3 @@ def delete_comment_page(comment_id):
         db.session.delete(get_comment)
         db.session.commit()
     return '删除成功'
-
-
-class ArticleForm(FlaskForm):
-    title = StringField('标题', [DataRequired('标题必填！'), Length(min=6, max=20, message='标题必须介于6-20字符！')])
-    keyword = StringField('关键词', [DataRequired('关键词必填！'), Length(min=6, max=20, message='关键词必须介于6-20字符！')])
-    description = StringField('描述', [DataRequired('描述必填！'), Length(min=6, max=100, message='描述必须介于6-20字符！')])
-
-
-class CommentForm(FlaskForm):
-    title = StringField('标题', [DataRequired('标题必填！'), Length(min=2, max=20, message='账户必须介于2-20字符！')])
-    comment = StringField('评论', [DataRequired('评论必填！')])
-    submit = SubmitField('提交')
-
-
-
-
-
-
-

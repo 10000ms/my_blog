@@ -116,7 +116,7 @@ class Article(db.Model):
     create_datetime = db.Column(db.DateTime)
     title = db.Column(db.String(128))
     keyword = db.Column(db.String(250))
-    description = db.Column(db.String(250))
+    description = db.Column(db.Text)
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', backref='article', lazy='dynamic')

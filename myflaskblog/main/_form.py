@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.main._form
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    wtf表格模块.
 
-'''
-wtf表格模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入WTF模块
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, PasswordField, FileField
@@ -17,20 +19,19 @@ class ArticleForm(FlaskForm):
     title = StringField('标题',
                         [
                             DataRequired('标题必填！'),
-                            Length(min=6, max=20, message='标题必须介于6-20字符！'),
-                            Regexp('.*?')
+                            Length(min=1, max=100, message='标题必须介于1-100字符！')
                         ]
                         )
     keyword = StringField('关键词',
                           [
                               DataRequired('关键词必填！'),
-                              Length(min=6, max=20, message='关键词必须介于6-20字符！')
+                              Length(min=1, max=100, message='关键词必须介于1-100字符！')
                           ]
                           )
     description = StringField('描述',
                               [
                                   DataRequired('描述必填！'),
-                                  Length(min=6, max=100, message='描述必须介于6-20字符！')]
+                                  Length(min=1, max=1000, message='描述必须介于1-1000字符！')]
                               )
 
 
@@ -38,11 +39,14 @@ class CommentForm(FlaskForm):
     title = StringField('标题',
                         [
                             DataRequired('标题必填！'),
-                            Length(min=2, max=20, message='账户必须介于2-20字符！')
+                            Length(min=1, max=100, message='标题必须介于1-100字符！')
                         ]
                         )
     comment = StringField('评论',
-                          [DataRequired('评论必填！')]
+                          [
+                              DataRequired('评论必填！'),
+                              Length(min=1, max=1000, message='评论必须介于1-1000字符！')
+                          ]
                           )
     submit = SubmitField('提交')
 
@@ -51,13 +55,16 @@ class UserLoginForm(FlaskForm):
     account = StringField('帐号',
                           [
                               DataRequired('帐号必填！'),
-                              Length(min=6, max=20, message='账户必须介于6-20字符！')
+                              Length(min=6, max=20, message='账户必须介于6-20字符！'),
+                              Regexp(r'\w+', message='账户必须是字母数字或者_')
                           ]
                           )
     password = PasswordField('密码',
                              [
                                  DataRequired('密码必填！'),
-                                 Length(min=6, max=20, message='密码必须介于6-20字符！')
+                                 Length(min=6, max=20, message='密码必须介于6-20字符！'),
+                                 Regexp(r'(?!^\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,20}',
+                                        message='密码错误')
                              ]
                              )
     submit = SubmitField('提交')
@@ -67,13 +74,16 @@ class UserRegisterForm(FlaskForm):
     account = StringField('帐号',
                           [
                               DataRequired('帐号必填！'),
-                              Length(min=6, max=20, message='帐号必须介于6-20字符！')
+                              Length(min=6, max=20, message='帐号必须介于6-20字符！'),
+                              Regexp(r'\w+', message='账户必须是字母数字或者_')
                           ]
                           )
     password = PasswordField('密码',
                              [
                                  DataRequired('密码必填！'),
-                                 Length(min=6, max=20, message='密码必须介于6-20字符！')
+                                 Length(min=6, max=20, message='密码必须介于6-20字符！'),
+                                 Regexp(r'(?!^\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}',
+                                        message='密码必须由字母、数字或符号2种或以上的字符类型组成')
                              ]
                              )
     confirm = PasswordField('重复密码',
@@ -84,14 +94,15 @@ class UserRegisterForm(FlaskForm):
                             )
     username = StringField('用户名',
                            [
-                               DataRequired('重复密码必填！'),
-                               Length(min=6, max=20, message='用户名必须介于6-20字符！')
+                               DataRequired('用户名必填！'),
+                               Length(min=2, max=20, message='用户名必须介于2-20字符！')
                            ]
                            )
     email = StringField('email',
                         [
                             DataRequired('email必填！'),
-                            Length(min=3, max=20, message='email必须介于3-20字符！')
+                            Length(min=3, max=40, message='email必须介于3-40字符！'),
+                            Regexp(r'^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$', message='邮箱格式不对')
                         ]
                         )
     submit = SubmitField('提交')
@@ -100,8 +111,8 @@ class UserRegisterForm(FlaskForm):
 class UsernameForm(FlaskForm):
     username = StringField('用户名',
                            [
-                               DataRequired('重复密码必填！'),
-                               Length(min=6, max=20, message='用户名必须介于6-20字符！')
+                               DataRequired('用户名必填！'),
+                               Length(min=2, max=20, message='用户名必须介于2-20字符！')
                            ]
                            )
     submit = SubmitField('提交')
@@ -111,7 +122,8 @@ class ResetEmailForm(FlaskForm):
     email = StringField('email',
                         [
                             DataRequired('email必填！'),
-                            Length(min=3, max=20, message='email必须介于3-20字符！')
+                            Length(min=3, max=20, message='email必须介于3-20字符！'),
+                            Regexp(r'^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$', message='邮箱格式不对')
                         ]
                         )
     submit = SubmitField('提交')
@@ -121,13 +133,16 @@ class ResetPasswordForm(FlaskForm):
     old_password = PasswordField('旧密码',
                                  [
                                      DataRequired('旧密码必填！'),
-                                     Length(min=6, max=20, message='密码必须介于6-20字符！')
+                                     Length(min=6, max=20, message='密码必须介于6-20字符！'),
+                                     Regexp(r'(?!^\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}',
+                                            message='密码必须由字母、数字或符号2种或以上的字符类型组成')
                                  ]
                                  )
     password = PasswordField('新密码',
                              [
                                  DataRequired('新密码必填！'),
-                                 Length(min=6, max=20, message='密码必须介于6-20字符！')
+                                 Length(min=6, max=20, message='密码必须介于6-20字符！'),
+                                 Regexp(r'(?!^\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}', message='邮箱格式不对')
                              ]
                              )
     confirm = PasswordField('重复密码',
@@ -143,13 +158,15 @@ class ForgetPasswordForm(FlaskForm):
     account = StringField('帐号',
                           [
                               DataRequired('帐号必填！'),
-                              Length(min=6, max=20, message='帐号必须介于6-20字符！')
+                              Length(min=6, max=20, message='帐号必须介于6-20字符！'),
+                              Regexp(r'\w+', message='账户必须是字母数字或者_')
                           ]
                           )
     email = StringField('email',
                         [
                             DataRequired('email必填！'),
-                            Length(min=3, max=20, message='email必须介于3-20字符！')
+                            Length(min=3, max=20, message='email必须介于3-20字符！'),
+                            Regexp(r'^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$', message='邮箱格式不对')
                         ]
                         )
     submit = SubmitField('提交')
@@ -160,7 +177,9 @@ class ResetForgetPasswordForm(FlaskForm):
     password = PasswordField('新密码',
                              [
                                  DataRequired('新密码必填！'),
-                                 Length(min=6, max=20, message='密码必须介于6-20字符！')
+                                 Length(min=6, max=20, message='密码必须介于6-20字符！'),
+                                 Regexp(r'(?!^\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}',
+                                        message='密码必须由字母、数字或符号2种或以上的字符类型组成')
                              ]
                              )
     confirm = PasswordField('重复密码',
