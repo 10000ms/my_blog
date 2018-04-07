@@ -10,7 +10,42 @@
         height:800px;
     }
     .login-content{
+        width:450px;
+        position:relative;
         margin-top:200px;
+        margin-left:auto;
+        margin-right:auto;
+        box-shadow: 0px 0px 5px 5px #f0f0f0;
+        padding: 20px;
+        border-radius: 15px;
+    }
+    label.control-label{
+        font-family: 'Microsoft YaHei';
+        font-size: 20px;
+        color:#808080;
+    }
+    input.form-control{
+        width:400px;
+    }
+    input.btn{
+        width:150px;
+        margin-left:125px;
+        position:absolute;
+        margin-top:15px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        color:#FFFFFF;
+    }
+    .forget-password{
+        width:80px;
+        margin-left:320px;
+        margin-top:15px;
+        color:#808080;
+    }
+    .forget-password-word{
+        color:#808080;
+        margin-bottom:15px;
     }
 </style>
 {% endblock other_styles %}
@@ -22,9 +57,9 @@
     {{ wtf.quick_form(form) }}
     </div>
 
-    <bottom  type="button" class="btn btn-default">
-        <a href="{{url_for('user.forget_password')}}">
-            忘记密码
+    <bottom  type="button" class="btn btn-default forget-password">
+        <a href="{{url_for('user.forget_password')}}" class="forget-password-word">
+               忘记密码
         </a>
     </bottom>
 

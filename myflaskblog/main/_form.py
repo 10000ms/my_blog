@@ -52,20 +52,22 @@ class CommentForm(FlaskForm):
 
 
 class UserLoginForm(FlaskForm):
-    account = StringField('帐号',
+    account = StringField('帐号：',
                           [
                               DataRequired('帐号必填！'),
                               Length(min=6, max=20, message='账户必须介于6-20字符！'),
                               Regexp(r'\w+', message='账户必须是字母数字或者_')
-                          ]
+                          ],
+                          render_kw={"placeholder": "请输入帐号"}
                           )
-    password = PasswordField('密码',
+    password = PasswordField('密码：',
                              [
                                  DataRequired('密码必填！'),
                                  Length(min=6, max=20, message='密码必须介于6-20字符！'),
                                  Regexp(r'(?!^\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,20}',
                                         message='密码错误')
-                             ]
+                             ],
+                             render_kw={"placeholder": "请输入密码"}
                              )
     submit = SubmitField('提交')
 
