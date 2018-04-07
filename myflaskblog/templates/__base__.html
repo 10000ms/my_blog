@@ -59,10 +59,7 @@
             text-align:center;
             font-size:16px;
             margin-top: 10px;
-        }
-
-        .footer-p-firstline{
-            margin-top: 10px;
+            line-height:1;
         }
 
         .background-img{
@@ -78,6 +75,29 @@
             margin-top:70px;
             height:1000px;
             min-width:500px;
+        }
+        .footer-line{
+            width:350px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .footer-img{
+            position:absolute;
+            margin:5px;
+        }
+        .footer-p{
+            position: relative;
+            top:22px;
+            left:40px;
+        }
+        .footer-second-line{
+            width:450px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .footer-p-second-line{
+            position: relative;
+            top:42px;
         }
 
     </style>
@@ -182,15 +202,25 @@
     {% block footer %}
         <div class="footer">
               <div class="container footer-div">
+                  <div class="footer-line">
+                      <div class="footer-img">
+                          <a href="http://flask.pocoo.org/">
+                              <img
+                               src="{{url_for('static', filename='img/flask-powered.png')}}"
+                               border="0"
+                               alt="Flask powered"
+                               title="Flask powered">
+                          </a>
+                      </div>
+                      <div class="footer-p">
+                          <p>Designed by Victor Lai</p>
+                      </div>
+                  </div>
 
-                  <a href="http://flask.pocoo.org/"><img
-                   src="{{url_for('static', filename='img/flask-powered.png')}}"
-                   border="0"
-                   alt="Flask powered"
-                   title="Flask powered"></a>
+                  <div class="footer-second-line">
+                      <p class="footer-p-second-line">备案号. Copyright © 2018. Victor Lai. All rights reserved.</p>
+                  </div>
 
-                <p class="footer-p-firstline">Designed by Victor Lai</p><br/>
-                <p>备案号. Copyright © 2018. Victor Lai. All rights reserved.</p>
               </div>
         </div>
     {% endblock footer %}
