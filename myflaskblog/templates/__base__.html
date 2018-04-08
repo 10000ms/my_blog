@@ -52,6 +52,7 @@
             overflow:hidden;
             box-shadow: 0px 0px 2px 2px #f0f0f0;
             min-width:180px;
+            padding:15px;
         }
 
         .footer-div{
@@ -99,7 +100,42 @@
             position: relative;
             top:42px;
         }
-
+        .profile-photo{
+            width:80%;
+            height:80%;
+        }
+        .nav-logo{
+            margin-top:12px;
+            margin-right:12px;
+            width:30px;
+            height:25px;
+        }
+        .nav-web-site-name{
+            font-weight:700;
+        }
+        .profile-photo-div{
+            text-align:center;
+            padding:20px;
+            border-bottom-style:groove;
+        }
+        .sidebar-web-site-name{
+            text-align:center;
+            font-size:30px;
+            font-weight:900;
+            color:#808080;
+            margin-top:30px;
+        }
+        .sidebar-github{
+            margin-top:60px;
+            margin-left:25px;
+            font-size:16px;
+            font-weight:600;
+            color:#808080;
+        }
+        .sidebar-github-link{
+            margin-left:25px;
+            color:#808080;
+        }
     </style>
     {% endblock background_styles %}
 
@@ -117,9 +153,11 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container text-center">
             <div class="navbar-header">
-                <img src="{{url_for('static', filename='img/favicon_black.png')}}" width="50px" height="50px" class="navbar-left">
-                <a href="{{url_for('index.index_page')}}" class="navbar-brand">
-                    1000ms的小站
+                <a href="{{url_for('index.index_page')}}">
+                    <img src="{{url_for('static', filename='img/favicon_black.png')}}" class="navbar-left nav-logo">
+                    <div class="navbar-brand nav-web-site-name">
+                        1000ms的小站
+                    </div>
                 </a>
             </div>
             <div class = "navbar-right">
@@ -176,13 +214,19 @@
 
             {% block sidebar %}
             <div class="sidebar col-md-2 col-md-offset-8">
-                <div>
-                    <img src="{{url_for('static', filename='img/Default.jpg')}}">
+                <div class="profile-photo-div">
+                    <img class="profile-photo" src="{{url_for('static', filename='img/Default.jpg')}}">
                 </div>
                 <div>
-                    <p>1000ms的小站</p><br/>
-                    <p>Github:</p><br/>
-                    <a href="https://github.com/10000ms"><p>https://github.com/10000ms</p></a>
+                    <div class="sidebar-web-site-name">
+                        <p>1000ms的小站</p>
+                    </div>
+                    <div class="sidebar-github">
+                        <p>Github:</p>
+                    </div>
+                    <div class="sidebar-github-link">
+                        <a href="https://github.com/10000ms"><p>https://github.com/10000ms</p></a>
+                    </div>
                 </div>
             </div>
             {% endblock sidebar %}
