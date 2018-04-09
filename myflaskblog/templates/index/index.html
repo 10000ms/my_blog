@@ -3,6 +3,19 @@
 
 {% block title %}1000ms的小站{% endblock title %}
 
+{% block other_styles %}
+<style>
+    .no-more-info{
+        font-family: 'Microsoft YaHei';
+        font-size: 40px;
+        color:#808080;
+        text-align:center;
+        letter-spacing:10px;
+        font-weight:600;
+    }
+</style>
+{% endblock other_styles %}
+
 {% block center_bar %}
 
 
@@ -15,10 +28,18 @@
     </button>
 {% endfor %}
 <br/>
-{% if pagination %}
+
+
+{% if pagination and need_pagination !=0 %}
 <div class="pagination">
     {{ macros.pagination_widget(pagination, 'index.index_page') }}
 </div>
+{% endif %}
+
+{% if need_pagination !=2 %}
+    <div  class="no-more-info">
+        <p>没有喽~</p>
+    </div>
 {% endif %}
 
 {% endblock center_bar %}

@@ -27,7 +27,13 @@ def index_page():
     pagination = Article.query.order_by(Article.create_datetime.desc()).paginate(
         page, per_page=10, error_out=True)
     articles = pagination.items
-    return render_template("/index/index.html", articles=articles, pagination=pagination)
+    if len(articles) < 11 and not request.args.get('page'):
+        need_pagination = 0
+    elif len(articles) < 11 and request.args.get('page'):
+        need_pagination = 1
+    else:
+        need_pagination = 2
+    return render_template("/index/index.html", articles=articles, pagination=pagination, need_pagination=need_pagination)
 
 
 @index.route('/search', methods=['POST'])
@@ -38,9 +44,7 @@ def search_page():
         page = request.args.get('page', 1, type=int)
         pagination = search_articles.paginate(page, per_page=10, error_out=True)
         articles = pagination.items
-        return render_template("/index/index.html", articles=articles, pagination=pagination)
+        article_num = 0
+        return render_template("/index/index.html", articles=articles, pagination=pagination, article_num=article_num)
     else:
         return redirect(url_for('index.index_page'))
-
-
-
