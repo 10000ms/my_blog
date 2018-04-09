@@ -27,9 +27,9 @@ def index_page():
     pagination = Article.query.order_by(Article.create_datetime.desc()).paginate(
         page, per_page=10, error_out=True)
     articles = pagination.items
-    if len(articles) < 11 and not request.args.get('page'):
+    if len(articles) < 10 and not request.args.get('page'):
         need_pagination = 0
-    elif len(articles) < 11 and request.args.get('page'):
+    elif len(articles) < 10 and request.args.get('page'):
         need_pagination = 1
     else:
         need_pagination = 2
