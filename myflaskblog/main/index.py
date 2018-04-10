@@ -44,7 +44,12 @@ def search_page():
         page = request.args.get('page', 1, type=int)
         pagination = search_articles.paginate(page, per_page=10, error_out=True)
         articles = pagination.items
-        article_num = 0
-        return render_template("/index/index.html", articles=articles, pagination=pagination, article_num=article_num)
+        if len(articles) < 10 and not request.args.get('page'):
+            need_pagination = 0
+        elif len(articles) < 10 and request.args.get('page'):
+            need_pagination = 1
+        else:
+            need_pagination = 2
+        return render_template("/index/index.html", articles=articles, pagination=pagination, need_pagination=need_pagination)
     else:
         return redirect(url_for('index.index_page'))

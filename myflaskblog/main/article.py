@@ -20,6 +20,7 @@ from flask import redirect, abort, flash
 from myflaskblog import img_manage
 from myflaskblog.main import _form
 from flask import request, url_for
+from flask import jsonify
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -178,4 +179,4 @@ def delete_comment_page(comment_id):
     else:
         db.session.delete(get_comment)
         db.session.commit()
-    return '删除成功'
+    return jsonify({'type': 'success', 'words': '删除成功'})

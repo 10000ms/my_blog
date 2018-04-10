@@ -3,45 +3,106 @@
 
 {% block title %}评论管理{% endblock title %}
 
-{% block center_bar %}
-<div>
-    <form method="post" action="{{url_for('admin.search_comment_page')}}">
-        <div class="input-group">
-            <input type="text" class="form-control" name="name" placeholder="搜索">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-            </span>
-        </div>
-    </form>
+{% block other_styles %}
+<style>
+    .center-div{
+        margin-top:70px;
+        min-height:800px;
+        padding:15px;
+        background-color:#fafafa;
+        overflow:hidden;
+        box-shadow: 0px 0px 2px 2px #f0f0f0;
+        min-width:500px;
+        border-radius: 5px;
+    }
+    .return{
+        width:80px;
+        height:40px;
+        font-size: 16px;
+        width:80px;
+        color:#808080;
+        margin-bottom:20px;
+    }
+    .return-a{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-weight:600;
+    }
+    .search-div{
+        border-top-style:solid;
+        border-top-width:2px;
+        border-top-color: #FFFFFF;
+        border-bottom-style:solid;
+        border-bottom-width:2px;
+        border-bottom-color: #FFFFFF;
+        padding:20px;
+        margin-bottom:20px;
+    }
+    .div-word{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:2px;
+        font-weight:600;
+    }
+    .table-div{
+        padding:20px;
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:2px;
+    }
+</style>
+{% endblock other_styles %}
+
+{% block content %}
+<div class="center-div col-md-8 col-md-offset-2">
+    <bottom  type="button" class="btn btn-default return">
+            <a href="{{url_for('admin.admin_index_page')}}" class="return-a">
+                返回
+            </a>
+    </bottom>
+    <div class="search-div">
+        <p class="div-word">按评论标题搜索评论:</p>
+        <form method="post" action="{{url_for('admin.search_comment_page')}}">
+            <div class="input-group">
+                <input type="text" class="form-control" name="name" placeholder="搜索">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div class="table-div">
+        <p class="div-word">评论管理:</p>
+        <table class="table table-striped">
+            <tr>
+                <th>文章</th>
+                <th>评论标题</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            {% for comment in comments %}
+            <tr>
+                <td>{{comment.article.title}}</td>
+                <td>{{comment.title}}</td>
+                <td>{{comment.create_datetime}}</td>
+                <td>
+                     <button type="button" class="btn btn-default">
+                        <a href="{{url_for('article.comment_detail_page', comment_id = comment.id)}}">
+                            查看评论
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
+                            删除
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div id="flash"></div>
+    </div>
 </div>
-
-<table class="table table-striped">
-    <tr>
-        <th>文章</th>
-        <th>评论标题</th>
-        <th>创建时间</th>
-        <th>操作</th>
-    </tr>
-    {% for comment in comments %}
-    <tr>
-        <td>{{comment.article.title}}</td>
-        <td>{{comment.title}}</td>
-        <td>{{comment.create_datetime}}</td>
-        <td>
-             <button type="button" class="btn btn-default">
-                <a href="{{url_for('article.comment_detail_page', comment_id = comment.id)}}">
-                    查看评论
-                </a>
-            </button>
-            <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
-                    删除
-            </button>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-{% endblock center_bar %}
+{% endblock content %}
 
 {% block other_scripts %}
     <script>
@@ -53,11 +114,20 @@
                 delete_button[i].addEventListener('click', function () {
                     var url = event.target.id
                     jQuery.post(url=url,function() {
-                        alert("删除成功");
-                        window.location.href = '{{url_for('admin.manage_comment_page')}}'
+                        $('#flash').append(flashMessage(JSON.parse(returnedData)));
+                        // window.location.href = '{{url_for('admin.manage_comment_page')}}'
                     })
                 })
             }
+
+            var flashMessage = function(data){
+              html = '';
+              for (i=0; i<data.length; i++) {
+                html += '<div class="alert alert-' + data[i]['type'] + '"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data[i].message + '</div>';
+              }
+              return html;
+              console.log('ok')
+            };
         })
     </script>
 {% endblock other_scripts %}

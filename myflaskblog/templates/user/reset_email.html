@@ -31,6 +31,7 @@
         width:150px;
         margin-left:125px;
         margin-top:15px;
+        position:absolute;
         background-color:#808080;
         font-family: 'Microsoft YaHei';
         font-size: 14px;
@@ -64,6 +65,18 @@
         letter-spacing:2px;
         font-family: 'Microsoft YaHei';
     }
+    .return{
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        width:80px;
+        margin-left:320px;
+        margin-top:15px;
+        color:#808080;
+    }
+    .return-a{
+        color:#808080;
+        margin-bottom:15px;
+    }
 </style>
 {% endblock other_styles %}
 
@@ -73,6 +86,11 @@
         <div>
         {{ wtf.quick_form(form) }}
         </div>
+        <bottom  type="button" class="btn btn-default return">
+            <a href="{{url_for('user.person_setting_page')}}" class="return-a">
+                返回
+            </a>
+        </bottom>
 
         {% for message in get_flashed_messages() %}
             <div class="alert alert-warning">
