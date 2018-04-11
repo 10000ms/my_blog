@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.models
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    数据库模型模块.
 
-'''
-数据库模型模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入模型模块
 from myflaskblog import db
 

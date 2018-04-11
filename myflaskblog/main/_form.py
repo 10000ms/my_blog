@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
     myflaskblog.main._form
@@ -11,7 +10,7 @@
 """
 # 导入WTF模块
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, PasswordField, FileField
+from wtforms import StringField, SubmitField, HiddenField, PasswordField, FileField, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo, Regexp
 
 
@@ -27,11 +26,13 @@ class ArticleForm(FlaskForm):
                               DataRequired('关键词必填！'),
                               Length(min=1, max=100, message='关键词必须介于1-100字符！')
                           ]
+
                           )
     description = StringField('描述',
                               [
                                   DataRequired('描述必填！'),
-                                  Length(min=1, max=1000, message='描述必须介于1-1000字符！')]
+                                  Length(min=1, max=1000, message='描述必须介于1-1000字符！')
+                              ]
                               )
 
 

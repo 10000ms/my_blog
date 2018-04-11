@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    config
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    配置模块.
 
-'''
-配置模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 import os, sys
 from flask import current_app
 

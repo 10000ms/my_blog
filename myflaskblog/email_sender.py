@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.email_sender
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    email发送功能模块.
 
-'''
-email发送功能
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 from threading import Thread
 from flask import current_app, render_template
 from flask_mail import Message

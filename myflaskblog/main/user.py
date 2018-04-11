@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.main.user
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    用户管理模块.
 
-'''
-用户页路由模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入蓝图模块
 from flask import Blueprint
 
@@ -43,7 +44,6 @@ def login_page():
             return redirect(url_for('user.login_user_page'))
     else:
         return render_template('/user/login.html', form=form)
-    # TODO：优化错误显示，ajax闪现返回
 
 
 @user.route('/user_page')

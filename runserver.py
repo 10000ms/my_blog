@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    runserver
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    项目入口模块.
 
-'''
-flask project entrance.
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 from myflaskblog import app
 
 

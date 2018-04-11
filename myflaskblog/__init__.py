@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.__init__
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    项目初始模块.
 
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入flask扩展
 from flask import Flask
 
@@ -71,7 +77,16 @@ if app.config['IS_DEVELOPMENT']:
     test_article8 = models.Article('A8', 'kw', 'not', '这是一篇博文', 1)
     test_article9 = models.Article('A9', 'kw', 'not', '这是一篇博文', 1)
     test_article10 = models.Article('A10', 'kw', 'not', '这是一篇博文', 1)
-    test_article11 = models.Article('A12', 'kw', 'not', '这是一篇博文', 1)
+    test_article11 = models.Article('A11', 'kw', 'not', '这是一篇博文', 1)
+    test_article12 = models.Article('A12', 'kw', 'not', '这是一篇博文', 1)
+    test_article13 = models.Article('A13', 'kw', 'not', '这是一篇博文', 1)
+    test_article14 = models.Article('A14', 'kw', 'not', '这是一篇博文', 1)
+    test_article15 = models.Article('A15', 'kw', 'not', '这是一篇博文', 1)
+    test_article16 = models.Article('A16', 'kw', 'not', '这是一篇博文', 1)
+    test_article17 = models.Article('A17', 'kw', 'not', '这是一篇博文', 1)
+    test_article18 = models.Article('A18', 'kw', 'not', '这是一篇博文', 1)
+    test_article19= models.Article('A19', 'kw', 'not', '这是一篇博文', 1)
+    test_article20 = models.Article('A20', 'kw', 'not', '这是一篇博文', 1)
     test_config1 = models.Config('WEB_SITE_PROFILE_PHOTO', '111.jpg')
     test_config2 = models.Config('WEB_SITE_NAME', '1000ms')
     db.session.add(test_user1)
@@ -96,6 +111,15 @@ if app.config['IS_DEVELOPMENT']:
     db.session.add(test_article9)
     db.session.add(test_article10)
     db.session.add(test_article11)
+    db.session.add(test_article12)
+    db.session.add(test_article13)
+    db.session.add(test_article14)
+    db.session.add(test_article15)
+    db.session.add(test_article16)
+    db.session.add(test_article17)
+    db.session.add(test_article18)
+    db.session.add(test_article19)
+    db.session.add(test_article20)
     db.session.add(test_config1)
     db.session.add(test_config2)
     db.session.commit()

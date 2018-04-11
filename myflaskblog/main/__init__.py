@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.main.__init__
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    蓝图注册模块.
 
-'''
-蓝图模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入项目本身
 from myflaskblog import app
 

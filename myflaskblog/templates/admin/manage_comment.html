@@ -51,6 +51,12 @@
         color:#808080;
         letter-spacing:2px;
     }
+    .pagination-div{
+        color:#808080;
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+    }
 </style>
 {% endblock other_styles %}
 
@@ -99,7 +105,13 @@
             </tr>
             {% endfor %}
         </table>
-        <div id="flash"></div>
+        {% if pagination and need_pagination !=0 %}
+        <div class="pagination-div">
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, 'admin.manage_comment_page') }}
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}
@@ -114,20 +126,11 @@
                 delete_button[i].addEventListener('click', function () {
                     var url = event.target.id
                     jQuery.post(url=url,function() {
-                        $('#flash').append(flashMessage(JSON.parse(returnedData)));
-                        // window.location.href = '{{url_for('admin.manage_comment_page')}}'
+                        alert("删除成功")
+                        window.location.href = '{{url_for('admin.manage_comment_page')}}'
                     })
                 })
             }
-
-            var flashMessage = function(data){
-              html = '';
-              for (i=0; i<data.length; i++) {
-                html += '<div class="alert alert-' + data[i]['type'] + '"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data[i].message + '</div>';
-              }
-              return html;
-              console.log('ok')
-            };
         })
     </script>
 {% endblock other_scripts %}

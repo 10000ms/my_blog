@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.main.img_handler
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    图片处理模块.
 
-'''
-图片处理模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
 
@@ -51,8 +52,6 @@ def get_article_img():
     else:
         abort(403)
     # TODO:wangediotr传过来多张图片要想办法处理
-
-# TODO：增加对无用图片的检查功能
 
 
 @img.route('/profile_photo', methods=['POST'])

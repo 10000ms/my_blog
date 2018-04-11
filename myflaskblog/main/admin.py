@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.main.admin
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    管理员功能模块.
 
-'''
-管理页路由模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入蓝图模块
 from flask import Blueprint
 
@@ -35,7 +36,16 @@ def user_manage_page():
         page = request.args.get('page', 1, type=int)
         pagination = all_user.paginate(page, per_page=10, error_out=True)
         users = pagination.items
-        return render_template("/admin/user_manage.html", users=users, pagination=pagination)
+        if len(all_user.all()) > 10:
+            if len(users) < 10:
+                need_pagination = 1
+            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(all_user.all()):
+                need_pagination = 1
+            else:
+                need_pagination = 2
+        else:
+            need_pagination = 0
+        return render_template("/admin/user_manage.html", users=users, pagination=pagination, need_pagination=need_pagination)
     else:
         abort(403)
 
@@ -50,11 +60,21 @@ def search_user_page():
             page = request.args.get('page', 1, type=int)
             pagination = search_user.paginate(page, per_page=10, error_out=True)
             users = pagination.items
-            return render_template("/admin/user_manage.html", users=users, pagination=pagination)
+            if len(search_user.all()) > 10:
+                if len(users) < 10:
+                    need_pagination = 1
+                elif request.args.get('page') and int(request.args.get('page')) * 10 == len(search_user.all()):
+                    need_pagination = 1
+                else:
+                    need_pagination = 2
+            else:
+                need_pagination = 0
+            return render_template("/admin/user_manage.html", users=users, pagination=pagination, need_pagination=need_pagination)
         else:
             return redirect(url_for('admin.user_manage_page'))
     else:
         abort(403)
+    # TODO:换页问题，redis储存上次搜索
 
 
 @admin.route('/delete_user/<int:user_id>', methods=['POST'])
@@ -83,10 +103,19 @@ def blog_setting_page():
 def manage_comment_page():
     if current_user.is_admin == 1:
         page = request.args.get('page', 1, type=int)
-        pagination = Comment.query.order_by(Comment.create_datetime.desc()).paginate(
-            page, per_page=10, error_out=True)
+        all_comment = Comment.query.order_by(Comment.create_datetime.desc())
+        pagination = all_comment.paginate(page, per_page=10, error_out=True)
         comments = pagination.items
-        return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination)
+        if len(all_comment.all()) > 10:
+            if len(comments) < 10:
+                need_pagination = 1
+            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(all_comment.all()):
+                need_pagination = 1
+            else:
+                need_pagination = 2
+        else:
+            need_pagination = 0
+        return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination, need_pagination=need_pagination)
     else:
         abort(403)
 
@@ -101,8 +130,18 @@ def search_comment_page():
             page = request.args.get('page', 1, type=int)
             pagination = search_comment.paginate(page, per_page=10, error_out=True)
             comments = pagination.items
-            return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination)
+            if len(search_comment.all()) > 10:
+                if len(comments) < 10:
+                    need_pagination = 1
+                elif request.args.get('page') and int(request.args.get('page')) * 10 == len(search_comment.all()):
+                    need_pagination = 1
+                else:
+                    need_pagination = 2
+            else:
+                need_pagination = 0
+            return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination, need_pagination=need_pagination)
         else:
             return redirect(url_for('admin.manage_comment_page'))
     else:
         abort(403)
+    # TODO:换页问题，redis储存上次搜索

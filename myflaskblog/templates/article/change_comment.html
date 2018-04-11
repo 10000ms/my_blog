@@ -1,14 +1,58 @@
 {% extends "__base__.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 这是评论修改页面 {% endblock title %}
+{% block title %} 评论修改 {% endblock title %}
+
+{% block other_styles %}
+<style>
+    .editor-area{
+        padding:20px;
+    }
+    .return{
+        width:80px;
+        height:40px;
+        font-size: 16px;
+        width:80px;
+        color:#808080;
+        margin-top:20px;
+        margin-left:20px;
+    }
+    .return-a{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-weight:600;
+    }
+    .info-div{
+        margin-bottom:30px;
+    }
+    label.control-label{
+        font-family: 'Microsoft YaHei';
+        font-size: 20px;
+        color:#808080;
+    }
+    input.btn{
+        width:150px;
+        margin-top:15px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        color:#FFFFFF;
+    }
+</style>
+{% endblock other_styles %}
 
 {% block center_bar %}
-
-<div>
-    {{ wtf.quick_form(form) }}
+<bottom  type="button" class="btn btn-default return">
+    <a href="{{url_for('user.person_setting_page')}}" class="return-a">
+        返回
+    </a>
+</bottom>
+<div class="editor-area">
+    <div class="info-div">
+        {{ wtf.quick_form(form) }}
+    </div>
 </div>
-
 {% endblock center_bar %}
 
 {% block other_scripts %}

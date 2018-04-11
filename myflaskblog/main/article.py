@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.main.article
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    博客文章处理模块.
 
-'''
-文章页路由模块
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 导入蓝图模块
 from flask import Blueprint
 
@@ -84,10 +85,19 @@ def new_article_page():
 def manage_article_page():
     if current_user.is_admin == 1:
         page = request.args.get('page', 1, type=int)
-        pagination = Article.query.order_by(Article.create_datetime.desc()).paginate(
-            page, per_page=10, error_out=True)
+        all_articles = Article.query.order_by(Article.create_datetime.desc())
+        pagination = all_articles.paginate(page, per_page=10, error_out=True)
         articles = pagination.items
-        return render_template("/article/manage_article.html", articles=articles, pagination=pagination)
+        if len(all_articles.all()) > 10:
+            if len(articles) < 10:
+                need_pagination = 1
+            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(all_articles.all()):
+                need_pagination = 1
+            else:
+                need_pagination = 2
+        else:
+            need_pagination = 0
+        return render_template("/article/manage_article.html", articles=articles, pagination=pagination, need_pagination=need_pagination)
     else:
         abort(403)
 
@@ -101,11 +111,21 @@ def search_article_page():
             page = request.args.get('page', 1, type=int)
             pagination = search_articles.paginate(page, per_page=10, error_out=True)
             articles = pagination.items
-            return render_template("/article/manage_article.html", articles=articles, pagination=pagination)
+            if len(search_articles.all()) > 10:
+                if len(articles) < 10:
+                    need_pagination = 1
+                elif request.args.get('page') and int(request.args.get('page')) * 10 == len(search_articles.all()):
+                    need_pagination = 1
+                else:
+                    need_pagination = 2
+            else:
+                need_pagination = 0
+            return render_template("/article/manage_article.html", articles=articles, pagination=pagination, need_pagination=need_pagination)
         else:
             return redirect(url_for('article.manage_article_page'))
     else:
         abort(403)
+    # TODO:换页问题，redis储存上次搜索
 
 
 @article.route('/change_article/<int:article_id>', methods=['GET', 'POST'])
@@ -180,3 +200,5 @@ def delete_comment_page(comment_id):
         db.session.delete(get_comment)
         db.session.commit()
     return jsonify({'type': 'success', 'words': '删除成功'})
+
+# TODO:评论有更好的处理方法

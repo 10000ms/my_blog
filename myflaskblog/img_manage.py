@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+    myflaskblog.img_manage
+    ~~~~~~~~~
 
-__author__ = 'Victor Lai'
+    图片管理模块.
 
-'''
-文章上传图片处理
-'''
-
+    :copyright: (c) 2018 by Victor Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 # 引入数据库
 from myflaskblog import db, app
 from myflaskblog.models import Article, Img

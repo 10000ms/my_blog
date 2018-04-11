@@ -2,36 +2,109 @@
 
 {% block title %} 评论：{{comment.title}} {% endblock title %}
 
+{% block other_styles %}
+<style>
+    .return{
+        width:80px;
+        height:40px;
+        font-size: 16px;
+        width:80px;
+        color:#808080;
+        margin-top:20px;
+        margin-left:20px;
+    }
+    .return-a{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-weight:600;
+    }
+    .detail-area{
+        padding:20px;
+    }
+    .comment-detail-area{
+        line-height:1.8;
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+    }
+    .article-title{
+        font-size: 30px;
+        font-weight:700;
+    }
+    .article-description{
+        font-size: 20px;
+        font-weight:500;
+    }
+    .func-button{
+        margin-bottom:20px;
+        width:150px;
+        height:40px;
+        color:#808080;
+    }
+    .func-button-word{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-size:15px;
+        line-height:1;
+        margin-bottom:0px;
+    }
+    .comment-detail-area-comment{
+        margin-top:20px;
+        border-top-style:solid;
+        border-top-width:2px;
+        border-top-color: #FFFFFF;
+        padding-top:20px;
+        font-size:18px;
+    }
+    .comment-detail-bottom{
+        text-align:center;
+    }
+    .comment-title{
+        font-size:30px;
+        font-weight:700;
+    }
+</style>
+{% endblock other_styles %}
+
 {% block center_bar %}
+<bottom  type="button" class="btn btn-default return">
+    <a href="{{url_for('user.person_setting_page')}}" class="return-a">
+        返回
+    </a>
+</bottom>
+<div class="detail-area">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
 
-{% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
+    <div class="comment-detail-area">
+        <p class="article-title">文章标题：{{comment.article.title}}</p>
+        <p class="article-description">描述：{{comment.article.description}}</p>
+        <br/>
+        <div class="comment-detail-area-comment">
+            <p class="comment-title">评论标题：{{comment.title}}</p>
+            <p>评论时间：{{comment.create_datetime}}</p>
+            <p>作者：{{comment.user.username}}</p>
+            <p>评论内容：{{comment.comment}}</p>
+        </div>
+        <div class="comment-detail-bottom">
+            {% if current_user.id == comment.user.id %}
+                <button type="button" class="btn btn-default func-button">
+                    <a class="func-button-word" href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
+                        修改
+                    </a>
+                </button>
+                <button type="button" class="btn btn-default delete-button func-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
+                    <p class="func-button-word">删除</p>
+                </button>
+            {% endif %}
+        </div>
     </div>
-{% endfor %}
-
-<div>
-    <h1>文章标题：{{comment.article.title}}</h1>
-    <p>描述：{{comment.article.description}}</p>
-    <br/>
-    {% if current_user.id == comment.user.id %}
-        <button type="button" class="btn btn-default">
-            <a href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
-                修改
-            </a>
-        </button>
-    {% endif %}
-        <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
-            删除
-        </button>
-    <br/>
-    <p>评论标题：{{comment.title}}</p>
-    <p>创建时间：{{comment.create_datetime}}</p>
-    <p>作者：{{comment.user.username}}</p>
-    <p>评论内容：{{comment.comment}}</p>
 </div>
-
 {% endblock center_bar %}
 
 {% block other_scripts %}
