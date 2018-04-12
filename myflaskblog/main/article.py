@@ -22,6 +22,7 @@ from myflaskblog import img_manage
 from myflaskblog.main import _form
 from flask import request, url_for
 from flask import jsonify
+from myflaskblog.img_manage import get_profile_photo_folder
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -52,8 +53,18 @@ def article_detail_page(article_id):
         pagination = get_comment.order_by(Comment.create_datetime.desc()).paginate(
             page, per_page=5, error_out=True)
         comments = pagination.items
+        if len(get_comment.all()) > 5:
+            if len(comments) < 5:
+                need_pagination = 1
+            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(get_comment.all()):
+                need_pagination = 1
+            else:
+                need_pagination = 2
+        else:
+            need_pagination = 0
+        folder = get_profile_photo_folder()
         return render_template("/article/article.html", article=get_article, form=form, comments=comments, \
-                               pagination=pagination)
+                               pagination=pagination, need_pagination=need_pagination, folder=folder)
 
 
 @article.route('/new_article', methods=['GET', 'POST'])

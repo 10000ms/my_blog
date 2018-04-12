@@ -28,8 +28,9 @@ def img_add_article_id(article, html):
         img_url = img.get('src')
         filename = img_url.rsplit('/', 1)[1]
         db_img = Img.query.filter_by(img_name=filename).first()
-        db_img.article_id = article
-        db.session.commit()
+        if db_img:
+            db_img.article_id = article
+            db.session.commit()
 
 
 # 修改文章时处理图片
@@ -41,10 +42,11 @@ def img_change_article_id(article, html):
     for img in all_img:
         img_url = img.get('src')
         filename = img_url.rsplit('/', 1)[1]
-        new_img_name.append(filename)
         db_img = Img.query.filter_by(img_name=filename).first()
-        db_img.article_id = article
-        db.session.commit()
+        if db_img:
+            new_img_name.append(filename)
+            db_img.article_id = article
+            db.session.commit()
     for old_img in old_imgs:
         upload_folder = current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'article_img/'
         if old_img.img_name not in new_img_name:

@@ -4,39 +4,160 @@
 
 {% block title %} {{article.title}} {% endblock title %}
 
+{% block other_styles %}
+<style>
+    .whole-article-div{
+        padding: 20px;
+    }
+    .article-div{
+        text-align: center;
+        border-bottom-style:solid;
+        border-bottom-width:2px;
+        border-bottom-color: #FFFFFF;
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+    }
+    .article-title{
+        font-weight:600;
+        font-size: 40px;
+    }
+    .article-detail{
+        padding-top: 10px;
+        border-top-style:solid;
+        border-top-width:2px;
+        border-top-color: #FFFFFF;
+        padding-bottom: 20px;
+        min-height: 500px;
+    }
+    .pagination-div{
+        color:#808080;
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+    }
+    .comment-div{
+        color:#808080;
+    }
+    .comment-div-title{
+        margin-bottom: 20px;
+        margin-top: 20px;
+        font-family: 'Microsoft YaHei';
+    }
+    .comment-div-title-word{
+        font-weight:600;
+        font-size: 23px;
+    }
+    .comment-div-profile-photo{
+        height: 100px;
+    }
+    .single-comment{
+        border-bottom-style:solid;
+        border-bottom-width:2px;
+        border-bottom-color: #FFFFFF;
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    .comment-profile-photo{
+        height: 80px;
+        width: 80px;
+        box-shadow: 0px 0px 2px 2px #f0f0f0;
+        position: absolute;
+    }
+    .comment-profile-photo-word{
+        position: absolute;
+        margin-left: 100px;
+        margin-top: 50px;
+        min-height: 600px;
+        font-size: 20px;
+    }
+    .deliver-comment-div{
+        padding-top: 20px;
+        padding-bottom: 20px;
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+    }
+    .deliver-comment{
+    }
+    label.control-label{
+        font-size: 18px;
+    }
+    input.btn{
+        width:150px;
+        margin-top:15px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        color:#FFFFFF;
+    }
+    .not-login-info{
+        font-size: 20px;
+        font-weight:600;
+        text-align: center;
+        padding: 30px;
+        border-style:solid;
+        border-width:5px;
+        border-color: #FFFFFF;
+        width: 500px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+</style>
+{% endblock other_styles %}
+
 {% block center_bar %}
-    <div>
-        <h1>文章标题：{{article.title}}</h1>
-        <p>创建时间：{{article.create_datetime}}</p>
-        <p>关键词：{{article.keyword}}</p>
-        <p>描述：{{article.description}}</p>
-        <p>作者：{{article.user.username}}</p>
-        {% autoescape false %}
-        {{article.content}}
-        {% endautoescape %}
+<div class="whole-article-div">
+    <div class="article-div">
+        <p class="article-title">{{article.title}}</p>
+        <p class="article-user-info">{{article.user.username}} 发表于{{article.create_datetime}}</p>
+        <p class="article-keyword">关键词：{{article.keyword}}</p>
+        <div class="article-detail">
+            {% autoescape false %}
+            {{article.content}}
+            {% endautoescape %}
+        </div>
     </div>
 
+    <div class="comment-div">
+        <div class="comment-div-title">
+        {% if not comments %}
+            <p class="comment-div-title-word"> 暂时没有评论哦~ </p>
+        {% else %}
+            <p class="comment-div-title-word"> 评论： </p>
+        {% endif %}
+        </div>
 
-{% for comment in comments %}
-<p>{{comment.user.username}}:</p>
-<p>{{comment.comment}}</p>
-{% endfor %}
+        {% for comment in comments %}
+        <div class="single-comment">
+            <div class="comment-div-profile-photo">
+                <img src="{{url_for('static', filename=folder+comment.user.profile_photo)}}" class="comment-profile-photo">
+                <p class="comment-profile-photo-word">{{comment.user.username}}: “{{comment.title}}”</p>
+            </div>
+            <p>{{comment.comment}}</p>
+        </div>
+        {% endfor %}
 
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, 'article.article_detail_page',article_id=article.id) }}
-</div>
-{% endif %}
 
-{% if current_user.is_authenticated %}
-<div>
-{{ wtf.quick_form(form) }}
+    {% if pagination and need_pagination !=0 %}
+        <div class="pagination-div">
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, 'article.article_detail_page',article_id=article.id) }}
+            </div>
+        </div>
+    {% endif %}
+    </div>
+
+    <div class="deliver-comment-div">
+        {% if current_user.is_authenticated %}
+        <div>
+            {{ wtf.quick_form(form) }}
+        </div>
+        {% else %}
+        <div class="not-login-info">
+            <p>请登陆后使用评论功能</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
-{% else %}
-<div>
-    <p>请登陆后使用评论功能</p>
-</div>
-{% endif %}
 
 {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
@@ -44,6 +165,5 @@
         {{ message }}
     </div>
 {% endfor %}
-
 {% endblock center_bar %}
 
