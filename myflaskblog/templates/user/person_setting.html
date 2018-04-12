@@ -4,28 +4,112 @@
 
 {% block title %} 个人设置 {% endblock title %}
 
+{% block other_styles %}
+<style>
+    .return{
+        width:80px;
+        height:40px;
+        font-size: 16px;
+        width:80px;
+        color:#808080;
+        margin-bottom:10px;
+        margin-top:20px;
+    }
+    .return-a{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-weight:600;
+    }
+    .func-button-div{
+        padding-top:10px;
+        padding-bottom:10px;
+        border-top-style:solid;
+        border-top-width:2px;
+        border-top-color: #FFFFFF;
+        border-bottom-style:solid;
+        border-bottom-width:2px;
+        border-bottom-color: #FFFFFF;
+        text-align:center;
+    }
+    .func-button{
+        width:150px;
+        height:40px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 16px;
+        font-weight:800;
+    }
+    .func-button-a{
+        color:#FFFFFF;
+    }
+    .change-username-div{
+        padding-top:20px;
+        padding-bottom:20px;
+        border-bottom-style:solid;
+        border-bottom-width:2px;
+        border-bottom-color: #FFFFFF;
+        text-align:center;
+        letter-spacing:5px;
+        padding-right:50px;
+        padding-left:50px;
+    }
+    label.control-label{
+        font-family: 'Microsoft YaHei';
+        font-size: 20px;
+        color:#808080;
+    }
+    input.btn{
+        width:150px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        color:#FFFFFF;
+    }
+    .comment-manage{
+        text-align:center;
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+    }
+    .comment-manage-title{
+        font-size: 20px;
+        font-weight:800;
+        letter-spacing:5px;
+    }
+    .comment-manage-title{
+        text-align:center;
+        font-size: 16px;
+    }
+</style>
+{% endblock other_styles %}
+
 {% block center_bar %}
-
-<bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.set_profile_photo')}}">
-        我的头像
+<button type="button" class="btn btn-default return">
+    <a href="{{url_for('user.login_user_page')}}" class="return-a">
+        返回
     </a>
-</bottom>
+</button>
+<div class="func-button-div">
+    <button  type="button" class="btn btn-default func-button">
+        <a href="{{url_for('user.set_profile_photo')}}" class="func-button-a">
+            我的头像
+        </a>
+    </button>
 
-<bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.reset_email')}}">
-        修改验证邮箱
-    </a>
-</bottom>
+    <button  type="button" class="btn btn-default func-button">
+        <a href="{{url_for('user.reset_email')}}" class="func-button-a">
+            修改验证邮箱
+        </a>
+    </button>
 
-<bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.reset_password')}}">
-        修改密码
-    </a>
-</bottom>
+    <button  type="button" class="btn btn-default func-button">
+        <a href="{{url_for('user.reset_password')}}" class="func-button-a">
+            修改密码
+        </a>
+    </button>
+</div>
 
-<br/>
-<div>
+<div class="change-username-div">
 {{ wtf.quick_form(form) }}
 </div>
 <br/>
@@ -39,39 +123,39 @@
     </div>
 {% endfor %}
 
-
-<p>评论管理</p>
-<table class="table table-striped">
-    <tr>
-        <th>文章</th>
-        <th>评论标题</th>
-        <th>创建时间</th>
-        <th>操作</th>
-    </tr>
-    {% for comment in comments %}
-    <tr>
-        <td>{{comment.article.title}}</td>
-        <td>{{comment.title}}</td>
-        <td>{{comment.create_datetime}}</td>
-        <td>
-             <button type="button" class="btn btn-default">
-                <a href="{{url_for('article.comment_detail_page', comment_id = comment.id)}}">
-                    查看评论
-                </a>
-            </button>
-            <button type="button" class="btn btn-default">
-                <a href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
-                    修改
-                </a>
-            </button>
-            <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
-                    删除
-            </button>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
+<div class="comment-manage">
+    <p class="comment-manage-title">评论管理</p>
+    <table class="table table-striped">
+        <tr>
+            <th class="comment-manage-title">文章</th>
+            <th class="comment-manage-title">评论标题</th>
+            <th class="comment-manage-title">创建时间</th>
+            <th class="comment-manage-title">操作</th>
+        </tr>
+        {% for comment in comments %}
+        <tr>
+            <td>{{comment.article.title}}</td>
+            <td>{{comment.title}}</td>
+            <td>{{comment.create_datetime}}</td>
+            <td>
+                 <button type="button" class="btn btn-default">
+                    <a href="{{url_for('article.comment_detail_page', comment_id = comment.id)}}">
+                        查看评论
+                    </a>
+                </button>
+                <button type="button" class="btn btn-default">
+                    <a href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
+                        修改
+                    </a>
+                </button>
+                <button type="button" class="btn btn-default delete-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
+                        删除
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock center_bar %}
 
 

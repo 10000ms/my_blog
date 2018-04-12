@@ -64,3 +64,7 @@ def clear_useless_img():
             db.session.delete(need_clear_img)
             db.session.commit()
         app.config.update(APSCHEDULER_LOCK=False)
+
+
+def get_profile_photo_folder():
+    return current_app.config['IMG_UPLOAD_FOLDER'].split('/', 1)[1] + 'profile_photo/'

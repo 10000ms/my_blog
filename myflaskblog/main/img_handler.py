@@ -57,8 +57,8 @@ def get_article_img():
 @img.route('/profile_photo', methods=['POST'])
 @login_required
 def get_profile_photo():
-    if current_user.is_admin == 1:
-        file = request.files['profilephoto']
+    if current_user.confirmed:
+        file = request.files['profile_photo']
         size = len(file.read())
         if file is None:
             abort(404)

@@ -58,7 +58,7 @@ if app.config['IS_DEVELOPMENT']:
     db.create_all()
     test_user1 = models.User('123456', 'a123456', 'VL', '111111@qq.com', True, True)
     test_user2 = models.User('111111', 'a111111', 'VL2', '111111@qq.com', False, True)
-    test_user3 = models.User('111112', '111111', 'VL3', '111111@qq.com')
+    test_user3 = models.User('111112', 'a111111', 'VL3', '111111@qq.com', False, False)
     test_user4 = models.User('111114', '111111', 'VL4', '111111@qq.com')
     test_user5 = models.User('111115', '111111', 'VL5', '111111@qq.com')
     test_user6 = models.User('111116', '111111', 'VL6', '111111@qq.com')

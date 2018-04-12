@@ -16,7 +16,8 @@
      <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}" >
     {% block styles %}
     <!-- Bootstrap -->
-    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/bootstrap.min.css.map')}}" rel="stylesheet">
 
     {% block background_styles %}
     <style>
@@ -282,7 +283,7 @@
     <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
 
     {% block background_scripts %}
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
             var canvas = document.getElementById("c");
             var ctx = canvas.getContext("2d");

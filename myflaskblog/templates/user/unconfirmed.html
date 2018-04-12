@@ -2,26 +2,50 @@
 
 {% block title %} 用户邮箱未验证 {% endblock title %}
 
+{% block other_styles %}
+<style>
+    .button-div-1{
+       padding:20px;
+       text-align:center;
+    }
+    .func-button{
+        width:200px;
+        height:40px;
+        font-size: 16px;
+        width:80px;
+        color:#808080;
+        margin-bottom:10px;
+        margin-top:20px;
+    }
+    .func-button-a{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-weight:600;
+    }
+</style>
+{% endblock other_styles %}
+
 {% block center_bar %}
+<div class="button-div-1">
+    <button type="button" class="btn btn-default func-button">
+        <a href="{{url_for('user.send_email_again')}}" class="func-button-a">
+            重新发送验证邮件
+        </a>
+    </button>
 
-<bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.send_email_again')}}">
-        重新发送验证邮件
-    </a>
-</bottom>
-
-<bottom  type="button" class="btn btn-default">
-    <a href="{{url_for('user.reset_email')}}">
-        修改验证邮箱
-    </a>
-</bottom>
+    <button type="button" class="btn btn-default func-button">
+        <a href="{{url_for('user.reset_email')}}" class="func-button-a">
+            修改验证邮箱
+        </a>
+    </button>
 
 
-{% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-{% endfor %}
-
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert"></button>
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
 {% endblock center_bar %}

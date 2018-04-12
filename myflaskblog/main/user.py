@@ -19,6 +19,7 @@ from myflaskblog.email_sender import send_email
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from myflaskblog.main import _form
+from myflaskblog.img_manage import get_profile_photo_folder
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -235,5 +236,9 @@ def person_setting_page():
 @user.route('/set_profile_photo')
 @login_required
 def set_profile_photo():
-    form = _form.ProfilePhotoForm()
-    return render_template('/user/set_profile_photo.html', form=form)
+    if current_user.confirmed:
+        form = _form.ProfilePhotoForm()
+        folder = get_profile_photo_folder()
+        return render_template('/user/set_profile_photo.html', form=form, folder=folder)
+    else:
+        return redirect(url_for('index.index_page'))

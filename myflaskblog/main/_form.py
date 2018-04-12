@@ -117,11 +117,12 @@ class UserRegisterForm(FlaskForm):
 
 
 class UsernameForm(FlaskForm):
-    username = StringField('用户名',
+    username = StringField('用户名修改',
                            [
                                DataRequired('用户名必填！'),
                                Length(min=2, max=20, message='用户名必须介于2-20字符！')
-                           ]
+                           ],
+                           render_kw={"placeholder": "您新的用户名"}
                            )
     submit = SubmitField('提交')
 
@@ -208,6 +209,6 @@ class ResetForgetPasswordForm(FlaskForm):
 
 
 class ProfilePhotoForm(FlaskForm):
-    profile_photo = FileField('图片',
+    profile_photo = FileField('新头像',
                               [DataRequired()]
                               )

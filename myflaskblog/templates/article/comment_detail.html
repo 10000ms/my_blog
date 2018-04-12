@@ -58,7 +58,7 @@
         font-size:18px;
     }
     .comment-detail-bottom{
-        text-align:center;
+        text-align:left;
     }
     .comment-title{
         font-size:30px;
@@ -87,21 +87,23 @@
         <br/>
         <div class="comment-detail-area-comment">
             <p class="comment-title">评论标题：{{comment.title}}</p>
+
+            <div class="comment-detail-bottom">
+                {% if current_user.id == comment.user.id %}
+                    <button type="button" class="btn btn-default func-button">
+                        <a class="func-button-word" href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
+                            修改
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-default delete-button func-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
+                        <p class="func-button-word">删除</p>
+                    </button>
+                {% endif %}
+            </div>
+
             <p>评论时间：{{comment.create_datetime}}</p>
             <p>作者：{{comment.user.username}}</p>
             <p>评论内容：{{comment.comment}}</p>
-        </div>
-        <div class="comment-detail-bottom">
-            {% if current_user.id == comment.user.id %}
-                <button type="button" class="btn btn-default func-button">
-                    <a class="func-button-word" href="{{url_for('article.change_comment_page', comment_id = comment.id)}}">
-                        修改
-                    </a>
-                </button>
-                <button type="button" class="btn btn-default delete-button func-button" id="{{url_for('article.delete_comment_page',comment_id = comment.id)}}">
-                    <p class="func-button-word">删除</p>
-                </button>
-            {% endif %}
         </div>
     </div>
 </div>
