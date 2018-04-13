@@ -34,7 +34,7 @@ class DevelopmentConfig(Config_Default):
     SECRET_KEY = os.urandom(24)  # 配置密匙值，session、cookies及部分其他应用会用到
     PROJECT_PATH = sys.path[0]  # 项目路径
 
-    FLASKY_MAIL_SUBJECT_PREFIX = '1000ms'  # 邮件标题名前缀
+    FLASKY_MAIL_SUBJECT_PREFIX = '1000ms小站信息：'  # 邮件标题名前缀
     FLASKY_MAIL_SENDER = os.environ.get('MAIL_USERNAME')  # 发邮件的人
 
     MAIL_SERVER = 'smtp.qq.com'  # 发送邮件服务器
@@ -58,6 +58,9 @@ class DevelopmentConfig(Config_Default):
     WEB_SITE_PROFILE_PHOTO = 'Default.jpg'  # 默认网站头像
     WEB_SITE_NAME = '1000ms的小站'  # 默认网站名
 
+    # REDIS_URL = "redis://:password@localhost:6379/0"
+    # REDIS_URL = "unix://[:password]@/path/to/socket.sock?db=0"
+    REDIS_URL = "redis://localhost:6379/0"
 
 class TestingConfig(Config_Default):
     TESTING = True

@@ -53,11 +53,11 @@
 {% endblock other_styles %}
 
 {% block center_bar %}
-    <bottom  type="button" class="btn btn-default return">
+    <button  type="button" class="btn btn-default return">
             <a href="{{url_for('admin.admin_index_page')}}" class="return-a">
                 返回
             </a>
-    </bottom>
+    </button>
 <div class="editor-area">
     <div class="info-div">
         {{ wtf.quick_form(form) }}

@@ -24,6 +24,8 @@ Flask-APScheduler ==> 1.8.0
 
 lxml ==> 3.8.0
 
+Flask-Redis => 0.3.0
+
 # 处理ImportError: No module named MySQLdb问题
 1.easy_install mysql-python (mix os)
 

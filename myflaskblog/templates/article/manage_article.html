@@ -62,11 +62,11 @@
 
 {% block content %}
 <div class="center-div col-md-8 col-md-offset-2">
-    <bottom  type="button" class="btn btn-default return">
+    <button  type="button" class="btn btn-default return">
             <a href="{{url_for('admin.admin_index_page')}}" class="return-a">
                 返回
             </a>
-    </bottom>
+    </button>
     <div class="search-div">
         <p class="div-word">按文章标题搜索文章:</p>
         <form method="post" action="{{url_for('article.search_article_page')}}">

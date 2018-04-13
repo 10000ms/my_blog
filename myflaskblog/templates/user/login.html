@@ -85,11 +85,11 @@
     {{ wtf.quick_form(form) }}
     </div>
 
-    <bottom  type="button" class="btn btn-default forget-password">
+    <button  type="button" class="btn btn-default forget-password">
         <a href="{{url_for('user.forget_password')}}" class="forget-password-word">
                忘记密码
         </a>
-    </bottom>
+    </button>
 
     {% for message in get_flashed_messages() %}
         <div class="alert alert-warning">

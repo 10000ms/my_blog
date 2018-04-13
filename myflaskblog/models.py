@@ -130,8 +130,6 @@ class Article(db.Model):
         self.content = content
         self.user_id = user_id
 
-        # TODO:正确的处理新文章简历的模块
-
 
 # 评论模块
 class Comment(db.Model):

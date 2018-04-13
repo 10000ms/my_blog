@@ -31,6 +31,7 @@
         border-bottom-width:2px;
         border-bottom-color: #FFFFFF;
         text-align:center;
+        margin-bottom: 20px;
     }
     .func-button{
         width:150px;
@@ -109,6 +110,13 @@
     </button>
 </div>
 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+{% endfor %}
+
 <div class="change-username-div">
 {{ wtf.quick_form(form) }}
 </div>
@@ -116,12 +124,7 @@
 
 
 
-{% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-{% endfor %}
+
 
 <div class="comment-manage">
     <p class="comment-manage-title">评论管理</p>

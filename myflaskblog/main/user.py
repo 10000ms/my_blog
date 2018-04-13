@@ -93,10 +93,11 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('index.index_page'))
     elif current_user.check_token(token, 'confirm'):
-        return '激活成功'
+        flash('激活成功')
+        return redirect(url_for('user.person_setting_page'))
     else:
-        return '邮箱激活失败，请重试'
-    # TODO:未登陆用户同样可以激活，使用正确跳转
+        flash('邮箱激活失败，请重试')
+        return redirect(url_for('user.person_setting_page'))
 
 
 @user.before_app_request
@@ -114,7 +115,6 @@ def unconfirmed():
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('index.index_page'))
     return render_template('/user/unconfirmed.html')
-    # TODO:增加是否需要修改邮箱
 
 
 @user.route('/send_email_again')
@@ -157,17 +157,19 @@ def forget_password():
         if not User.query.filter_by(account=form.account.data).first():
             flash('未找到该用户')
             return redirect(url_for('user.forget_password'))
-        need_resetpassword_user = User.query.filter_by(account=form.account.data).first()
-        if need_resetpassword_user.email != form.email.data:
+        need_reset_password_user = User.query.filter_by(account=form.account.data).first()
+        if not need_reset_password_user.confirmed:
+            flash('邮箱未激活用户无法使用该功能')
+            return redirect(url_for('user.forget_password'))
+        if need_reset_password_user.email != form.email.data:
             flash('用户email错误')
             return redirect(url_for('user.forget_password'))
-        token = need_resetpassword_user.generate_token('resetpassword')
-        send_email(need_resetpassword_user.email, '请重置您的密码', 'email/resetpassword', user=need_resetpassword_user, token=token)
+        token = need_reset_password_user.generate_token('resetpassword')
+        send_email(need_reset_password_user.email, '请重置您的密码', 'email/resetpassword', user=need_reset_password_user, token=token)
         flash('重置密码邮件已发送，请登陆邮箱根据提示进行密码修改')
         return redirect(url_for('user.forget_password'))
     else:
         return render_template('/user/forget_password.html', form=form)
-    # TODO:注册未激活用户忘记密码
 
 
 @user.route('/forget_password_setting/<token>', methods=['GET', 'POST'])
@@ -175,7 +177,6 @@ def forget_password_setting(token):
     form = _form.ResetForgetPasswordForm()
     form.reset_password_token.data = token
     return render_template('/user/forget_password_setting.html', form=form)
-    # TODO:忘记密码部分更加合理
 
 
 @user.route('/forget_password_setting_password', methods=['POST'])
@@ -190,7 +191,7 @@ def forget_password_setting_password():
         user_id = get_data.get('rp')
         forget_password_user = User.query.filter_by(id=user_id).first()
         forget_password_user.change_password(form.password.data)
-        flash('密码修改成功')
+        flash('密码修改成功，请跳转登陆页面登陆')
         return render_template('/user/forget_password_setting.html', form=form)
     else:
         abort(404)
