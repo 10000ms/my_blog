@@ -20,6 +20,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from myflaskblog.main import _form
 from myflaskblog.img_manage import get_profile_photo_folder
+from myflaskblog.redis_manage import user_login_out
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -60,6 +61,7 @@ def login_user_page():
 @user.route('/logout')
 @login_required
 def logout():
+    user_login_out(current_user.id)
     logout_user()  # 登出用户
     return redirect(url_for('index.index_page'))
 

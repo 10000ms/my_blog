@@ -87,7 +87,7 @@
                 <th>创建时间</th>
                 <th>操作</th>
             </tr>
-            {% for comment in comments %}
+            {% for comment in items %}
             <tr>
                 <td>{{comment.article.title}}</td>
                 <td>{{comment.title}}</td>
@@ -108,7 +108,7 @@
         {% if pagination and need_pagination !=0 %}
         <div class="pagination-div">
             <div class="pagination">
-                {{ macros.pagination_widget(pagination, 'admin.manage_comment_page') }}
+                {{ macros.pagination_widget(pagination, pagination_url) }}
             </div>
         </div>
         {% endif %}

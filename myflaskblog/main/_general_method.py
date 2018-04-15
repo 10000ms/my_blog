@@ -9,7 +9,8 @@
     :license: BSD, see LICENSE for more details.
 """
 from myflaskblog.models import Article
-from flask import request
+from myflaskblog.models import User
+from myflaskblog.models import Comment
 from flask import render_template
 
 
@@ -26,19 +27,23 @@ def page_mode(all_item_len, page_item_len, page=None, each_page_item=10):
     return need_pagination
 
 
-def search_article(search_name, pagination_url, template):
-    search_articles = Article.query.filter(Article.title.ilike('%' + search_name + '%'))
-    page = request.args.get('page', 1, type=int)
-    pagination = search_articles.paginate(page, per_page=10, error_out=True)
-    articles = pagination.items
+def search(search_model, search_name, pagination_url, template, pagination_page, page):
+    if search_model == 'Article':
+        search_item = Article.query.filter(Article.title.ilike('%' + search_name + '%'))
+    elif search_model == 'User':
+        search_item = User.query.filter(User.is_admin != 1, User.username.ilike('%' + search_name + '%'))
+    elif search_model == 'Comment':
+        search_item = Comment.query.filter(Comment.title.ilike('%' + search_name + '%'))
+    pagination = search_item.paginate(pagination_page, per_page=10, error_out=True)
+    pagination_items = pagination.items
     need_pagination = page_mode(
-        len(search_articles.all()),
-        len(articles),
-        request.args.get('page')
+        len(search_item.all()),
+        len(pagination_items),
+        page
     )
     return render_template(
         template,
-        articles=articles,
+        items=pagination_items,
         pagination=pagination,
         need_pagination=need_pagination,
         pagination_url=pagination_url

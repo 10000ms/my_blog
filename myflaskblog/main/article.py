@@ -23,7 +23,7 @@ from myflaskblog.main import _form
 from flask import request, url_for
 from flask import jsonify
 from myflaskblog.img_manage import get_profile_photo_folder
-from myflaskblog.main import _generalMethod
+from myflaskblog.main import _general_method
 from myflaskblog.redis_manage import add_redis_user_data, get_redis_user_value
 
 # 导入flask_login模块
@@ -55,18 +55,22 @@ def article_detail_page(article_id):
         pagination = get_comment.order_by(Comment.create_datetime.desc()).paginate(
             page, per_page=5, error_out=True)
         comments = pagination.items
-        if len(get_comment.all()) > 5:
-            if len(comments) < 5:
-                need_pagination = 1
-            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(get_comment.all()):
-                need_pagination = 1
-            else:
-                need_pagination = 2
-        else:
-            need_pagination = 0
+        need_pagination = _general_method.page_mode(
+            len(get_comment.all()),
+            len(comments),
+            request.args.get('page'),
+            5
+        )
         folder = get_profile_photo_folder()
-        return render_template("/article/article.html", article=get_article, form=form, comments=comments, \
-                               pagination=pagination, need_pagination=need_pagination, folder=folder)
+        return render_template(
+            "/article/article.html",
+            article=get_article,
+            form=form,
+            comments=comments,
+            pagination=pagination,
+            need_pagination=need_pagination,
+            folder=folder
+        )
 
 
 @article.route('/new_article', methods=['GET', 'POST'])
@@ -80,8 +84,13 @@ def new_article_page():
         new_article_description = request.form.get('description')
         new_article_content = request.form.get('content')
         new_article_user_id = current_user.id
-        new_article = Article(new_article_title, new_article_keyword, new_article_description, new_article_content, \
-                              new_article_user_id)
+        new_article = Article(
+            new_article_title,
+            new_article_keyword,
+            new_article_description,
+            new_article_content,
+            new_article_user_id
+        )
         db.session.add(new_article)
         db.session.commit()
         img_manage.img_add_article_id(new_article.id, new_article.content)
@@ -101,22 +110,19 @@ def manage_article_page():
         all_articles = Article.query.order_by(Article.create_datetime.desc())
         pagination = all_articles.paginate(page, per_page=10, error_out=True)
         articles = pagination.items
-        if len(all_articles.all()) > 10:
-            if len(articles) < 10:
-                need_pagination = 1
-            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(all_articles.all()):
-                need_pagination = 1
-            else:
-                need_pagination = 2
-        else:
-            need_pagination = 0
+        need_pagination = _general_method.page_mode(
+            len(all_articles.all()),
+            len(articles),
+            request.args.get('page')
+        )
         pagination_url = 'article.manage_article_page'
-        return render_template("/article/manage_article.html",
-                               articles=articles,
-                               pagination=pagination,
-                               need_pagination=need_pagination,
-                               pagination_url=pagination_url
-                               )
+        return render_template(
+            "/article/manage_article.html",
+            items=articles,
+            pagination=pagination,
+            need_pagination=need_pagination,
+            pagination_url=pagination_url
+        )
     else:
         abort(403)
 
@@ -128,16 +134,24 @@ def search_article_page():
         if request.method == 'POST'and request.form.get('name'):
             search_name = request.form.get('name')
             add_redis_user_data(current_user.id, 'article.search_article_page', search_name)
-            return _generalMethod.search_article(search_name,
-                                                 'article.search_article_page',
-                                                 "/article/manage_article.html"
-                                                 )
+            return _general_method.search(
+                'Article',
+                search_name,
+                'article.search_article_page',
+                "/article/manage_article.html",
+                request.args.get('page', 1, type=int),
+                None
+            )
         elif request.method == 'GET' and request.args.get('page'):
             search_name = get_redis_user_value(current_user.id, 'article.search_article_page')
-            return _generalMethod.search_article(search_name,
-                                                 'article.search_article_page',
-                                                 "/article/manage_article.html"
-                                                 )
+            return _general_method.search(
+                'Article',
+                search_name,
+                'article.search_article_page',
+                "/article/manage_article.html",
+                request.args.get('page', 1, type=int),
+                request.args.get('page')
+            )
         else:
             return redirect(url_for('article.manage_article_page'))
     else:

@@ -28,4 +28,12 @@ def get_redis_user_value(user_id, func):
 
 
 def user_login_out(user_id):
-    pass
+    article_redis_name = str(user_id) + 'article.search_article_page'
+    if redis_store.get(article_redis_name):
+        redis_store.delete(article_redis_name)
+    user_redis_name = str(user_id) + 'admin.search_user_page'
+    if redis_store.get(user_redis_name):
+        redis_store.delete(user_redis_name)
+    comment_redis_name = str(user_id) + 'admin.search_comment_page'
+    if redis_store.get(comment_redis_name):
+        redis_store.delete(comment_redis_name)

@@ -20,7 +20,7 @@ from flask import url_for
 from flask import redirect
 from flask import request
 from flask import make_response
-from myflaskblog.main import _generalMethod
+from myflaskblog.main import _general_method
 
 
 index = Blueprint('index', __name__)
@@ -33,7 +33,7 @@ def index_page():
     pagination = all_articles.paginate(
         page, per_page=10, error_out=True)
     articles = pagination.items
-    need_pagination = _generalMethod.page_mode(
+    need_pagination = _general_method.page_mode(
         len(all_articles.all()),
         len(articles),
         request.args.get('page')
@@ -41,7 +41,7 @@ def index_page():
     pagination_url = 'index.index_page'
     return render_template(
         "/index/index.html",
-        articles=articles,
+        items=articles,
         pagination=pagination,
         need_pagination=need_pagination,
         pagination_url=pagination_url
@@ -52,12 +52,26 @@ def index_page():
 def search_page():
     if request.method == 'POST'and request.form.get('name'):
         search_name = request.form.get('name')
-        response = make_response(_generalMethod.search_article(search_name, 'index.search_page', "/index/index.html"))
+        response = make_response(_general_method.search(
+            'Article',
+            search_name,
+            'index.search_page',
+            "/index/index.html",
+            request.args.get('page', 1, type=int),
+            None
+        ))
         response.set_cookie("index_article_search", search_name)
         return response
     elif request.method == 'GET'and request.args.get('page'):
         search_name = request.cookies.get('index_article_search')
-        return _generalMethod.search_article(search_name, 'index.search_page', "/index/index.html")
+        return _general_method.search(
+            'Article',
+            search_name,
+            'index.search_page',
+            "/index/index.html",
+            request.args.get('page', 1, type=int),
+            request.args.get('page')
+        )
     else:
         return redirect(url_for('index.index_page'))
 

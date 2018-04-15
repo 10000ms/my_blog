@@ -51,7 +51,6 @@ def get_article_img():
                 return res
     else:
         abort(403)
-    # TODO:wangediotr传过来多张图片要想办法处理
 
 
 @img.route('/profile_photo', methods=['POST'])

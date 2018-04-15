@@ -83,6 +83,7 @@
         editor.customConfig.uploadFileName = 'file'   //上传文章图片配置文件名
         editor.customConfig.debug = false  //debug
         editor.customConfig.zIndex = 100
+        editor.customConfig.uploadImgMaxLength = 1
         editor.create()
         editor.txt.html('{% autoescape false %}{{article.content}}{% endautoescape %}')
 

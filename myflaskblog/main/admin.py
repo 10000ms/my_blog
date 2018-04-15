@@ -12,12 +12,15 @@
 from flask import Blueprint
 
 # 导入flask_login模块
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_required, current_user
 
 # 导入必须的模块
-from flask import request, flash, url_for, render_template, redirect, abort
+from flask import request, url_for, render_template, redirect, abort
 from myflaskblog.models import User, Comment
 from myflaskblog import db
+from myflaskblog.main import _general_method
+from myflaskblog.redis_manage import add_redis_user_data, get_redis_user_value
+
 
 admin = Blueprint('admin', __name__)
 
@@ -36,45 +39,52 @@ def user_manage_page():
         page = request.args.get('page', 1, type=int)
         pagination = all_user.paginate(page, per_page=10, error_out=True)
         users = pagination.items
-        if len(all_user.all()) > 10:
-            if len(users) < 10:
-                need_pagination = 1
-            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(all_user.all()):
-                need_pagination = 1
-            else:
-                need_pagination = 2
-        else:
-            need_pagination = 0
-        return render_template("/admin/user_manage.html", users=users, pagination=pagination, need_pagination=need_pagination)
+        need_pagination = _general_method.page_mode(
+            len(all_user.all()),
+            len(users),
+            request.args.get('page')
+        )
+        pagination_url = 'admin.user_manage_page'
+        return render_template(
+            "/admin/user_manage.html",
+            items=users,
+            pagination=pagination,
+            need_pagination=need_pagination,
+            pagination_url=pagination_url
+        )
     else:
         abort(403)
 
 
-@admin.route('/search_user', methods=['POST'])
+@admin.route('/search_user', methods=['GET', 'POST'])
 @login_required
 def search_user_page():
     if current_user.is_admin == 1:
         if request.method == 'POST' and request.form.get('name'):
             search_name = request.form.get('name')
-            search_user = User.query.filter(User.is_admin != 1, User.username.ilike('%'+search_name+'%'))
-            page = request.args.get('page', 1, type=int)
-            pagination = search_user.paginate(page, per_page=10, error_out=True)
-            users = pagination.items
-            if len(search_user.all()) > 10:
-                if len(users) < 10:
-                    need_pagination = 1
-                elif request.args.get('page') and int(request.args.get('page')) * 10 == len(search_user.all()):
-                    need_pagination = 1
-                else:
-                    need_pagination = 2
-            else:
-                need_pagination = 0
-            return render_template("/admin/user_manage.html", users=users, pagination=pagination, need_pagination=need_pagination)
+            add_redis_user_data(current_user.id, 'admin.search_user_page', search_name)
+            return _general_method.search(
+                'User',
+                search_name,
+                'admin.search_user_page',
+                "/admin/user_manage.html",
+                request.args.get('page', 1, type=int),
+                None
+            )
+        elif request.method == 'GET' and request.args.get('page'):
+            search_name = get_redis_user_value(current_user.id, 'admin.search_user_page')
+            return _general_method.search(
+                'User',
+                search_name,
+                'admin.search_user_page',
+                "/admin/user_manage.html",
+                request.args.get('page', 1, type=int),
+                request.args.get('page')
+            )
         else:
             return redirect(url_for('admin.user_manage_page'))
     else:
         abort(403)
-    # TODO:换页问题，redis储存上次搜索
 
 
 @admin.route('/delete_user/<int:user_id>', methods=['POST'])
@@ -106,42 +116,49 @@ def manage_comment_page():
         all_comment = Comment.query.order_by(Comment.create_datetime.desc())
         pagination = all_comment.paginate(page, per_page=10, error_out=True)
         comments = pagination.items
-        if len(all_comment.all()) > 10:
-            if len(comments) < 10:
-                need_pagination = 1
-            elif request.args.get('page') and int(request.args.get('page')) * 10 == len(all_comment.all()):
-                need_pagination = 1
-            else:
-                need_pagination = 2
-        else:
-            need_pagination = 0
-        return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination, need_pagination=need_pagination)
+        need_pagination = _general_method.page_mode(
+            len(all_comment.all()),
+            len(comments),
+            request.args.get('page')
+        )
+        pagination_url = 'admin.manage_comment_page'
+        return render_template(
+            '/admin/manage_comment.html',
+            items=comments,
+            pagination=pagination,
+            need_pagination=need_pagination,
+            pagination_url=pagination_url
+        )
     else:
         abort(403)
 
 
-@admin.route('/search_comment', methods=['POST'])
+@admin.route('/search_comment', methods=['GET', 'POST'])
 @login_required
 def search_comment_page():
     if current_user.is_admin == 1:
         if request.method == 'POST' and request.form.get('name'):
             search_name = request.form.get('name')
-            search_comment = Comment.query.filter(Comment.title.ilike('%'+search_name+'%'))
-            page = request.args.get('page', 1, type=int)
-            pagination = search_comment.paginate(page, per_page=10, error_out=True)
-            comments = pagination.items
-            if len(search_comment.all()) > 10:
-                if len(comments) < 10:
-                    need_pagination = 1
-                elif request.args.get('page') and int(request.args.get('page')) * 10 == len(search_comment.all()):
-                    need_pagination = 1
-                else:
-                    need_pagination = 2
-            else:
-                need_pagination = 0
-            return render_template('/admin/manage_comment.html', comments=comments, pagination=pagination, need_pagination=need_pagination)
+            add_redis_user_data(current_user.id, 'admin.search_comment_page', search_name)
+            return _general_method.search(
+                'Comment',
+                search_name,
+                'admin.search_comment_page',
+                "/admin/manage_comment.html",
+                request.args.get('page', 1, type=int),
+                None
+            )
+        elif request.method == 'GET' and request.args.get('page'):
+            search_name = get_redis_user_value(current_user.id, 'admin.search_comment_page')
+            return _general_method.search(
+                'Comment',
+                search_name,
+                'admin.search_comment_page',
+                "/admin/manage_comment.html",
+                request.args.get('page', 1, type=int),
+                None
+            )
         else:
             return redirect(url_for('admin.manage_comment_page'))
     else:
         abort(403)
-    # TODO:换页问题，redis储存上次搜索
