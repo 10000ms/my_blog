@@ -118,7 +118,7 @@
     {% if pagination and need_pagination !=0 %}
     <div class="pagination-div">
         <div class="pagination">
-            {{ macros.pagination_widget(pagination, 'article.manage_article_page') }}
+            {{ macros.pagination_widget(pagination, pagination_url) }}
         </div>
     </div>
     {% endif %}

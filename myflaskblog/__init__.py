@@ -127,6 +127,7 @@ if app.config['IS_DEVELOPMENT']:
     db.session.add(test_config1)
     db.session.add(test_config2)
     db.session.commit()
+    redis_store.flushdb()  # 清空当前redis数据库
     # TODO:后期改进该测试功能
 
 

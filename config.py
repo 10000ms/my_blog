@@ -61,6 +61,8 @@ class DevelopmentConfig(Config_Default):
     # REDIS_URL = "redis://:password@localhost:6379/0"
     # REDIS_URL = "unix://[:password]@/path/to/socket.sock?db=0"
     REDIS_URL = "redis://localhost:6379/0"
+    REDIS_EXPIRE_TIME = 86400  # redis的key过期时间
+
 
 class TestingConfig(Config_Default):
     TESTING = True

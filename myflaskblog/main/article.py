@@ -23,9 +23,11 @@ from myflaskblog.main import _form
 from flask import request, url_for
 from flask import jsonify
 from myflaskblog.img_manage import get_profile_photo_folder
+from myflaskblog.main import _generalMethod
+from myflaskblog.redis_manage import add_redis_user_data, get_redis_user_value
 
 # 导入flask_login模块
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_required, current_user
 
 
 article = Blueprint('article', __name__)
@@ -108,35 +110,38 @@ def manage_article_page():
                 need_pagination = 2
         else:
             need_pagination = 0
-        return render_template("/article/manage_article.html", articles=articles, pagination=pagination, need_pagination=need_pagination)
+        pagination_url = 'article.manage_article_page'
+        return render_template("/article/manage_article.html",
+                               articles=articles,
+                               pagination=pagination,
+                               need_pagination=need_pagination,
+                               pagination_url=pagination_url
+                               )
     else:
         abort(403)
 
 
-@article.route('/search', methods=['POST'])
+@article.route('/search', methods=['GET', 'POST'])
+@login_required
 def search_article_page():
     if current_user.is_admin == 1:
         if request.method == 'POST'and request.form.get('name'):
             search_name = request.form.get('name')
-            search_articles = Article.query.filter(Article.title.ilike('%'+search_name+'%'))
-            page = request.args.get('page', 1, type=int)
-            pagination = search_articles.paginate(page, per_page=10, error_out=True)
-            articles = pagination.items
-            if len(search_articles.all()) > 10:
-                if len(articles) < 10:
-                    need_pagination = 1
-                elif request.args.get('page') and int(request.args.get('page')) * 10 == len(search_articles.all()):
-                    need_pagination = 1
-                else:
-                    need_pagination = 2
-            else:
-                need_pagination = 0
-            return render_template("/article/manage_article.html", articles=articles, pagination=pagination, need_pagination=need_pagination)
+            add_redis_user_data(current_user.id, 'article.search_article_page', search_name)
+            return _generalMethod.search_article(search_name,
+                                                 'article.search_article_page',
+                                                 "/article/manage_article.html"
+                                                 )
+        elif request.method == 'GET' and request.args.get('page'):
+            search_name = get_redis_user_value(current_user.id, 'article.search_article_page')
+            return _generalMethod.search_article(search_name,
+                                                 'article.search_article_page',
+                                                 "/article/manage_article.html"
+                                                 )
         else:
             return redirect(url_for('article.manage_article_page'))
     else:
         abort(403)
-    # TODO:换页问题，redis储存上次搜索
 
 
 @article.route('/change_article/<int:article_id>', methods=['GET', 'POST'])
@@ -211,5 +216,6 @@ def delete_comment_page(comment_id):
         db.session.delete(get_comment)
         db.session.commit()
     return jsonify({'type': 'success', 'words': '删除成功'})
+
 
 # TODO:评论有更好的处理方法
