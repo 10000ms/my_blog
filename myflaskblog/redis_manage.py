@@ -43,6 +43,10 @@ def user_login_out(user_id):
     email_redis_name = str(user_id) + 'email'
     if redis_store.get(email_redis_name):
         redis_store.delete(email_redis_name)
+    redis_session_name = str(user_id) + 'session'
+    redis_session_time = str(user_id) + 'session_time'
+    redis_store.delete(redis_session_name)
+    redis_store.delete(redis_session_time)
 
 
 def check_send_time(user_id):
@@ -91,9 +95,37 @@ def email_token_check(token):
     else:
         return True
 
-def user_session_set():
-    pass
+
+def user_session_set(user_id, session):
+    expire_time = current_app.config['REDIS_EXPIRE_TIME']
+    redis_session_name = str(user_id) + 'session'
+    redis_session_time = str(user_id) + 'session_time'
+    if redis_store.get(redis_session_name):
+        redis_store.delete(redis_session_name)
+    if redis_store.get(redis_session_time):
+        redis_store.delete(redis_session_time)
+    redis_store.set(redis_session_name, session, expire_time)
+    redis_store.set(redis_session_time, int(time()), expire_time)
 
 
-def user_session_get():
-    pass
+def user_session_check(user_id, session):
+    time_span = current_app.config['TIME_SPAN']
+    redis_session_name = str(user_id) + 'session'
+    redis_session_time = str(user_id) + 'session_time'
+    if redis_store.get(redis_session_name) and redis_store.get(redis_session_time):
+        last_time = str(redis_store.get(redis_session_time))[2:]
+        last_time = int(last_time[:-1])
+        if int(time()) - last_time < time_span:
+            old_session = str(redis_store.get(redis_session_name))[2:]
+            old_session = old_session[:-1]
+            if old_session == session:
+                user_session_set(user_id, session)
+                return True
+            else:
+                return False
+        else:
+            user_session_set(user_id, session)
+            return True
+    else:
+        user_session_set(user_id, session)
+        return True

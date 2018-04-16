@@ -52,6 +52,12 @@
     <div class="info-div">
         {{ wtf.quick_form(form) }}
     </div>
+    <div class="editor" id="editor">
+        <p>请在此框中输入评论</p>
+    </div>
+    <div class="button" >
+        <button class="btn btn-default" id="btn1">提交</button>
+    </div>
 </div>
 {% endblock center_bar %}
 
@@ -62,4 +68,46 @@
         $('#comment').val('{{comment.comment}}')
     })
 </script>
+{% endblock other_scripts %}
+
+{% block other_scripts %}
+    <script type="text/javascript" src="/static/wangEditor/js/wangEditor.min.js"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor
+        // 或者 var editor = new E('#editor')
+        var editor = new E( document.getElementById('editor') )
+        editor.customConfig.menus = [
+            'bold',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'code',
+            'undo',
+            'redo'
+        ]
+        editor.customConfig.debug = false  //debug
+        editor.customConfig.zIndex = 100
+        editor.customConfig.uploadImgMaxLength = 0
+        editor.create()
+
+        document.getElementById('btn1').addEventListener('click', function () {
+            // 读取 html
+            // var html = editor.txt.html()
+            // $('#aaa').html(html)
+            var title = $('#title').val()
+            var keyword = $('#keyword').val()
+            var description = $('#description').val()
+            var content = editor.txt.html()
+            var csrf_token = $('#csrf_token').val()
+            if(title.length == 0 || keyword.length == 0 || content.length == 0 || description.length == 0){
+                alert("请正确填写内容");
+                return
+            }
+            jQuery.post(url='{{url_for('article.new_article_page')}}',data = {name:'new_article',csrf_token:csrf_token, title:title, keyword:keyword, description:description,content:content},function(url) {
+                alert("提交成功")
+                window.location.href = url
+            })
+        }, false)
+
+    </script>
 {% endblock other_scripts %}

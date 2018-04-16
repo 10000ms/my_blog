@@ -34,11 +34,6 @@ class CommentForm(FlaskForm):
         DataRequired('标题必填！'),
         Length(min=1, max=100, message='标题必须介于1-100字符！')
     ])
-    comment = StringField('评论', [
-        DataRequired('评论必填！'),
-        Length(min=1, max=1000, message='评论必须介于1-1000字符！')
-    ])
-    submit = SubmitField('提交')
 
 
 class UserLoginForm(FlaskForm):

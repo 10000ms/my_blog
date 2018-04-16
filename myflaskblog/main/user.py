@@ -17,12 +17,13 @@ from myflaskblog.models import User, Comment
 from myflaskblog import db
 from myflaskblog.email_sender import send_email
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+from flask import current_app, make_response
 from myflaskblog.main import _form
 from myflaskblog.img_manage import get_profile_photo_folder
-from myflaskblog.redis_manage import user_login_out
+from myflaskblog.redis_manage import user_login_out, user_session_check
 from myflaskblog.redis_manage import check_send_time, email_token_check, email_token_set
 from myflaskblog.main import _general_method
+import uuid
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -40,12 +41,17 @@ def login_page():
         if not check_login_user:
             flash('该用户不存在')
             return redirect(url_for('user.login_page'))
-        elif not check_login_user.verify_password(form.password.data):
+        if not check_login_user.verify_password(form.password.data):
             flash('密码错误')
             return redirect(url_for('user.login_page'))
-        else:
-            login_user(check_login_user, remember=True)
-            return redirect(url_for('user.login_user_page'))
+        user_session = str(uuid.uuid1())
+        if not user_session_check(check_login_user.id, user_session):
+            flash('该用户已登陆，请稍后再试')
+            return redirect(url_for('user.login_page'))
+        login_user(check_login_user, remember=True)
+        response = make_response(redirect(url_for('user.login_user_page')))
+        response.set_cookie("user_session", user_session)
+        return response
     else:
         return render_template('/user/login.html', form=form)
 
@@ -114,12 +120,19 @@ def confirm(token):
 
 @user.before_app_request
 def before_request():
+    if request.cookies.get('user_session') \
+            and current_user.is_authenticated \
+            and not user_session_check(current_user.id, request.cookies.get('user_session')):
+            flash('该用户已登陆')
+            return redirect(url_for('user.login_page'))
+    if current_user.is_authenticated and not request.cookies.get('user_session'):
+        flash('登陆已失效，请重新登陆')
+        return redirect(url_for('user.login_page'))
     if current_user.is_authenticated \
             and not current_user.confirmed \
             and str(request.endpoint)[:5] != 'user.'\
             and request.endpoint != 'static':
         return redirect(url_for('user.unconfirmed'))
-# TODO：单点登陆
 
 
 @user.route('/unconfirmed')
