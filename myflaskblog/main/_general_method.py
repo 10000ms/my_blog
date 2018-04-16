@@ -12,6 +12,9 @@ from myflaskblog.models import Article
 from myflaskblog.models import User
 from myflaskblog.models import Comment
 from flask import render_template
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
+from myflaskblog import db
 
 
 def page_mode(all_item_len, page_item_len, page=None, each_page_item=10):
@@ -48,3 +51,29 @@ def search(search_model, search_name, pagination_url, template, pagination_page,
         need_pagination=need_pagination,
         pagination_url=pagination_url
     )
+
+
+def check_token(token, function_module):
+    s = Serializer(current_app.config['SECRET_KEY'])
+    try:
+        data = s.loads(token)
+    except:
+        return False
+    if function_module == 'confirm':
+        fm_name = 'c'
+        if User.query.filter_by(id=data.get(fm_name)).first():
+            check_user = User.query.filter_by(id=data.get(fm_name)).first()
+            if not check_user.confirmed:
+                check_user.confirmed = True
+                db.session.commit()
+                return data.get(fm_name)
+            else:
+                return False
+        else:
+            return False
+    elif function_module == 'resetpassword':
+        fm_name = 'rp'
+        if User.query.filter_by(id=data.get(fm_name)).first():
+            return data.get(fm_name)
+        else:
+            return False

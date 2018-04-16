@@ -21,6 +21,8 @@ from flask import current_app
 from myflaskblog.main import _form
 from myflaskblog.img_manage import get_profile_photo_folder
 from myflaskblog.redis_manage import user_login_out
+from myflaskblog.redis_manage import check_send_time, email_token_check, email_token_set
+from myflaskblog.main import _general_method
 
 # 导入flask_login模块
 from flask_login import login_user, login_required, logout_user, current_user
@@ -73,33 +75,41 @@ def register_page():
         if User.query.filter_by(account=form.account.data).first():
             flash('用户已存在')
             return redirect(url_for('user.register_page'))
-        else:
-            account = form.account.data
-            password = form.password.data
-            username = form.username.data
-            email = form.email.data
-            new_user = User(account, password, username, email)
-            db.session.add(new_user)
-            db.session.commit()
-            token = new_user.generate_token('confirm')
-            send_email(new_user.email, '请确认您的帐号', 'email/confirm', user=new_user, token=token)
-            login_user(new_user, remember=True)
-            return redirect(url_for('user.login_user_page'))
+        if User.query.filter_by(email=form.email.data).first():
+            flash('email已注册')
+            return redirect(url_for('user.register_page'))
+        account = form.account.data
+        password = form.password.data
+        username = form.username.data
+        email = form.email.data
+        new_user = User(account, password, username, email)
+        db.session.add(new_user)
+        db.session.commit()
+        token = new_user.generate_token('confirm')
+        send_email(new_user.email, '请确认您的帐号', 'email/confirm', user=new_user, token=token)
+        login_user(new_user, remember=True)
+        return redirect(url_for('user.login_user_page'))
     else:
         return render_template('/user/register.html', form=form)
 
 
 @user.route('/confirm/<token>')
-@login_required
 def confirm(token):
-    if current_user.confirmed:
+    if current_user.is_authenticated and current_user.confirmed:
         return redirect(url_for('index.index_page'))
-    elif current_user.check_token(token, 'confirm'):
-        flash('激活成功')
-        return redirect(url_for('user.person_setting_page'))
     else:
-        flash('邮箱激活失败，请重试')
-        return redirect(url_for('user.person_setting_page'))
+        if not email_token_check(token):
+            flash('请使用最新设置邮箱激活')
+            return redirect(url_for('user.login_page'))
+        confirm_user = _general_method.check_token(token, 'confirm')
+        if confirm_user:
+            if not current_user.is_authenticated:
+                login_user(User.query.filter_by(id=confirm_user).first(), remember=True)
+            flash('激活成功')
+            return redirect(url_for('user.person_setting_page'))
+        else:
+            flash('已激活用户，请登陆')
+            return redirect(url_for('user.login_page'))
 
 
 @user.before_app_request
@@ -109,6 +119,7 @@ def before_request():
             and str(request.endpoint)[:5] != 'user.'\
             and request.endpoint != 'static':
         return redirect(url_for('user.unconfirmed'))
+# TODO：单点登陆
 
 
 @user.route('/unconfirmed')
@@ -123,10 +134,12 @@ def unconfirmed():
 @login_required
 def send_email_again():
     token = current_user.generate_token('confirm')
-    send_email(current_user.email, '请确认您的帐号', 'email/confirm', user=current_user, token=token)
-    flash('已重发验证邮件')
+    if check_send_time(current_user.id):
+        send_email(current_user.email, '请确认您的帐号', 'email/confirm', user=current_user, token=token)
+        flash('已重发验证邮件')
+    else:
+        flash('请勿频繁操作')
     return redirect(url_for('user.unconfirmed'))
-    # TODO:检测重发间隔
 
 
 @user.route('/reset_email', methods=['GET', 'POST'])
@@ -137,13 +150,20 @@ def reset_email():
         if form.email.data == current_user.email:
             flash('新邮箱与旧邮箱重复')
             return redirect(url_for('user.reset_email'))
-        reset_email_user = User.query.filter_by(id=current_user.id).first()
-        reset_email_user.email = form.email.data
-        reset_email_user.confirmed = False
-        db.session.commit()
-        token = current_user.generate_token('confirm')
-        send_email(current_user.email, '请确认您的新邮箱', 'email/resetemail', user=current_user, token=token)
-        flash('提交成功，请留意新邮箱的信息')
+        if User.query.filter_by(email=form.email.data).first():
+            flash('email已存在')
+            return redirect(url_for('user.reset_email'))
+        if check_send_time(current_user.id):
+            reset_email_user = User.query.filter_by(id=current_user.id).first()
+            reset_email_user.email = form.email.data
+            reset_email_user.confirmed = False
+            db.session.commit()
+            token = current_user.generate_token('confirm')
+            email_token_set(current_user.id, token)
+            send_email(current_user.email, '请确认您的新邮箱', 'email/resetemail', user=current_user, token=token)
+            flash('提交成功，请留意新邮箱的信息')
+        else:
+            flash('请勿频繁操作')
         return redirect(url_for('user.reset_email'))
     else:
         return render_template('/user/reset_email.html', form=form)
@@ -166,9 +186,18 @@ def forget_password():
         if need_reset_password_user.email != form.email.data:
             flash('用户email错误')
             return redirect(url_for('user.forget_password'))
-        token = need_reset_password_user.generate_token('resetpassword')
-        send_email(need_reset_password_user.email, '请重置您的密码', 'email/resetpassword', user=need_reset_password_user, token=token)
-        flash('重置密码邮件已发送，请登陆邮箱根据提示进行密码修改')
+        if check_send_time(need_reset_password_user):
+            token = need_reset_password_user.generate_token('resetpassword')
+            send_email(
+                need_reset_password_user.email,
+                '请重置您的密码',
+                'email/resetpassword',
+                user=need_reset_password_user,
+                token=token
+            )
+            flash('重置密码邮件已发送，请登陆邮箱根据提示进行密码修改')
+        else:
+            flash('请勿频繁操作')
         return redirect(url_for('user.forget_password'))
     else:
         return render_template('/user/forget_password.html', form=form)
