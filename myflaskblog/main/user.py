@@ -123,9 +123,11 @@ def before_request():
     if request.cookies.get('user_session') \
             and current_user.is_authenticated \
             and not user_session_check(current_user.id, request.cookies.get('user_session')):
+            logout_user()
             flash('该用户已登陆')
             return redirect(url_for('user.login_page'))
     if current_user.is_authenticated and not request.cookies.get('user_session'):
+        logout_user()
         flash('登陆已失效，请重新登陆')
         return redirect(url_for('user.login_page'))
     if current_user.is_authenticated \
