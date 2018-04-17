@@ -219,7 +219,7 @@
             {% block sidebar %}
             <div class="sidebar col-md-2 col-md-offset-8">
                 <div class="profile-photo-div">
-                    <img class="profile-photo" src="{{url_for('static', filename='img/Default.jpg')}}">
+                    <img class="profile-photo" src="{{WEBSITE_PROFILE_PHOTO}}">
                 </div>
                 <div>
                     <div class="sidebar-web-site-name">
@@ -266,7 +266,7 @@
                   </div>
 
                   <div class="footer-second-line">
-                      <p class="footer-p-second-line">备案号. Copyright © 2018. Victor Lai. All rights reserved.</p>
+                      <p class="footer-p-second-line">{{WEBSITE_LICENSE}}. Copyright © 2018. Victor Lai. All rights reserved.</p>
                   </div>
 
               </div>

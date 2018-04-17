@@ -92,7 +92,8 @@ if app.config['IS_DEVELOPMENT']:
     test_article19= models.Article('A19', 'kw', 'not', '这是一篇博文', 1)
     test_article20 = models.Article('A20', 'kw', 'not', '这是一篇博文', 1)
     test_config1 = models.Config('WEB_SITE_PROFILE_PHOTO', '111.jpg')
-    test_config2 = models.Config('WEB_SITE_NAME', '1000ms')
+    test_config2 = models.Config('WEB_SITE_NAME', '1000ms的小站')
+    test_config3 = models.Config('WEBSITE_LICENSE', '备案号：暂无')
     db.session.add(test_user1)
     db.session.add(test_user2)
     db.session.add(test_user3)
@@ -139,9 +140,10 @@ def user_loader(id):  # 这个id参数的值是在 login_user(user)中传入的 
 
 
 # 设置模板全局变量
-app.add_template_global(app.config['WEB_SITE_NAME'], 'WEB_SITE_NAME')
-app.add_template_global(app.static_folder + app.config['IMG_UPLOAD_FOLDER']+app.config['WEB_SITE_PROFILE_PHOTO'], \
-                        'WEB_SITE_PROFILE_PHOTO')
+app.add_template_global(app.config['WEBSITE_NAME'], 'WEBSITE_NAME')
+app.add_template_global(app.config['WEBSITE_LICENSE'], 'WEBSITE_LICENSE')
+app.add_template_global(app.static_folder + app.config['IMG_UPLOAD_FOLDER']+app.config['WEBSITE_PROFILE_PHOTO'],
+                        'WEBSITE_PROFILE_PHOTO')
 
 
 # 最后引入防止循环引用
