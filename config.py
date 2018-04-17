@@ -48,23 +48,23 @@ class DevelopmentConfig(Config_Default):
 
     JOBS = [
         {
-            'id': 'clear_useless_img',
-            'func': 'myflaskblog.img_manage:clear_useless_img',
-            'trigger': {'type': 'cron', 'hour': '4'},   # 定时凌晨4点清理无用图片
-        },
-        {
             'id': 'get_website_config',
             'func': 'myflaskblog.website_config_manage:get_website_config',
             'trigger': 'interval',
             'seconds': 10,
-            'end_date': (datetime.datetime.now()+datetime.timedelta(seconds=15)).strftime('%Y-%m-%d %H:%M:%S'),
-        }  # 程序启动后从数据库提取网站设置，执行一次
+            'end_date': (datetime.datetime.now() + datetime.timedelta(seconds=15)).strftime('%Y-%m-%d %H:%M:%S'),
+        },  # 程序启动后从数据库提取网站设置，执行一次
+        {
+            'id': 'clear_useless_img',
+            'func': 'myflaskblog.img_manage:clear_useless_img',
+            'trigger': {'type': 'cron', 'hour': '4'},   # 定时凌晨4点清理无用图片
+        }
     ]
     APSCHEDULER_LOCK = False  # 防止定时任务被同时执行多次
 
     WEBSITE_PROFILE_PHOTO = 'Default.jpg'  # 默认网站头像
     WEBSITE_NAME = '1000ms'  # 默认网站名
-    WEBSITE_LICENSE = '备案号'  # 默认网站备案号
+    WEBSITE_LICENSE = '备案号-NOT'  # 默认网站备案号
 
     # REDIS_URL = "redis://:password@localhost:6379/0"
     # REDIS_URL = "unix://[:password]@/path/to/socket.sock?db=0"

@@ -33,9 +33,6 @@ from flask_apscheduler import APScheduler
 # 导入Redis模块
 from flask_redis import FlaskRedis
 
-# 导入其他必要模块
-import hashlib
-
 
 app = Flask(__name__)
 app.config.from_object(config['config'])  # 从项目目录的config.py读入配置
@@ -91,8 +88,8 @@ if app.config['IS_DEVELOPMENT']:
     test_article18 = models.Article('A18', 'kw', 'not', '这是一篇博文', 1)
     test_article19= models.Article('A19', 'kw', 'not', '这是一篇博文', 1)
     test_article20 = models.Article('A20', 'kw', 'not', '这是一篇博文', 1)
-    test_config1 = models.Config('WEB_SITE_PROFILE_PHOTO', '111.jpg')
-    test_config2 = models.Config('WEB_SITE_NAME', '1000ms的小站')
+    test_config1 = models.Config('WEBSITE_PROFILE_PHOTO', '111.jpg')
+    test_config2 = models.Config('WEBSITE_NAME', '1000ms的小站')
     test_config3 = models.Config('WEBSITE_LICENSE', '备案号：暂无')
     db.session.add(test_user1)
     db.session.add(test_user2)
@@ -127,6 +124,7 @@ if app.config['IS_DEVELOPMENT']:
     db.session.add(test_article20)
     db.session.add(test_config1)
     db.session.add(test_config2)
+    db.session.add(test_config3)
     db.session.commit()
     redis_store.flushdb()  # 清空当前redis数据库
     # TODO:后期改进该测试功能
@@ -142,7 +140,7 @@ def user_loader(id):  # 这个id参数的值是在 login_user(user)中传入的 
 # 设置模板全局变量
 app.add_template_global(app.config['WEBSITE_NAME'], 'WEBSITE_NAME')
 app.add_template_global(app.config['WEBSITE_LICENSE'], 'WEBSITE_LICENSE')
-app.add_template_global(app.static_folder + app.config['IMG_UPLOAD_FOLDER']+app.config['WEBSITE_PROFILE_PHOTO'],
+app.add_template_global('/static/img/'+app.config['WEBSITE_PROFILE_PHOTO'],
                         'WEBSITE_PROFILE_PHOTO')
 
 

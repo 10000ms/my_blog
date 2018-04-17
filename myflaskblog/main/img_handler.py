@@ -102,7 +102,8 @@ def change_size(img_file):
 
 # 生成链接地址
 def create_img_url(func, filename):
+    static_folder = str(app.static_folder).rsplit('myflaskblog', 1)[1] + current_app.config['IMG_UPLOAD_FOLDER']
     if func == 'article_img':
-        return url_for('static', filename='img/article_img/'+filename)
+        return static_folder + 'article_img/' + filename
     elif func == 'profile_photo':
-        return url_for('static', filename='img/profile_photo/' + filename)
+        return static_folder + 'profile_photo/' + filename
