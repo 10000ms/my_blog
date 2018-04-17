@@ -39,15 +39,14 @@ def article_detail_page(article_id):
     form = _form.CommentForm()
     if not get_article:
         return '找不到该文章'
-    elif form.validate_on_submit():
-        title = form.title.data
-        comment = form.comment.data
+    elif request.method == 'POST':
+        title = request.form.get('title')
+        comment = request.form.get('comment')
         user_id = current_user.id
         article_id = article_id
         new_comment = Comment(title, comment, user_id, article_id)
         db.session.add(new_comment)
         db.session.commit()
-        flash('评论成功')
         return redirect(url_for('article.article_detail_page', article_id=article_id))
     else:
         page = request.args.get('page', 1, type=int)
@@ -208,11 +207,10 @@ def comment_detail_page(comment_id):
 def change_comment_page(comment_id):
     get_comment = Comment.query.filter_by(id=comment_id).first()
     form = _form.CommentForm()
-    if form.validate_on_submit() and get_comment.user.id == current_user.id:
-        get_comment.title = form.title.data
-        get_comment.comment = form.comment.data
+    if request.method == 'POST' and get_comment.user.id == current_user.id:
+        get_comment.title = request.form.get('title')
+        get_comment.comment = request.form.get('comment')
         db.session.commit()
-        flash('修改成功')
         return redirect(url_for('article.comment_detail_page', comment_id=comment_id))
     elif get_comment.user.id == current_user.id:
         return render_template('/article/change_comment.html', comment=get_comment, form=form)
@@ -230,6 +228,3 @@ def delete_comment_page(comment_id):
         db.session.delete(get_comment)
         db.session.commit()
     return jsonify({'type': 'success', 'words': '删除成功'})
-
-
-# TODO:评论有更好的处理方法

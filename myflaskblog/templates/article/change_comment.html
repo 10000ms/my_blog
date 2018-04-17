@@ -39,6 +39,27 @@
         font-size: 14px;
         color:#FFFFFF;
     }
+    .w-e-text-container{
+        min-height:300px;
+    }
+    .button{
+        width:200px;
+        margin-top:20px;
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+    }
+    #btn1{
+        width:150px;
+        height:50px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 16px;
+        color:#FFFFFF;
+        letter-spacing:5px;
+        font-weight:600;
+        text-align: center;
+    }
 </style>
 {% endblock other_styles %}
 
@@ -62,15 +83,6 @@
 {% endblock center_bar %}
 
 {% block other_scripts %}
-<script>
-    $(document).ready(function() {
-        $('#title').val('{{comment.title}}')
-        $('#comment').val('{{comment.comment}}')
-    })
-</script>
-{% endblock other_scripts %}
-
-{% block other_scripts %}
     <script type="text/javascript" src="/static/wangEditor/js/wangEditor.min.js"></script>
     <script type="text/javascript">
         var E = window.wangEditor
@@ -89,25 +101,33 @@
         editor.customConfig.zIndex = 100
         editor.customConfig.uploadImgMaxLength = 0
         editor.create()
+        editor.txt.html('{% autoescape false %}{{comment.comment}}{% endautoescape %}')
+
+        $('#title').val('{{comment.title}}')
+
+        var old_title = $('#title').val()
+        var old_comment = editor.txt.html()
 
         document.getElementById('btn1').addEventListener('click', function () {
-            // 读取 html
-            // var html = editor.txt.html()
-            // $('#aaa').html(html)
             var title = $('#title').val()
-            var keyword = $('#keyword').val()
-            var description = $('#description').val()
-            var content = editor.txt.html()
+            var comment = editor.txt.html()
             var csrf_token = $('#csrf_token').val()
-            if(title.length == 0 || keyword.length == 0 || content.length == 0 || description.length == 0){
+            if(title.length == 0 || comment.length == 0){
                 alert("请正确填写内容");
                 return
             }
-            jQuery.post(url='{{url_for('article.new_article_page')}}',data = {name:'new_article',csrf_token:csrf_token, title:title, keyword:keyword, description:description,content:content},function(url) {
+            if(title == old_title && comment == old_comment){
+                alert("未修改评论请勿提交");
+                return
+            }
+            if(comment.length >1500){
+                alert("评论内容过长，请重新输入");
+                return
+            }
+            jQuery.post(url='{{url_for('article.change_comment_page', comment_id=comment.id)}}',data = {name:'new_comment',csrf_token:csrf_token, title:title,comment:comment},function(url) {
                 alert("提交成功")
-                window.location.href = url
+                window.location.href = '{{url_for('article.comment_detail_page', comment_id=comment.id)}}'
             })
         }, false)
-
     </script>
 {% endblock other_scripts %}

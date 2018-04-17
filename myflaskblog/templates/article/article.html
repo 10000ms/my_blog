@@ -57,6 +57,7 @@
         padding-bottom: 20px;
         padding-top: 20px;
         font-family: 'Microsoft YaHei';
+        max-height: 1000px;
     }
     .comment-profile-photo{
         height: 80px;
@@ -144,7 +145,7 @@
                 <img src="{{url_for('static', filename=folder+comment.user.profile_photo)}}" class="comment-profile-photo">
                 <p class="comment-profile-photo-word">{{comment.user.username}}: “{{comment.title}}”</p>
             </div>
-            <p>{{comment.comment}}</p>
+            <p>{% autoescape false %}{{comment.comment}}{% endautoescape %}</p>
         </div>
         {% endfor %}
 
@@ -210,17 +211,19 @@
             // var html = editor.txt.html()
             // $('#aaa').html(html)
             var title = $('#title').val()
-            var keyword = $('#keyword').val()
-            var description = $('#description').val()
-            var content = editor.txt.html()
+            var comment = editor.txt.html()
             var csrf_token = $('#csrf_token').val()
-            if(title.length == 0 || keyword.length == 0 || content.length == 0 || description.length == 0){
+            if(title.length == 0 || comment.length == 0){
                 alert("请正确填写内容");
                 return
             }
-            jQuery.post(url='{{url_for('article.new_article_page')}}',data = {name:'new_article',csrf_token:csrf_token, title:title, keyword:keyword, description:description,content:content},function(url) {
+            if(comment.length >1500){
+                alert("评论内容过长，请重新输入");
+                return
+            }
+            jQuery.post(url='{{url_for('article.article_detail_page', article_id=article.id)}}',data = {name:'new_comment',csrf_token:csrf_token, title:title,comment:comment},function(url) {
                 alert("提交成功")
-                window.location.href = url
+                window.location.reload()
             })
         }, false)
 

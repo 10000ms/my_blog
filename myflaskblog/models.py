@@ -148,8 +148,6 @@ class Comment(db.Model):
         self.user_id = user_id
         self.article_id = article_id
 
-        # TODO:正确的处理评论模块
-
 
 # 图片模块
 class Img(db.Model):

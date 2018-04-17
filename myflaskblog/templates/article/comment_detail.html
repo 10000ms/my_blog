@@ -103,7 +103,7 @@
 
             <p>评论时间：{{comment.create_datetime}}</p>
             <p>作者：{{comment.user.username}}</p>
-            <p>评论内容：{{comment.comment}}</p>
+            <p>评论内容：{% autoescape false %}{{comment.comment}}{% endautoescape %}</p>
         </div>
     </div>
 </div>
