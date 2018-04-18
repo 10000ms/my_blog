@@ -16,10 +16,12 @@ from flask_login import login_required, current_user
 
 # 导入必须的模块
 from flask import request, url_for, render_template, redirect, abort
-from myflaskblog.models import User, Comment
+from myflaskblog.models import User, Comment, Config
 from myflaskblog import db
 from myflaskblog.main import _general_method
 from myflaskblog.redis_manage import add_redis_user_data, get_redis_user_value
+from myflaskblog.main import _form
+from flask import current_app, flash
 
 
 admin = Blueprint('admin', __name__)
@@ -28,7 +30,10 @@ admin = Blueprint('admin', __name__)
 @admin.route('/')
 @login_required
 def admin_index_page():
-    return render_template('/admin/admin.html')
+    if current_user.is_admin == 1:
+        return render_template('/admin/admin.html')
+    else:
+        abort(403)
 
 
 @admin.route('/user_manage')
@@ -103,7 +108,7 @@ def delete_user_page(user_id):
 @login_required
 def blog_setting_page():
     if current_user.is_admin == 1:
-        return render_template('/admin/blog_setting.html')
+        return render_template('/admin/website_config.html')
     else:
         abort(403)
 
@@ -160,5 +165,33 @@ def search_comment_page():
             )
         else:
             return redirect(url_for('admin.manage_comment_page'))
+    else:
+        abort(403)
+
+
+@admin.route('/website_config', methods=['GET', 'POST'])
+@login_required
+def website_config():
+    if current_user.is_admin == 1:
+        config_form = _form.WebsiteConfigFrom()
+        profile_photo_form = _form.WebsiteProfilePhotoFrom()
+        db_website_name = Config.query.filter_by(item='WEBSITE_NAME').first().value
+        db_website_license = Config.query.filter_by(item='WEBSITE_LICENSE').first().value
+        if config_form.validate_on_submit():
+            website_name = config_form.website_name.data
+            website_license = config_form.website_license.data
+            Config.query.filter_by(item='WEBSITE_NAME').first().value = website_name
+            Config.query.filter_by(item='WEBSITE_LICENSE').first().value = website_license
+            db.session.commit()
+            flash('修改成功,重启网站后生效')
+            return redirect(url_for('admin.website_config'))
+        else:
+            return render_template(
+                '/admin/website_config.html',
+                config_form=config_form,
+                profile_photo_form=profile_photo_form,
+                website_name=db_website_name,
+                website_license=db_website_license
+            )
     else:
         abort(403)

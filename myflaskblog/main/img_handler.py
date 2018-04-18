@@ -16,7 +16,7 @@ from flask import Blueprint
 
 
 # 导入必要模块
-from myflaskblog.models import Img
+from myflaskblog.models import Img, Config
 from myflaskblog import db
 from flask import redirect, abort, flash, current_app
 import os
@@ -75,6 +75,28 @@ def get_profile_photo():
         abort(403)
 
 
+@img.route('/website_profile_photo', methods=['POST'])
+@login_required
+def get_website_profile_photo():
+    if current_user.confirmed:
+        file = request.files['profile_photo']
+        size = len(file.read())
+        if file is None:
+            abort(404)
+        elif file and allowed_file(file.filename) and size < 2048*2048:
+            filename = create_name(file.filename)
+            profile_photo_img = change_website_profile_photo_size(file)
+            profile_photo_img.save(upload_folder('website_profile_photo') + filename)
+            website_profile = Config.query.filter_by(item='WEBSITE_PROFILE_PHOTO').first().value
+            if website_profile != 'Default.jpg':
+                os.remove(upload_folder('website_profile_photo') + website_profile)
+                Config.query.filter_by(item='WEBSITE_PROFILE_PHOTO').first().value = filename
+            db.session.commit()
+            return '上传成功'
+    else:
+        abort(403)
+
+
 # 文件名合法性验证
 def allowed_file(filename):
     return '.' in filename and \
@@ -87,6 +109,8 @@ def upload_folder(func):
         return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'article_img/'
     elif func == 'profile_photo':
         return current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'] + 'profile_photo/'
+    elif func == 'website_profile_photo':
+        return str(current_app.static_folder + current_app.config['IMG_UPLOAD_FOLDER'])
 
 
 # 生成随机文件名
@@ -98,6 +122,12 @@ def create_name(filename):
 def change_size(img_file):
     img1 = Image.open(img_file)
     return img1.resize((250, 250), Image.ANTIALIAS)
+
+
+# 生成合适尺寸的图片
+def change_website_profile_photo_size(img_file):
+    img1 = Image.open(img_file)
+    return img1.resize((600, 600), Image.ANTIALIAS)
 
 
 # 生成链接地址

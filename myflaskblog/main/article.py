@@ -17,7 +17,7 @@ from flask import render_template
 # 导入必要模块
 from myflaskblog.models import Article, Comment
 from myflaskblog import db
-from flask import redirect, abort, flash
+from flask import redirect, abort
 from myflaskblog import img_manage
 from myflaskblog.main import _form
 from flask import request, url_for

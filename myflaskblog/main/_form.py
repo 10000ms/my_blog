@@ -150,3 +150,19 @@ class ResetForgetPasswordForm(FlaskForm):
 
 class ProfilePhotoForm(FlaskForm):
     profile_photo = FileField('新头像', [DataRequired()])
+
+
+class WebsiteProfilePhotoFrom(FlaskForm):
+    profile_photo = FileField('新网站头像', [DataRequired()])
+
+
+class WebsiteConfigFrom(FlaskForm):
+    website_name = StringField('网站名', [
+        DataRequired('网站名必填！'),
+        Length(min=2, max=20, message='网站名必须介于2-20字符！'),
+    ])
+    website_license = StringField('网站备案号', [
+        DataRequired('网站备必填！'),
+        Length(min=10, max=20, message='网站备必须介于10-20字符！'),
+    ])
+    submit = SubmitField('提交')

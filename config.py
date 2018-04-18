@@ -51,8 +51,8 @@ class DevelopmentConfig(Config_Default):
             'id': 'get_website_config',
             'func': 'myflaskblog.website_config_manage:get_website_config',
             'trigger': 'interval',
-            'seconds': 10,
-            'end_date': (datetime.datetime.now() + datetime.timedelta(seconds=15)).strftime('%Y-%m-%d %H:%M:%S'),
+            'seconds': 15,
+            'end_date': (datetime.datetime.now() + datetime.timedelta(seconds=20)).strftime('%Y-%m-%d %H:%M:%S'),
         },  # 程序启动后从数据库提取网站设置，执行一次
         {
             'id': 'clear_useless_img',

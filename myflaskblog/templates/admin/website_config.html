@@ -1,0 +1,136 @@
+{% extends "__base__.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 网站设置 {% endblock title %}
+
+{% block other_styles %}
+<style>
+    .return{
+        width:80px;
+        height:40px;
+        font-size: 16px;
+        width:80px;
+        color:#808080;
+        margin-top:20px;
+        margin-left:20px;
+    }
+    .return-a{
+        font-family: 'Microsoft YaHei';
+        color:#808080;
+        letter-spacing:5px;
+        font-weight:600;
+    }
+    .editor{
+        margin-top:20px;
+        padding:20px;
+        max-width: 600px;
+        min-width: 400px;
+        margin-right: auto;
+        margin-left: auto;
+        border-top-style:solid;
+        border-top-width:2px;
+        border-top-color: #FFFFFF;
+        color:#808080;
+    }
+    .set-profile-photo{
+        border-bottom-style:solid;
+        border-bottom-width:2px;
+        border-bottom-color: #FFFFFF;
+        margin-top:20px;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+    label.control-label{
+        font-family: 'Microsoft YaHei';
+        font-size: 20px;
+        font-weight:800;
+        letter-spacing:5px;
+    }
+    #btn1{
+        margin-top:20px;
+        width:150px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        color:#FFFFFF;
+    }
+    input.btn{
+        width:150px;
+        margin-left:200px;
+        margin-top:15px;
+        background-color:#808080;
+        font-family: 'Microsoft YaHei';
+        font-size: 14px;
+        color:#FFFFFF;
+    }
+</style>
+{% endblock other_styles %}
+
+{% block center_bar %}
+<button  type="button" class="btn btn-default return">
+    <a href="{{url_for('admin.admin_index_page')}}" class="return-a">
+        返回
+    </a>
+</button>
+<div class="editor">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="set-profile-photo">
+        <div>
+        {{ wtf.quick_form(profile_photo_form)}}
+        </div>
+        <button class="btn btn-default" id="btn1">提交</button>
+    </div>
+
+    <div class="info-div">
+        {{ wtf.quick_form(config_form) }}
+    </div>
+</div>
+{% endblock center_bar %}
+
+{% block other_scripts %}
+<script>
+    $(document).ready(function() {
+
+        $('#website_name').val('{{website_name}}')
+        $('#website_license').val('{{website_license}}')
+
+        document.getElementById('btn1').addEventListener('click', function () {
+            //检测图片格式和大小后再上传
+            var img = $('#profile_photo')[0].files[0]
+            if(!img){
+                alert("请选择图片")
+            }else{
+                var img_name = $('#profile_photo').val()
+                var index= img_name.lastIndexOf(".")
+                img_id=img_name.substring(index);
+                if(img_id!=".bmp"&&img_id!=".png"&&img_id!=".gif"&&img_id!=".jpg"&&img_id!=".jpeg"){
+                    alert("图片格式有误，请重新选择")
+                    $('#profile_photo').val('')
+                }else if(img.size > 2048*2048*3){
+                    alert("图片大于3M，请重新选择")
+                    $('#profile_photo').val('')
+                }else{
+                    var formData = new FormData()
+                    formData.append('profile_photo', img)
+                    $.ajax({
+                           url : '{{url_for('img.get_website_profile_photo')}}',
+                           type : 'POST',
+                           data : formData,
+                           processData: false,  // tell jQuery not to process the data
+                           contentType: false,  // tell jQuery not to set contentType
+                           success : function(data) {
+                               alert("提交成功")
+                           }
+                    })
+                }
+            }
+        })
+    })
+</script>
+{% endblock other_scripts %}
