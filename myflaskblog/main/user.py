@@ -107,7 +107,7 @@ def confirm(token):
         if not email_token_check(token):
             flash('请使用最新设置邮箱激活')
             return redirect(url_for('user.login_page'))
-        confirm_user = _general_method.check_token(token, 'confirm')
+        confirm_user = _general_method.check_token(token)
         if confirm_user:
             if not current_user.is_authenticated:
                 login_user(User.query.filter_by(id=confirm_user).first(), remember=True)

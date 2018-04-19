@@ -3,7 +3,8 @@
     myflaskblog.main._generalMethod
     ~~~~~~~~~
 
-    通用功能模块.
+    通用功能模块
+    内含3个功能：page_mode；search；check_token
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
@@ -58,7 +59,7 @@ def search(search_model, search_name, pagination_url, template, pagination_page,
     :param template: 所需要渲染的模板
     :param pagination_page: pagination所需要的page参数
     :param page: 页码
-    :return: 直接使用的渲染模板
+    :return: 直接可以使用的渲染模板
     """
     if search_model == 'Article':
         search_item = Article.query.filter(Article.title.ilike('%' + search_name + '%'))
@@ -82,21 +83,26 @@ def search(search_model, search_name, pagination_url, template, pagination_page,
     )
 
 
-def check_token(token, function_module):
+def check_token(token):
+    """
+    验证邮箱激活地址的token是否正确，并更新数据库中用户确认信息
+
+    :param token: Serializer生成的token
+    :return: 激活成功则返回用户id，失败则返回false
+    """
     s = Serializer(current_app.config['SECRET_KEY'])
     try:
         data = s.loads(token)
     except:
         return False
-    if function_module == 'confirm':
-        fm_name = 'c'
-        if User.query.filter_by(id=data.get(fm_name)).first():
-            check_user = User.query.filter_by(id=data.get(fm_name)).first()
-            if not check_user.confirmed:
-                check_user.confirmed = True
-                db.session.commit()
-                return data.get(fm_name)
-            else:
-                return False
+    fm_name = 'c'  # 验证的key为c
+    if User.query.filter_by(id=data.get(fm_name)).first():
+        check_user = User.query.filter_by(id=data.get(fm_name)).first()
+        if not check_user.confirmed:
+            check_user.confirmed = True
+            db.session.commit()
+            return data.get(fm_name)
         else:
             return False
+    else:
+        return False

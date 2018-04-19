@@ -3,7 +3,10 @@
     myflaskblog.main.__init__
     ~~~~~~~~~
 
-    蓝图注册模块.
+    蓝图注册模块
+    注册蓝图：/；/admin；/article；/user；/img
+    以及全局错误模块
+    所有模块均在myflaskblog.main内
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.

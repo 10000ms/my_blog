@@ -8,26 +8,29 @@
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
-# 导入蓝图模块
+# 导入flask内的相关类
 from flask import Blueprint
-
-# 导入模板模块
 from flask import render_template
+from flask import request
+from flask import url_for
+from flask import jsonify
+from flask import redirect
+from flask import abort
+# 导入flask_login模块内检验登陆和获取当前用户类
+from flask_login import login_required
+from flask_login import current_user
 
-# 导入必要模块
-from myflaskblog.models import Article, Comment
+
+# 导入项目中相关功能
 from myflaskblog import db
-from flask import redirect, abort
+from myflaskblog.models import Article
+from myflaskblog.models import Comment
 from myflaskblog import img_manage
 from myflaskblog.main import _form
-from flask import request, url_for
-from flask import jsonify
-from myflaskblog.img_manage import get_profile_photo_folder
 from myflaskblog.main import _general_method
-from myflaskblog.redis_manage import add_redis_user_data, get_redis_user_value
-
-# 导入flask_login模块
-from flask_login import login_required, current_user
+from myflaskblog.img_manage import get_profile_photo_folder
+from myflaskblog.redis_manage import add_redis_user_data
+from myflaskblog.redis_manage import get_redis_user_value
 
 
 article = Blueprint('article', __name__)
@@ -35,6 +38,15 @@ article = Blueprint('article', __name__)
 
 @article.route('/<int:article_id>', methods=['GET', 'POST'])
 def article_detail_page(article_id):
+    """
+    文章具体内容页。
+    通过获取的文章id查找文章并输出到模板进行渲染，同时输出的还有该文章的评论
+    POST是通过ajax获取文章新评论，并添加到数据库功能
+
+    :param article_id: 文章id
+    :return: GET: 渲染/article/article.html
+              POST: ajax功能，返回信息让前端js获知成功即可
+    """
     get_article = Article.query.filter_by(id=article_id).first()
     form = _form.CommentForm()
     if not get_article:
@@ -47,7 +59,7 @@ def article_detail_page(article_id):
         new_comment = Comment(title, comment, user_id, article_id)
         db.session.add(new_comment)
         db.session.commit()
-        return redirect(url_for('article.article_detail_page', article_id=article_id))
+        return '评论成功'
     else:
         page = request.args.get('page', 1, type=int)
         get_comment = Comment.query.filter_by(article_id=article_id)
@@ -75,6 +87,12 @@ def article_detail_page(article_id):
 @article.route('/new_article', methods=['GET', 'POST'])
 @login_required
 def new_article_page():
+    """
+    新文章页面，并可以接受新文章信息写入数据库
+
+    :return:GET: 渲染/article/new_article.html
+             POST: ajax功能，返回信息让前端js获知成功即可
+    """
     if request.method == 'POST' and current_user.is_admin == 1:
         new_article_title = request.form.get('title')
         if not new_article_title:
@@ -93,7 +111,7 @@ def new_article_page():
         db.session.add(new_article)
         db.session.commit()
         img_manage.img_add_article_id(new_article.id, new_article.content)
-        return url_for('article.article_detail_page', article_id=new_article.id)
+        return '新文章添加成功'
     elif current_user.is_admin == 1:
         form = _form.ArticleForm()
         return render_template('/article/new_article.html', form=form)
@@ -104,6 +122,11 @@ def new_article_page():
 @article.route('/manage_article')
 @login_required
 def manage_article_page():
+    """
+    文章管理页面，判断用户权限后获取数据库非管理员用户，使用page_mode判断需要页码模块后渲染输出
+
+    :return: 渲染/article/manage_article.html
+    """
     if current_user.is_admin == 1:
         page = request.args.get('page', 1, type=int)
         all_articles = Article.query.order_by(Article.create_datetime.desc())
@@ -114,6 +137,7 @@ def manage_article_page():
             len(articles),
             request.args.get('page')
         )
+        # 搜索功能可能存在换页到不同的模块，所以需要指定url
         pagination_url = 'article.manage_article_page'
         return render_template(
             "/article/manage_article.html",
@@ -129,9 +153,17 @@ def manage_article_page():
 @article.route('/search', methods=['GET', 'POST'])
 @login_required
 def search_article_page():
+    """
+    文章管理下的文章搜索页面，先判断用户权限，然后判断方法。
+    POST为初次传递搜索关键字，根据关键字查询结果，并将结果存入redis中，方便分页使用
+    GET为搜索结果的第二页及之后，提出redis中的关键字，再次进行搜索，输出第二页
+
+    :return: 使用搜索结果的文章渲染/article/manage_article.html
+    """
     if current_user.is_admin == 1:
         if request.method == 'POST'and request.form.get('name'):
             search_name = request.form.get('name')
+            # 搜索关键字存入redis
             add_redis_user_data(current_user.id, 'article.search_article_page', search_name)
             return _general_method.search(
                 'Article',
@@ -142,6 +174,7 @@ def search_article_page():
                 None
             )
         elif request.method == 'GET' and request.args.get('page'):
+            # 提取搜索关键字，再次进行搜索
             search_name = get_redis_user_value(current_user.id, 'article.search_article_page')
             return _general_method.search(
                 'Article',
@@ -160,6 +193,13 @@ def search_article_page():
 @article.route('/change_article/<int:article_id>', methods=['GET', 'POST'])
 @login_required
 def change_article_page(article_id):
+    """
+    修改文章页面。
+    GET：提取需要修改的文章
+
+    :param article_id: 文章id
+    :return:
+    """
     if request.method == 'POST' and current_user.is_admin == 1:
         new_article_title = request.form.get('title')
         if not new_article_title:
@@ -184,12 +224,15 @@ def change_article_page(article_id):
 @login_required
 def delete_article_page(article_id):
     if current_user.is_admin == 1:
+        if Comment.query.filter_by(article_id=article_id).first():
+            return '有评论的文章无法删除'
         delete_article = Article.query.filter_by(id=article_id).first()
         db.session.delete(delete_article)
         db.session.commit()
         return '删除成功'
     else:
         return abort(403)
+# TODO：完善有评论的文章无法删除
 
 
 @article.route('/comment_detail/<int:comment_id>')

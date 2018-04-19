@@ -3,7 +3,8 @@
     myflaskblog.main._form
     ~~~~~~~~~
 
-    wtf表格模块.
+    wtf表格模块
+    内含需要用到的表格共12个
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
