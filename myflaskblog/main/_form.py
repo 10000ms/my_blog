@@ -10,8 +10,17 @@
 """
 # 导入WTF模块
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, PasswordField, FileField
-from wtforms.validators import DataRequired, Length, EqualTo, Regexp
+# 导入所需要的Field
+from wtforms import StringField
+from wtforms import SubmitField
+from wtforms import HiddenField
+from wtforms import PasswordField
+from wtforms import FileField
+# 导入验证模块
+from wtforms.validators import DataRequired
+from wtforms.validators import Length
+from wtforms.validators import EqualTo
+from wtforms.validators import Regexp
 
 
 class ArticleForm(FlaskForm):
