@@ -80,6 +80,3 @@ class TestingConfig(Config_Default):
 config = {
     'config': DevelopmentConfig,
 }
-
-
-# TODO：使用文件锁保证APScheduler只执行一次
