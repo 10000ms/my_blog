@@ -124,8 +124,8 @@
                 alert("评论内容过长，请重新输入");
                 return
             }
-            jQuery.post(url='{{url_for('article.change_comment_page', comment_id=comment.id)}}',data = {name:'new_comment',csrf_token:csrf_token, title:title,comment:comment},function(url) {
-                alert("提交成功")
+            jQuery.post(url='{{url_for('article.change_comment_page', comment_id=comment.id)}}',data = {name:'new_comment',csrf_token:csrf_token, title:title,comment:comment},function(data) {
+                alert(data)
                 window.location.href = '{{url_for('article.comment_detail_page', comment_id=comment.id)}}'
             })
         }, false)

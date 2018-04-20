@@ -24,6 +24,7 @@ from flask_login import current_user
 # 导入项目中相关功能
 from myflaskblog import db
 from myflaskblog.models import User
+from myflaskblog.models import Article
 from myflaskblog.models import Comment
 from myflaskblog.models import Config
 from myflaskblog.main import _general_method
@@ -125,18 +126,25 @@ def search_user_page():
 def delete_user_page(user_id):
     """
     删除用户页面，无法直接打开，前端js将需要删除的用户id传输过来
+    然后判断用户是否关联文章或者评论，关联则无法删除
 
     :param user_id: 需要删除的用户id
-    :return: ajax功能，返回信息让前端js获知成功即可
+    :return: ajax功能，返回纯文本信息让前端js获知情况
     """
     if current_user.is_admin == 1:
         delete_user = User.query.filter_by(id=user_id).first()
-        db.session.delete(delete_user)
-        db.session.commit()
-        return '删除成功'
+        if delete_user:
+            user_comment = Comment.query.filter_by(user_id=user_id).first()
+            user_article = Article.query.filter_by(user_id=user_id).first()
+            if user_article or user_comment:
+                return '有该用户文章或评论，无法删除'
+            db.session.delete(delete_user)
+            db.session.commit()
+            return '删除成功'
+        else:
+            abort(405)
     else:
         abort(403)
-# TODO：完善有评论或文章的用户无法删除
 
 
 @admin.route('/blog_setting')

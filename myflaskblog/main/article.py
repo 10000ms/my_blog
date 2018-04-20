@@ -3,7 +3,8 @@
     myflaskblog.main.article
     ~~~~~~~~~
 
-    博客文章处理模块.
+    博客文章处理模块
+    内含可以直接访问的页面7个，涵盖文章和评论发表，修改，删除，详情
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
@@ -13,7 +14,6 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import url_for
-from flask import jsonify
 from flask import redirect
 from flask import abort
 # 导入flask_login模块内检验登陆和获取当前用户类
@@ -88,10 +88,10 @@ def article_detail_page(article_id):
 @login_required
 def new_article_page():
     """
-    新文章页面，并可以接受新文章信息写入数据库
+    新文章页面，并可以接受新文章信息写入数据库，并会对提交文章的图片进行关联
 
     :return:GET: 渲染/article/new_article.html
-             POST: ajax功能，返回信息让前端js获知成功即可
+             POST: ajax功能，返回新文章详情页
     """
     if request.method == 'POST' and current_user.is_admin == 1:
         new_article_title = request.form.get('title')
@@ -110,8 +110,9 @@ def new_article_page():
         )
         db.session.add(new_article)
         db.session.commit()
+        # 本文图片关联
         img_manage.img_add_article_id(new_article.id, new_article.content)
-        return '新文章添加成功'
+        return url_for('article.article_detail_page', article_id=new_article.id)
     elif current_user.is_admin == 1:
         form = _form.ArticleForm()
         return render_template('/article/new_article.html', form=form)
@@ -195,10 +196,12 @@ def search_article_page():
 def change_article_page(article_id):
     """
     修改文章页面。
-    GET：提取需要修改的文章
+    GET: 提取需要修改的文章,渲染输出模板
+    POST: 接受提交的修改后文章，提交到数据库，并对图片进行删除或者关联
 
     :param article_id: 文章id
-    :return:
+    :return: GET: 使用文章渲染/article/change_article.html
+              POST: ajax功能，返回文章详情页
     """
     if request.method == 'POST' and current_user.is_admin == 1:
         new_article_title = request.form.get('title')
@@ -210,6 +213,7 @@ def change_article_page(article_id):
         need_change_article.description = request.form.get('description')
         need_change_article.content = request.form.get('content')
         db.session.commit()
+        # 检测旧文章图片，进行旧无用删除和新图片关联
         img_manage.img_change_article_id(article_id, need_change_article.content)
         return url_for('article.article_detail_page', article_id=article_id)
     elif current_user.is_admin == 1:
@@ -223,6 +227,13 @@ def change_article_page(article_id):
 @article.route('/delete_article/<int:article_id>', methods=['POST'])
 @login_required
 def delete_article_page(article_id):
+    """
+    删除文章页面，无法直接打开，前端js将需要删除的文章id传输过来
+    然后判断文章是否有关联评论，关联则无法删除
+
+    :param article_id: 需要删除的文章id
+    :return: ajax功能，返回纯文本信息让前端js获知情况
+    """
     if current_user.is_admin == 1:
         if Comment.query.filter_by(article_id=article_id).first():
             return '有评论的文章无法删除'
@@ -232,12 +243,18 @@ def delete_article_page(article_id):
         return '删除成功'
     else:
         return abort(403)
-# TODO：完善有评论的文章无法删除
 
 
 @article.route('/comment_detail/<int:comment_id>')
 @login_required
 def comment_detail_page(comment_id):
+    """
+    评论具体内容页。
+    通过获取的评论id查找文章并输出到模板进行渲染
+
+    :param comment_id: 评论id
+    :return: 使用评论渲染/article/comment_detail.html
+    """
     get_comment = Comment.query.filter_by(id=comment_id).first()
     if get_comment.user.id != current_user.id and current_user.is_admin == 0:
         abort(403)
@@ -248,13 +265,22 @@ def comment_detail_page(comment_id):
 @article.route('/change_comment/<int:comment_id>', methods=['GET', 'POST'])
 @login_required
 def change_comment_page(comment_id):
+    """
+    修改评论页面。必须是发表评论的用户才能修改评论
+    GET: 提取需要修改的评论,渲染输出模板
+    POST: 接受提交的修改后评论，提交到数据库
+
+    :param comment_id: 评论id
+    :return:GET: 使用评论渲染/article/change_comment.html
+             POST: ajax功能，返回纯文本信息让前端js获知情况
+    """
     get_comment = Comment.query.filter_by(id=comment_id).first()
     form = _form.CommentForm()
     if request.method == 'POST' and get_comment.user.id == current_user.id:
         get_comment.title = request.form.get('title')
         get_comment.comment = request.form.get('comment')
         db.session.commit()
-        return redirect(url_for('article.comment_detail_page', comment_id=comment_id))
+        return '提交成功'
     elif get_comment.user.id == current_user.id:
         return render_template('/article/change_comment.html', comment=get_comment, form=form)
     else:
@@ -264,10 +290,16 @@ def change_comment_page(comment_id):
 @article.route('/delete_comment/<int:comment_id>', methods=['POST'])
 @login_required
 def delete_comment_page(comment_id):
+    """
+    删除评论页面，无法直接打开，前端js将需要删除的文章id传输过来
+
+    :param comment_id: 评论id
+    :return: ajax功能，返回纯文本信息让前端js获知情况
+    """
     get_comment = Comment.query.filter_by(id=comment_id).first()
     if get_comment.user.id != current_user.id and current_user.is_admin == 0:
         abort(403)
     else:
         db.session.delete(get_comment)
         db.session.commit()
-    return jsonify({'type': 'success', 'words': '删除成功'})
+    return '删除成功'

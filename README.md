@@ -27,9 +27,9 @@ lxml ==> 3.8.0
 Flask-Redis => 0.3.0
 
 # 处理ImportError: No module named MySQLdb问题
-1.easy_install mysql-python (mix os)
+1.easy_install mysql-python (mac os)
 
-2.pip install mysql-python (mix os)
+2.pip install mysql-python (mac os)
 
 3.apt-get install python-mysqldb (Linux Ubuntu)
 

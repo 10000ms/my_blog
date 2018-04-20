@@ -3,14 +3,15 @@
     myflaskblog.main.error
     ~~~~~~~~~
 
-    全局错误处理模块.
+    全局错误处理模块
+    可以渲染好看的错误页面
+    可以处理404；403；401；405；500这些常见的错误
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
 # 导入蓝图模块
 from flask import Blueprint
-
 # 导入模板模块
 from flask import render_template
 

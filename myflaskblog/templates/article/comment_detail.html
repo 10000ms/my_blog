@@ -116,8 +116,8 @@
         for (i = 0; i < delete_button.length; i++) {
             delete_button[i].addEventListener('click', function () {
                 var url = event.target.id
-                jQuery.post(url=url,function() {
-                    alert("删除成功");
+                jQuery.post(url=url,function(data) {
+                    alert(data);
                     window.location.href = '{{url_for('user.person_setting_page')}}'
                  })
             })
