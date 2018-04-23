@@ -3,17 +3,27 @@
     myflaskblog.redis
     ~~~~~~~~~
 
-    网站设置管理模块.
+    网站设置管理模块
+    在网站启动后从数据库
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
-from flask import url_for
+# 导入项目相关模块
 from myflaskblog import app
 from myflaskblog.models import Config
 
 
 def get_website_config():
+    """
+    从数据库中读取数据进行add_template_global设置，定时任务
+    设置内容有：
+    1.网站名字
+    2.网站备案号
+    3.网站头像
+
+    :return:
+    """
     if not app.config['APSCHEDULER_LOCK']:
         app.config.update(APSCHEDULER_LOCK=True)
         if Config.query.filter_by(item='WEBSITE_NAME').first():
@@ -30,6 +40,12 @@ def get_website_config():
 
 
 def get_static_url(img_name):
+    """
+    网站头像的url地址
+
+    :param img_name: 头像名
+    :return: url地址
+    """
     static_folder = str(app.static_folder).rsplit('myflaskblog', 1)[1]
     url = static_folder + app.config['IMG_UPLOAD_FOLDER'] + img_name
     return url

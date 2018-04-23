@@ -4,34 +4,25 @@
     myflaskblog.__init__
     ~~~~~~~~~
 
-    项目初始模块.
+    项目初始模块
+    初始化项目，配置设置及一些而外模块
+    最后导入路由main
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
-# 导入flask扩展
+# 导入flask内的相关类
 from flask import Flask
-
-# 导入Flask-SQLAlchemy模块
+# 导入flask扩展类
 from flask_sqlalchemy import SQLAlchemy
-
-# 导入Flask-bootstrap模块
 from flask_bootstrap import Bootstrap
-
-# 导入login模块
 from flask_login import LoginManager
-
-# 导入配置模块
-from config import config
-
-# 导入Mail模块
 from flask_mail import Mail
-
-# 导入定时任务模块
-from flask_apscheduler import APScheduler
-
-# 导入Redis模块
+from flask_apscheduler import APScheduler  # 定时任务
 from flask_redis import FlaskRedis
+
+# 导入本项目配置模块
+from config import config
 
 
 app = Flask(__name__)

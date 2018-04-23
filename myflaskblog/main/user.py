@@ -11,7 +11,7 @@
 """
 # 导入uuid创建唯一id
 import uuid
-# 导入Serializer加密
+# 导入Serializer进行解密
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 # 导入flask内的相关类

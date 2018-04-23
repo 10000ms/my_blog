@@ -25,9 +25,10 @@ from flask_login import UserMixin
 from myflaskblog import app
 from flask import current_app
 
+
 # 用户模型
 class User(db.Model, UserMixin):
-    '''
+    """
     创建类的时候继承UserMixin ,有一些用户相关属性 
  
     * is_authenticated ：是否被验证 
@@ -35,7 +36,7 @@ class User(db.Model, UserMixin):
     * is_anonymous : 是否是匿名用户 
     * get_id() : 获得用户的id，并转换为 Unicode 类型 
     
-    '''
+    """
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     account = db.Column(db.String(80), unique=True)

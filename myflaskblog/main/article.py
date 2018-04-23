@@ -29,6 +29,7 @@ from myflaskblog import img_manage
 from myflaskblog.main import _form
 from myflaskblog.main import _general_method
 from myflaskblog.img_manage import get_profile_photo_folder
+from myflaskblog.img_manage import article_delete
 from myflaskblog.redis_manage import add_redis_user_data
 from myflaskblog.redis_manage import get_redis_user_value
 
@@ -230,6 +231,7 @@ def delete_article_page(article_id):
     """
     删除文章页面，无法直接打开，前端js将需要删除的文章id传输过来
     然后判断文章是否有关联评论，关联则无法删除
+    最后删除可能存在的文章图片
 
     :param article_id: 需要删除的文章id
     :return: ajax功能，返回纯文本信息让前端js获知情况
@@ -240,6 +242,7 @@ def delete_article_page(article_id):
         delete_article = Article.query.filter_by(id=article_id).first()
         db.session.delete(delete_article)
         db.session.commit()
+        article_delete(article_id)
         return '删除成功'
     else:
         return abort(403)
