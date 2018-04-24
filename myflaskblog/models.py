@@ -3,7 +3,14 @@
     myflaskblog.models
     ~~~~~~~~~
 
-    数据库模型模块.
+    数据库模型类模块
+    网站所需要用到的mysql数据库的所有模型
+    内含：
+    1.网站用户模型
+    2.网站设置模型
+    3.blog文章模型
+    4.博文评论模型
+    5.文章图片模型
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
@@ -22,13 +29,13 @@ from datetime import datetime
 from flask_login import UserMixin
 
 # 导入必要模块
-from myflaskblog import app
 from flask import current_app
 
 
-# 用户模型
 class User(db.Model, UserMixin):
     """
+    网站用户模型
+
     创建类的时候继承UserMixin ,有一些用户相关属性 
  
     * is_authenticated ：是否被验证 
@@ -51,6 +58,16 @@ class User(db.Model, UserMixin):
     articles = db.relationship('Article', backref='user', lazy='dynamic')
 
     def __init__(self, account, password_hash, username, email, is_admin=False, confirmed=False):
+        """
+        增加用户功能
+
+        :param account: 用户帐号
+        :param password_hash: 用户密码hash值
+        :param username: 用户名
+        :param email: 用户email
+        :param is_admin: 管理权限
+        :param confirmed: 邮箱认证
+        """
         self.account = account
         self.username = username
         self.email = email
@@ -60,18 +77,42 @@ class User(db.Model, UserMixin):
         self.confirmed = confirmed
 
     def change_password(self, new_password):
+        """
+        修改密码，提交至数据库
+
+        :param new_password: 新密码
+        :return:
+        """
         self.password_hash = generate_password_hash(new_password)
         db.session.commit()
 
     @property
     def password(self):
+        """
+        防止password被访问
+
+        :return:
+        """
         raise AttributeError('password is not a readable attribute')
 
     def verify_password(self, password):
+        """
+        认证密码
+
+        :param password: 要认证的密码
+        :return:
+        """
         return check_password_hash(self.password_hash, password)
 
-    # 注意重启app的时候SECRET_KEY会重置
     def generate_token(self, function_module, expiration=3600):
+        """
+        生成邮箱认证token
+        注意重启app的时候SECRET_KEY会重置
+
+        :param function_module: 功能名
+        :param expiration: 过期时间
+        :return:
+        """
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         if function_module == 'confirm':
             fm_name = 'c'
@@ -80,6 +121,13 @@ class User(db.Model, UserMixin):
         return s.dumps({fm_name: self.id})
 
     def check_token(self, token, function_module):
+        """
+        模型类中的认证token检查，并激活
+
+        :param token: 要认真的token
+        :param function_module: 功能名
+        :return:
+        """
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -99,8 +147,10 @@ class User(db.Model, UserMixin):
             return True
 
 
-# 常规配置模块
 class Config(db.Model):
+    """
+    网站设置模型
+    """
     __tablename__ = 'config'
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(128))
@@ -111,8 +161,10 @@ class Config(db.Model):
         self.value = value
 
 
-# blog文章模块
 class Article(db.Model):
+    """
+    blog文章模型
+    """
     __tablename__ = 'article'
     id = db.Column(db.Integer, primary_key=True)
     create_datetime = db.Column(db.DateTime)
@@ -132,8 +184,10 @@ class Article(db.Model):
         self.user_id = user_id
 
 
-# 评论模块
 class Comment(db.Model):
+    """
+    博文评论模型
+    """
     __tablename__ = 'Comment'
     id = db.Column(db.Integer, primary_key=True)
     create_datetime = db.Column(db.DateTime)
@@ -150,8 +204,10 @@ class Comment(db.Model):
         self.article_id = article_id
 
 
-# 图片模块
 class Img(db.Model):
+    """
+    文章图片模型，储存图片信息，不储存图片
+    """
     __tablename__ = 'Img'
     id = db.Column(db.Integer, primary_key=True)
     create_datetime = db.Column(db.DateTime)

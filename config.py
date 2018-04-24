@@ -3,31 +3,41 @@
     config
     ~~~~~~~~~
 
-    配置模块.
+    配置模块
 
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
-import os, sys
+import os
+import sys
 import datetime
 
 
-class Config_Default(object):
+class ConfigDefault(object):
+    """
+    默认配置，其他配置均从此配置继承
+    """
     DEBUG = False
     TESTING = False
 
 
-class ProductionConfig(Config_Default):
+class ProductionConfig(ConfigDefault):
+    """
+    实际工作环境使用配置
+    """
     DATABASE_URI = 'mysql://user@localhost/foo'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
-class DevelopmentConfig(Config_Default):
+class DevelopmentConfig(ConfigDefault):
+    """
+    开发环境用配置
+    """
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root@localhost:3306/test?charset=utf8'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    #跟踪修改，耗费资源，后期将会取消，False
+    # 跟踪修改，耗费资源，该包作者后期将会取消，False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     BOOTSTRAP_SERVE_LOCAL = True  # 使用本地的bootstrap源
     IS_DEVELOPMENT = True  # 自定义值，检查是否出于开发配置环境
@@ -46,6 +56,7 @@ class DevelopmentConfig(Config_Default):
     IMG_UPLOAD_FOLDER = '/img/'  # 文件上传相关，目录配置
     IMG_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'bmp'])  # 文件上传相关，允许文件名
 
+    # 定时任务配置
     JOBS = [
         {
             'id': 'get_website_config',
@@ -73,10 +84,14 @@ class DevelopmentConfig(Config_Default):
     TIME_SPAN = 180  # 登陆用户检查释放时间
 
 
-class TestingConfig(Config_Default):
+class TestingConfig(ConfigDefault):
+    """
+    测试环境用配置
+    """
     TESTING = True
 
 
+# 启动app是调用该处
 config = {
     'config': DevelopmentConfig,
 }
