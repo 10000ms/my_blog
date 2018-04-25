@@ -20,6 +20,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_apscheduler import APScheduler  # 定时任务
 from flask_redis import FlaskRedis
+from flask_script import Manager, Shell
 
 # 导入本项目配置模块
 from config import config
@@ -31,6 +32,7 @@ db = SQLAlchemy(app)  # 在项目中导入SQLAlchemy模块
 bootstrap = Bootstrap(app)  # 在项目中导入bootstrap模块
 mail = Mail(app)  # 在项目中导入mail模块
 redis_store = FlaskRedis(app)  # 在项目中导入Redis模块
+manager = Manager(app)  # 在项目中导入shell管理功能
 
 # 在项目中导入login模块
 login_manager = LoginManager()
@@ -41,6 +43,26 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
+
+def make_shell_context():
+    """
+    为shell建立上下文环境
+
+    :return:
+    """
+    return dict(
+        app=app,
+        db=db,
+        User=models.User,
+        Config=models.Config,
+        Article=models.Article,
+        Comment=models.Comment,
+        Img=models.Img,
+    )
+
+
+# 增加shell指令
+manager.add_command("shell", Shell(make_context=make_shell_context))
 
 # 检测当前环境是否处于开发环境，后期改进该测试功能
 if app.config['IS_DEVELOPMENT']:

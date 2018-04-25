@@ -9,8 +9,8 @@
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
-from myflaskblog import app
+from myflaskblog import manager
 
 
 if __name__ == '__main__':
-    app.run()
+    manager.run()
