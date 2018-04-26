@@ -1,33 +1,6 @@
 # myflaskblog
 flask blog
 
-# requirement
-Jinja2 ==> 2.10
-
-Werkzeug ==> 0.14.1
-
-Flask ==> 0.12.2
-
-Flask-WTF ==> 0.14.2
-
-Flask-SQLAlchemy ==> 2.3.2
-
-Flask-bootstarp ==> 3.3.7.1
-
-Flask-login ==> 0.4.1
-
-Flask-mail ==> 0.9.1
-
-Pillow ==> 5.0.0
-
-Flask-APScheduler ==> 1.8.0
-
-lxml ==> 3.8.0
-
-Flask-Redis => 0.3.0
-
-Flask-script ==>2.0.6
-
 # 处理ImportError: No module named MySQLdb问题
 1.easy_install mysql-python (mac os)
 
