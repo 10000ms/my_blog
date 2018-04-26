@@ -86,7 +86,6 @@ def article_delete(article):
             os.remove(get_article_img_folder() + need_clean_img.img_name)
 
 
-# 定时清理图片
 def clear_useless_img():
     """
     定期清理图片功能，先获取锁，防止同时执行错误，然后进行查找没有文章id的图片进行清理
