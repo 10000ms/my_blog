@@ -20,9 +20,12 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_apscheduler import APScheduler  # 定时任务
 from flask_redis import FlaskRedis
-from flask_script import Manager, Shell
+from flask_script import Manager
+from flask_script import Shell
+from flask_migrate import Migrate
+from flask_migrate import MigrateCommand
 
-# 导入本项目配置模块
+# 导入本项目需要模块
 from config import config
 
 
@@ -33,6 +36,7 @@ bootstrap = Bootstrap(app)  # 在项目中导入bootstrap模块
 mail = Mail(app)  # 在项目中导入mail模块
 redis_store = FlaskRedis(app)  # 在项目中导入Redis模块
 manager = Manager(app)  # 在项目中导入shell管理功能
+migrate = Migrate(app, db)  # 数据库迁移功能
 
 # 在项目中导入login模块
 login_manager = LoginManager()
@@ -42,6 +46,10 @@ login_manager.init_app(app)
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
+
+
+# 创建完成后再导入models类
+from myflaskblog import models
 
 
 def make_shell_context():
@@ -63,84 +71,32 @@ def make_shell_context():
 
 # 增加shell指令
 manager.add_command("shell", Shell(make_context=make_shell_context))
+manager.add_command('db', MigrateCommand)
 
-# 检测当前环境是否处于开发环境，后期改进该测试功能
-if app.config['IS_DEVELOPMENT']:
-    # 创建所有数据库表格
-    from myflaskblog import models
-    db.drop_all()
+
+@manager.option('-d', '-drop_first', dest='drop_first', default=False)
+def create_db(drop_first):
+    """
+    数据库初始化命令
+    python manage.py create_db -d True 清空数据库
+
+    :param drop_first: 是否清空久数据库，默认否
+    :return:
+    """
+    if drop_first:
+        db.drop_all()
     db.create_all()
-    test_user1 = models.User('123456', 'a123456', 'VL', '111111@qq.com', True, True)
-    test_user2 = models.User('111111', 'a111111', 'VL2', '111111@qq.com', False, True)
-    test_user3 = models.User('111112', 'a111111', 'VL3', '111111@qq.com', False, False)
-    test_user4 = models.User('111114', '111111', 'VL4', '111111@qq.com')
-    test_user5 = models.User('111115', '111111', 'VL5', '111111@qq.com')
-    test_user6 = models.User('111116', '111111', 'VL6', '111111@qq.com')
-    test_user7 = models.User('111117', '111111', 'VL7', '111111@qq.com')
-    test_user8 = models.User('111118', '111111', 'VL8', '111111@qq.com')
-    test_user9 = models.User('111119', '111111', 'VL9', '111111@qq.com')
-    test_user10 = models.User('1111110', '111111', 'VL10', '111111@qq.com')
-    test_user11 = models.User('1111111', '111111', 'VL11', '111111@qq.com')
-    test_article1 = models.Article('A1', 'kw', 'not', '这是一篇博文', 1)
-    test_article2 = models.Article('A2', 'kw', 'not', '这是一篇博文', 1)
-    test_article3 = models.Article('A3', 'kw', 'not', '这是一篇博文', 1)
-    test_article4 = models.Article('A4', 'kw', 'not', '这是一篇博文', 1)
-    test_article5 = models.Article('A5', 'kw', 'not', '这是一篇博文', 1)
-    test_article6 = models.Article('A6', 'kw', 'not', '这是一篇博文', 1)
-    test_article7 = models.Article('A7', 'kw', 'not', '这是一篇博文', 1)
-    test_article8 = models.Article('A8', 'kw', 'not', '这是一篇博文', 1)
-    test_article9 = models.Article('A9', 'kw', 'not', '这是一篇博文', 1)
-    test_article10 = models.Article('A10', 'kw', 'not', '这是一篇博文', 1)
-    test_article11 = models.Article('A11', 'kw', 'not', '这是一篇博文', 1)
-    test_article12 = models.Article('A12', 'kw', 'not', '这是一篇博文', 1)
-    test_article13 = models.Article('A13', 'kw', 'not', '这是一篇博文', 1)
-    test_article14 = models.Article('A14', 'kw', 'not', '这是一篇博文', 1)
-    test_article15 = models.Article('A15', 'kw', 'not', '这是一篇博文', 1)
-    test_article16 = models.Article('A16', 'kw', 'not', '这是一篇博文', 1)
-    test_article17 = models.Article('A17', 'kw', 'not', '这是一篇博文', 1)
-    test_article18 = models.Article('A18', 'kw', 'not', '这是一篇博文', 1)
-    test_article19= models.Article('A19', 'kw', 'not', '这是一篇博文', 1)
-    test_article20 = models.Article('A20', 'kw', 'not', '这是一篇博文', 1)
-    test_config1 = models.Config('WEBSITE_PROFILE_PHOTO', '111.jpg')
-    test_config2 = models.Config('WEBSITE_NAME', '1000ms的小站')
-    test_config3 = models.Config('WEBSITE_LICENSE', '备案号：暂无')
-    db.session.add(test_user1)
-    db.session.add(test_user2)
-    db.session.add(test_user3)
-    db.session.add(test_user4)
-    db.session.add(test_user5)
-    db.session.add(test_user6)
-    db.session.add(test_user7)
-    db.session.add(test_user8)
-    db.session.add(test_user9)
-    db.session.add(test_user10)
-    db.session.add(test_user11)
-    db.session.add(test_article1)
-    db.session.add(test_article2)
-    db.session.add(test_article3)
-    db.session.add(test_article4)
-    db.session.add(test_article5)
-    db.session.add(test_article6)
-    db.session.add(test_article7)
-    db.session.add(test_article8)
-    db.session.add(test_article9)
-    db.session.add(test_article10)
-    db.session.add(test_article11)
-    db.session.add(test_article12)
-    db.session.add(test_article13)
-    db.session.add(test_article14)
-    db.session.add(test_article15)
-    db.session.add(test_article16)
-    db.session.add(test_article17)
-    db.session.add(test_article18)
-    db.session.add(test_article19)
-    db.session.add(test_article20)
-    db.session.add(test_config1)
-    db.session.add(test_config2)
-    db.session.add(test_config3)
+    super_user = models.User('123456', 'a123456', 'VL', '111111@qq.com', True, True)
+    website_config_set_1 = models.Config('WEBSITE_PROFILE_PHOTO', '111.jpg')
+    website_config_set_2 = models.Config('WEBSITE_NAME', '1000ms的小站')
+    website_config_set_3 = models.Config('WEBSITE_LICENSE', '备案号：暂无')
+    db.session.add(super_user)
+    db.session.add(website_config_set_1)
+    db.session.add(website_config_set_2)
+    db.session.add(website_config_set_3)
     db.session.commit()
     redis_store.flushdb()  # 清空当前redis数据库
-    # TODO:后期改进该测试功能
+    print("ok")
 
 
 @login_manager.user_loader  # 使用user_loader装饰器的回调函数非常重要，他将决定 user 对象是否在登录状态

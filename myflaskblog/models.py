@@ -15,9 +15,6 @@
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
-# 导入模型模块
-from myflaskblog import db
-
 # 导入加密用包
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -30,6 +27,7 @@ from flask_login import UserMixin
 
 # 导入必要模块
 from flask import current_app
+from myflaskblog import db
 
 
 class User(db.Model, UserMixin):
