@@ -20,21 +20,6 @@ class ConfigDefault(object):
     DEBUG = False
     TESTING = False
 
-
-class ProductionConfig(ConfigDefault):
-    """
-    实际工作环境使用配置
-    """
-    DATABASE_URI = 'mysql://user@localhost/foo'
-    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-
-
-class DevelopmentConfig(ConfigDefault):
-    """
-    开发环境用配置
-    """
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root@localhost:3306/test?charset=utf8'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     # 跟踪修改，耗费资源，该包作者后期将会取消，False
@@ -68,7 +53,7 @@ class DevelopmentConfig(ConfigDefault):
         {
             'id': 'clear_useless_img',
             'func': 'myflaskblog.img_manage:clear_useless_img',
-            'trigger': {'type': 'cron', 'hour': '4'},   # 定时凌晨4点清理无用图片
+            'trigger': {'type': 'cron', 'hour': '4'},  # 定时凌晨4点清理无用图片
         }
     ]
     APSCHEDULER_LOCK = False  # 防止定时任务被同时执行多次
@@ -84,6 +69,19 @@ class DevelopmentConfig(ConfigDefault):
     TIME_SPAN = 180  # 登陆用户检查释放时间
 
 
+class ProductionConfig(ConfigDefault):
+    """
+    实际工作环境使用配置
+    """
+
+
+class DevelopmentConfig(ConfigDefault):
+    """
+    开发环境用配置
+    """
+    DEBUG = True
+
+
 class TestingConfig(ConfigDefault):
     """
     测试环境用配置
@@ -93,5 +91,7 @@ class TestingConfig(ConfigDefault):
 
 # 启动app是调用该处
 config = {
-    'config': DevelopmentConfig,
+    'production_config': ProductionConfig,
+    'development_config': DevelopmentConfig,
+    'testing_config': TestingConfig,
 }

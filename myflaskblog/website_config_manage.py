@@ -24,19 +24,21 @@ def get_website_config():
 
     :return:
     """
-    if not app.config['APSCHEDULER_LOCK']:
-        app.config.update(APSCHEDULER_LOCK=True)
-        if Config.query.filter_by(item='WEBSITE_NAME').first():
-            website_name = Config.query.filter_by(item='WEBSITE_NAME').first().value
-            app.add_template_global(website_name, 'WEBSITE_NAME')
-        if Config.query.filter_by(item='WEBSITE_PROFILE_PHOTO').first():
-            website_profile_photo_name = str(Config.query.filter_by(item='WEBSITE_PROFILE_PHOTO').first().value)
-            website_profile_photo = get_static_url(website_profile_photo_name)
-            app.add_template_global(website_profile_photo, 'WEBSITE_PROFILE_PHOTO')
-        if Config.query.filter_by(item='WEBSITE_LICENSE').first():
-            website_license = Config.query.filter_by(item='WEBSITE_LICENSE').first().value
-            app.add_template_global(website_license, 'WEBSITE_LICENSE')
-        app.config.update(APSCHEDULER_LOCK=False)
+    with app.app_context():
+        if not app.config['APSCHEDULER_LOCK']:
+            app.config.update(APSCHEDULER_LOCK=True)
+            if Config.query.filter_by(item='WEBSITE_NAME').first():
+                website_name = Config.query.filter_by(item='WEBSITE_NAME').first().value
+                app.add_template_global(website_name, 'WEBSITE_NAME')
+            if Config.query.filter_by(item='WEBSITE_PROFILE_PHOTO').first():
+                website_profile_photo_name = str(Config.query.filter_by(item='WEBSITE_PROFILE_PHOTO').first().value)
+                website_profile_photo = get_static_url(website_profile_photo_name)
+                app.add_template_global(website_profile_photo, 'WEBSITE_PROFILE_PHOTO')
+            if Config.query.filter_by(item='WEBSITE_LICENSE').first():
+                website_license = Config.query.filter_by(item='WEBSITE_LICENSE').first().value
+                app.add_template_global(website_license, 'WEBSITE_LICENSE')
+            app.config.update(APSCHEDULER_LOCK=False)
+        print('网站默认配置完成')
 
 
 def get_static_url(img_name):

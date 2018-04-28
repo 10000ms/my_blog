@@ -11,6 +11,9 @@
     :copyright: (c) 2018 by Victor Lai.
     :license: BSD, see LICENSE for more details.
 """
+# 导入系统类
+import os
+
 # 导入flask内的相关类
 from flask import Flask
 # 导入flask扩展类
@@ -29,24 +32,42 @@ from flask_migrate import MigrateCommand
 from config import config
 
 
-app = Flask(__name__)
-app.config.from_object(config['config'])  # 从项目目录的config.py读入配置
-db = SQLAlchemy(app)  # 在项目中导入SQLAlchemy模块
-bootstrap = Bootstrap(app)  # 在项目中导入bootstrap模块
-mail = Mail(app)  # 在项目中导入mail模块
-redis_store = FlaskRedis(app)  # 在项目中导入Redis模块
-manager = Manager(app)  # 在项目中导入shell管理功能
-migrate = Migrate(app, db)  # 数据库迁移功能
-
-# 在项目中导入login模块
+db = SQLAlchemy()
+bootstrap = Bootstrap()
+mail = Mail()
+redis_store = FlaskRedis()
+migrate = Migrate()
 login_manager = LoginManager()
-login_manager.init_app(app)
+
+
+def create_app(config_name):
+    """
+    app创建的工厂函数
+
+    :param config_name: 使用配置的配置名
+    :return: 创建的app
+    """
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])  # 从项目目录的config.py读入配置
+    db.init_app(app)  # 在项目中导入SQLAlchemy模块
+    bootstrap.init_app(app)  # 在项目中导入bootstrap模块
+    mail.init_app(app)  # 在项目中导入mail模块
+    redis_store.init_app(app)  # 在项目中导入Redis模块
+    migrate.init_app(app, db)  # 数据库迁移功能
+
+    # 在项目中导入login模块
+    login_manager.init_app(app)
+
+    return app
+
+
+app = create_app(os.getenv('FLASK_CONFIG') or 'production_config')
+manager = Manager(app)
 
 # 在项目中创建定时任务
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
-
 
 # 创建完成后再导入models类
 from myflaskblog import models
@@ -77,7 +98,7 @@ manager.add_command('db', MigrateCommand)
 @manager.option('-d', '-drop_first', dest='drop_first', default=False)
 def create_db(drop_first):
     """
-    数据库初始化命令
+    数据库初始化命令(首次运行前必须先运行该指令)
     python manage.py create_db -d True 清空数据库
 
     :param drop_first: 是否清空久数据库，默认否
@@ -97,6 +118,19 @@ def create_db(drop_first):
     db.session.commit()
     redis_store.flushdb()  # 清空当前redis数据库
     print("ok")
+
+
+@manager.command
+def test():
+    """
+    单元测试命令行
+    用法：python manager.py test
+
+    :return:
+    """
+    import unittest
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
 
 
 @login_manager.user_loader  # 使用user_loader装饰器的回调函数非常重要，他将决定 user 对象是否在登录状态
