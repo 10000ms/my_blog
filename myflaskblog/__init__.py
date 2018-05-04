@@ -108,7 +108,7 @@ def create_db(drop_first):
         db.drop_all()
     db.create_all()
     super_user = models.User('123456', 'a123456', 'VL', '111111@qq.com', True, True)
-    website_config_set_1 = models.Config('WEBSITE_PROFILE_PHOTO', '111.jpg')
+    website_config_set_1 = models.Config('WEBSITE_PROFILE_PHOTO', 'Default.jpg')
     website_config_set_2 = models.Config('WEBSITE_NAME', '1000ms的小站')
     website_config_set_3 = models.Config('WEBSITE_LICENSE', '备案号：暂无')
     db.session.add(super_user)

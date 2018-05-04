@@ -26,7 +26,7 @@ class ConfigDefault(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     BOOTSTRAP_SERVE_LOCAL = True  # 使用本地的bootstrap源
     IS_DEVELOPMENT = True  # 自定义值，检查是否出于开发配置环境
-    SECRET_KEY = os.urandom(24)  # 配置密匙值，session、cookies及部分其他应用会用到
+    SECRET_KEY = 'oR4NCzUudlWEQwFxcny7zhwib2LTKo8J'  # 配置密匙值，session、cookies及部分其他应用会用到
     PROJECT_PATH = sys.path[0]  # 项目路径
 
     FLASKY_MAIL_SUBJECT_PREFIX = '1000ms小站信息：'  # 邮件标题名前缀
