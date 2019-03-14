@@ -9,10 +9,13 @@ import 'iview/dist/styles/iview.css';
 import LightTimeline from 'vue-light-timeline';
 
 import Console from './utils/Console';
+import Secret from './utils/Secret';
 
 Vue.config.productionTip = false;
 Vue.prototype.$log = Console.log;
 Vue.prototype.$bus = new Vue();
+Vue.prototype.$secret = Secret;
+
 
 Vue.use(Vuex);
 Vue.use(iView);

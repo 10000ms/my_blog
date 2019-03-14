@@ -50,7 +50,7 @@
               </DropdownItem>
             </div>
             <div v-if="userName">
-              <DropdownItem disabled="true">
+              <DropdownItem :disabled="true">
                 <span class="dropdown-item">
                   欢迎：{{userName}}
                 </span>
@@ -109,7 +109,7 @@
                         this.$refs.registerModel.openModal();
                         break;
                     case 'admin':
-                        this.$router.push({name: 'adminIndex'});
+                        this.$router.push({name: 'endIndex'});
                         break;
                 }
             },

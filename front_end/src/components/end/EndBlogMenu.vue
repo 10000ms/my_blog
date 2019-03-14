@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu mode="horizontal" active-name="1" :style="menuStyle" @on-select="selectMethod">
-      <MenuItem name="archive" class="menu-menu">
+      <MenuItem name="endIndex" class="menu-menu">
         <span class="span-menu">
           <Icon type="ios-speedometer" size="16"/>
           总览
@@ -80,7 +80,7 @@
           </a>
           <DropdownMenu slot="list">
             <div>
-              <DropdownItem disabled="true">
+              <DropdownItem :disabled="true">
                 <span class="dropdown-item">
                   欢迎：{{userName}}
                 </span>

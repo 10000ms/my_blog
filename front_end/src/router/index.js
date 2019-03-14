@@ -8,6 +8,7 @@ import Blog from '../pages/front-page/Blog';
 import Tabs from '../pages/front-page/Tabs';
 import Front from '../pages/Front';
 import End from '../pages/End';
+import EndIndex from '../pages/end-page/EndIndex'
 
 Vue.use(Router);
 
@@ -56,8 +57,8 @@ export default new Router({
             children: [
                 {
                     path: '',
-                    name: 'adminIndex',
-                    component: Index,
+                    name: 'endIndex',
+                    component: EndIndex,
                 },
             ],
         },
