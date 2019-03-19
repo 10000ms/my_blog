@@ -14,7 +14,7 @@
             文章管理
           </span>
         </template>
-        <MenuItem name="3-1">
+        <MenuItem name="create-blog">
           <span class="dropdown-item">
             新文章
           </span>

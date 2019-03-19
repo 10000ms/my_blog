@@ -33,8 +33,8 @@
     background-color: rgb(245,245,245);
   }
   .main-content {
-    width: 80%;
-    margin: 1% auto;
+    width: 100%;
+    /*margin: 1% auto;*/
   }
 
 </style>

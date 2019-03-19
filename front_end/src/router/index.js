@@ -9,6 +9,7 @@ import Tabs from '../pages/front-page/Tabs';
 import Front from '../pages/Front';
 import End from '../pages/End';
 import EndIndex from '../pages/end-page/EndIndex'
+import CreateBlog from '../pages/end-page/CreateBlog'
 
 Vue.use(Router);
 
@@ -59,6 +60,11 @@ export default new Router({
                     path: '',
                     name: 'endIndex',
                     component: EndIndex,
+                },
+                {
+                    path: 'create-blog',
+                    name: 'create-blog',
+                    component: CreateBlog,
                 },
             ],
         },
