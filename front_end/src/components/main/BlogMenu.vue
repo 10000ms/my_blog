@@ -159,10 +159,24 @@
 </style>
 
 <style>
-  /*登录dropdown配色更改*/
+  /*dropdown配色更改*/
   .ivu-select-dropdown {
     background: linear-gradient(to left, #cc2b5e, #753a88) !important;
     color: white;
+  }
+
+  .ivu-select-item {
+    background: linear-gradient(to left, #cc2b5e, #753a88) !important;
+    color: white !important;
+  }
+
+  .ivu-select-item:hover {
+    color: rgb(45, 140, 240) !important;
+  }
+
+  .ivu-select-item-selected {
+    color: rgb(45, 140, 240) !important;
+    font-weight: 800;
   }
 
   .ivu-menu-item:hover {
