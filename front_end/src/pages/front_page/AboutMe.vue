@@ -1,9 +1,11 @@
 <template>
-  <div class="markdown-div" v-html="compiledMarkdown"></div>
+    <div class="markdown-div thin-content-div" v-html="compiledMarkdown"></div>
 </template>
 
 <script>
-    import marked from 'marked'
+    import '../../assets/css/marked.less';
+    import 'highlight.js/styles/xcode.css';
+    import {Markdown} from '../../utils/markdown.js';
 
     export default {
         name: 'AboutMe',
@@ -14,15 +16,12 @@
         },
         computed: {
             compiledMarkdown: function () {
-                return marked(this.input, { sanitize: true })
-            }
+                return Markdown(this.input);
+            },
         },
     }
 </script>
 
 <style scoped>
-  .markdown-div {
-    width: 80%;
-    margin: 5% auto;
-  }
+
 </style>

@@ -1,15 +1,22 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Index from '../pages/front-page/Index';
-import Archive from '../pages/front-page/Archive';
-import AboutMe from '../pages/front-page/AboutMe';
-import Categories from '../pages/front-page/Categories';
-import Blog from '../pages/front-page/Blog';
-import Tabs from '../pages/front-page/Tabs';
+import Index from '../pages/front_page/Index';
+import Archive from '../pages/front_page/Archive';
+import AboutMe from '../pages/front_page/AboutMe';
+import Categories from '../pages/front_page/Categories';
+import Blog from '../pages/front_page/Blog';
+import Tabs from '../pages/front_page/Tabs';
 import Front from '../pages/Front';
 import End from '../pages/End';
-import EndIndex from '../pages/end-page/EndIndex'
-import CreateBlog from '../pages/end-page/CreateBlog'
+import EndIndex from '../pages/end_page/EndIndex'
+import CreateBlog from '../pages/end_page/CreateBlog'
+import ManageBlog from '../pages/end_page/ManageBlog'
+import CreateTabs from '../pages/end_page/CreateTabs'
+import ManageTabs from '../pages/end_page/ManageTabs'
+import CreateCategories from '../pages/end_page/CreateCategories'
+import ManageCategories from '../pages/end_page/ManageCategories'
+import EndAboutMe from '../pages/end_page/EndAboutMe'
+import ManageWebsite from '../pages/end_page/ManageWebsite'
 
 Vue.use(Router);
 
@@ -65,6 +72,41 @@ export default new Router({
                     path: 'create-blog',
                     name: 'create-blog',
                     component: CreateBlog,
+                },
+                {
+                    path: 'manage-blog',
+                    name: 'manage-blog',
+                    component: ManageBlog,
+                },
+                {
+                    path: 'create-tabs',
+                    name: 'create-tabs',
+                    component: CreateTabs,
+                },
+                {
+                    path: 'manage-tabs',
+                    name: 'manage-tabs',
+                    component: ManageTabs,
+                },
+                {
+                    path: 'create-categories',
+                    name: 'create-categories',
+                    component: CreateCategories,
+                },
+                {
+                    path: 'manage-categories',
+                    name: 'manage-categories',
+                    component: ManageCategories,
+                },
+                {
+                    path: 'end-about-me',
+                    name: 'end-about-me',
+                    component: EndAboutMe,
+                },
+                {
+                    path: 'manage-website',
+                    name: 'manage-website',
+                    component: ManageWebsite,
                 },
             ],
         },

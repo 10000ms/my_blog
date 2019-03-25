@@ -1,83 +1,78 @@
-@import 'https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500,500i,700,700i&subset=latin-ext';
-@import 'https://fonts.googleapis.com/css?family=Roboto+Mono:300,400&subset=latin-ext';
-@import 'https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css';
-
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500,500i,700,700i&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300,400&subset=latin-ext');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css');
 :root {
-  font-size: 20px;
+  font-size: 18px;
 }
-
-.markdown-div { /* TEXT PARENT */
-  width: 35em;
+.markdown-div {
+  /* TEXT PARENT */
+  width: 100%;
   margin: 0 auto;
   font-family: "Fira Sans", "Verdana", "Geneva", sans-serif;
   font-weight: 300;
   line-height: 1.4;
-  text-align: center;
-  font-size: 0.9rem;
-  /*letter-spacing: 1px;*/
-}
-
-.markdown-div * {
   text-align: left;
+  font-size: 0.9rem;
 }
-
-.markdown-div > h1,
-.markdown-div > h2,
-.markdown-div > h3,
-.markdown-div > h4,
-.markdown-div > h5,
-.markdown-div > h6 {
-  margin: 0;
+.markdown-div * code {
+  padding: 0 0.2em 0.1em;
+  background-color: #eee;
+}
+.markdown-div h1,
+.markdown-div h2,
+.markdown-div h3,
+.markdown-div h4,
+.markdown-div h5,
+.markdown-div h6 {
+  margin: 1rem 0 0;
   padding: 0;
   font-weight: normal;
 }
-
-.markdown-div > h1 {
-  margin-top: 1rem;
+.markdown-div h1 {
   margin-bottom: 1rem;
   font-weight: 700;
-  font-size: 3.25rem;
+  font-size: 2.75rem;
 }
-
-.markdown-div > h2 {
-  margin-top: 1rem;
+.markdown-div h2 {
   margin-bottom: 1rem;
   font-weight: 300;
-  font-size: 2.5rem;
+  font-size: 2.35rem;
 }
-
-.markdown-div > h3 {
-  margin-top: 1rem;
+.markdown-div h3 {
   margin-bottom: 0.5rem;
   font-weight: 400;
   font-size: 2rem;
 }
-
-.markdown-div > h4 {
-  margin-top: 1rem;
+.markdown-div h4 {
   margin-bottom: 0.25rem;
   font-weight: 500;
   font-size: 1.5rem;
 }
-
-.markdown-div > h5 {
-  margin-top: 1rem;
+.markdown-div h5 {
   font-weight: 700;
   font-size: 1.25rem;
 }
-
-.markdown-div > h6 {
-  margin-top: 1rem;
+.markdown-div h6 {
   font-weight: 700;
   font-size: 1rem;
 }
-
-.markdown-div > p {
+.markdown-div p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
-.markdown-div > a {
+.markdown-div p var {
+  padding: 0 0.2em 0.1em;
+  background-color: #eee;
+  font-weight: bolder;
+  font-style: normal;
+}
+.markdown-div p samp {
+  padding: 0 0.2em 0.1em;
+  margin: 0 0.1em;
+  background-color: #666;
+  color: #eee;
+}
+.markdown-div a {
   background-image: linear-gradient(#449, #449);
   background-size: 0.06em 0.06em;
   background-repeat: repeat-x;
@@ -85,35 +80,28 @@
   background-position-x: 0;
   color: #449;
   text-decoration: none;
-  /* text-shadow: white 0.7px 0.7px 0.1px, white 0 1px 0.1px, white -.7px 0.7px 0.1px, white -.7px 0 0.1px, white -.7px -.7px 0.1px, white 0 -.7px 0.1px, white 0.7px -.7px 0.1px, white 0.7px 0 0.1px; */
   transition: 0.15s;
 }
-
-.markdown-div > a:active {
+.markdown-div a :active {
   background-color: #eee;
   color: #555;
   text-decoration: none;
-  /* text-shadow: #eee 0.7px 0.7px 0.1px, #eee 0 1px 0.1px, #eee -.7px 0.7px 0.1px, #eee -.7px 0 0.1px, #eee -.7px -.7px 0.1px, #eee 0 -.7px 0.1px, #eee 0.7px -.7px 0.1px, #eee 0.7px 0 0.1px; */
 }
-
-.markdown-div > a:hover {
+.markdown-div a :hover {
   background-image: linear-gradient(#66e, #66e);
   color: #66e;
 }
-
-.markdown-div > b,
-.markdown-div > strong {
+.markdown-div b,
+.markdown-div strong {
   font-weight: bolder;
 }
-
-.markdown-div > em,
-.markdown-div > i {
+.markdown-div em,
+.markdown-div i {
   font-style: italic;
 }
-
-.markdown-div > del,
-.markdown-div > s,
-.markdown-div > strike {
+.markdown-div del,
+.markdown-div s,
+.markdown-div strike {
   text-decoration: none;
   background-image: linear-gradient(#000, #000);
   background-size: 0.06em 0.06em;
@@ -121,45 +109,23 @@
   background-position-y: 65%;
   background-position-x: 0;
 }
-
-.markdown-div > code,
-.markdown-div > pre,
-.markdown-div > samp,
-.markdown-div > var {
+.markdown-div code,
+.markdown-div pre,
+.markdown-div samp,
+.markdown-div var {
   font-size: 85%;
   font-family: "Roboto Mono", monospace;
   font-weight: 300;
   color: #737373;
 }
-
-.markdown-div > pre {
+.markdown-div pre {
   display: block;
   margin: 1rem -1rem;
   padding: 1rem 2rem;
   background-color: #eee;
   border-left: 0.1rem solid #888;
 }
-
-.markdown-div > * code {
-  padding: 0 0.2em 0.1em;
-  background-color: #eee;
-}
-
-.markdown-div > p var {
-  padding: 0 0.2em 0.1em;
-  background-color: #eee;
-  font-weight: bolder;
-  font-style: normal;
-}
-
-.markdown-div > p samp {
-  padding: 0 0.2em 0.1em;
-  margin: 0 0.1em;
-  background-color: #666;
-  color: #eee;
-}
-
-.markdown-div > kbd {
+.markdown-div kbd {
   position: relative;
   padding: 0.2em 0.2em 0.1em 0.2em;
   margin: 0 0.1em;
@@ -170,8 +136,7 @@
   border-radius: 0.2em;
   border-bottom: 0.05em solid #aaa;
 }
-
-.markdown-div > blockquote {
+.markdown-div blockquote {
   margin: 1rem -1rem;
   padding: 1rem 2rem 0 2rem;
   background-color: #eee;
@@ -180,8 +145,7 @@
   font-style: italic;
   line-height: 1.5;
 }
-
-.markdown-div > blockquote::before {
+.markdown-div blockquote ::before {
   content: "\201C";
   display: block;
   position: relative;
@@ -191,8 +155,7 @@
   font-size: 2em;
   color: #888;
 }
-
-.markdown-div > blockquote::after {
+.markdown-div blockquote ::after {
   content: "\201D";
   display: inline-block;
   position: relative;
@@ -204,8 +167,7 @@
   margin-left: 99%;
   color: #888;
 }
-
-.markdown-div > abbr[title] {
+.markdown-div abbr[title] {
   text-decoration: none;
   background-image: linear-gradient(90deg, gray 50%, transparent 50%);
   background-size: 0.1em 0.06em;
@@ -214,18 +176,21 @@
   background-position-x: 0;
   font-feature-settings: "smcp";
 }
-
-.markdown-div > ul {
+.markdown-div ol ol,
+.markdown-div ol ul,
+.markdown-div ul ol,
+.markdown-div ul ul {
+  margin: 0.5em 0;
+}
+.markdown-div ul {
   list-style: none;
   margin-left: -2em;
   padding-left: 2em;
 }
-
-.markdown-div > ul > li {
+.markdown-div ul li {
   padding-left: 0;
 }
-
-.markdown-div > ul > li::before {
+.markdown-div ul li ::before {
   content: "»";
   display: block;
   position: relative;
@@ -236,8 +201,7 @@
   color: #888;
   text-align: right;
 }
-
-.markdown-div > ul ul > li::before {
+.markdown-div ul ul li ::before {
   content: "›";
   display: block;
   position: relative;
@@ -248,24 +212,20 @@
   color: #888;
   text-align: right;
 }
-
-.markdown-div > ol {
+.markdown-div ol {
   list-style: none;
   margin-left: -1em;
   padding-left: 2em;
 }
-
-.markdown-div > ol > li {
+.markdown-div ol li {
   padding-left: 0;
   counter-increment: ol-count;
 }
-
-.markdown-div > ol > li:first-child {
+.markdown-div ol li :first-child {
   counter-reset: ol-count;
 }
-
-.markdown-div > ol > li::before {
-  content: counter(ol-count)".";
+.markdown-div ol li ::before {
+  content: counter(ol-count) ".";
   display: block;
   position: relative;
   height: 0;
@@ -275,53 +235,54 @@
   color: #888;
   text-align: right;
 }
-
-.markdown-div > ol ol,
-.markdown-div > ol ul,
-.markdown-div > ul ol,
-.markdown-div > ul ul {
-  margin: 0.5em 0;
-}
-
-.markdown-div > img {
+.markdown-div img {
   display: block;
   width: calc(100% + 4rem);
   margin: 1rem -2rem;
 }
-
-.markdown-div > figure {
+.markdown-div figure {
   display: inline-table;
   margin: 0rem -2rem 1rem -2rem;
   padding: 2rem 2rem;
   background-color: #eee;
 }
-
-.markdown-div > figure img {
+.markdown-div figure img {
   display: inline-block;
   width: auto;
   max-width: 100%;
   margin: 0 auto;
 }
-
-.markdown-div > figure img + img {
+.markdown-div figure img + img {
   margin-left: 1rem;
 }
-
-.markdown-div > figure figcaption {
+.markdown-div figure {
+  display: inline-table;
+  margin: 0rem -2rem 1rem -2rem;
+  padding: 2rem 2rem;
+  background-color: #eee;
+}
+.markdown-div figure img {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.markdown-div figure + img {
+  margin-left: 1rem;
+}
+.markdown-div figure figcaption {
   max-width: 100%;
   margin: 1rem auto -1rem auto;
   font-size: 0.9rem;
   font-style: italic;
 }
-
-.markdown-div > table {
+.markdown-div table {
   margin: 0 -1rem 1rem -1rem;
   width: calc(100% + 2rem);
   overflow: hidden;
   border-collapse: collapse;
 }
-
-.markdown-div > table caption {
+.markdown-div table caption {
   padding-top: 0.5rem;
   border-top: 1px solid #eee;
   caption-side: bottom;
@@ -329,44 +290,38 @@
   font-style: italic;
   color: #666;
 }
-
-.markdown-div > tr {
+.markdown-div tr {
   transition: 0.15s;
 }
-
-.markdown-div > thead tr {
+.markdown-div td,
+.markdown-div th {
+  position: relative;
+  padding: 0.3rem 1rem;
+}
+.markdown-div th {
+  font-weight: bolder;
+}
+.markdown-div tbody tr :hover,
+.markdown-div tfoot tr :hover {
+  background-color: #eee;
+}
+.markdown-div tbody tr:first-of-type td,
+.markdown-div tbody tr:first-of-type th {
+  padding-top: 0.5rem;
+}
+.markdown-div thead tr {
   border-bottom: 2px solid #888;
 }
-
-.markdown-div > tfoot tr {
+.markdown-div tfoot tr {
   border-bottom: none;
   border-top: 1px solid #eee;
   font-weight: bolder;
 }
-
-.markdown-div > tbody tr:hover,
-.markdown-div > tfoot tr:hover {
-  background-color: #eee;
-}
-
-.markdown-div > td, th {
-  position: relative;
-  padding: 0.3rem 1rem;
-}
-
-.markdown-div > th {
-  font-weight: bolder;
-}
-
-.markdown-div > tbody tr:first-of-type td,
-.markdown-div > tbody tr:first-of-type th {
-  padding-top: 0.5rem;
-}
-
-.markdown-div > hr {
+.markdown-div hr {
   height: 0;
   width: 10rem;
   border: 0;
-  border-bottom: 1px solid rgba(0,0,0,1);
+  border-bottom: 1px solid #000000;
   margin: 2rem auto;
 }
+/*# sourceMappingURL=marked.css.map */

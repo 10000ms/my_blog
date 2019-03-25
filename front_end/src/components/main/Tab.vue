@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <Icon type="ios-pricetag"/>
-    <span class="tab-span">{{tab}}</span>
-  </div>
+    <div>
+        <Icon type="ios-pricetag"/>
+        <span class="tab-span">{{tab}}</span>
+    </div>
 </template>
 
 <script>
@@ -19,8 +19,8 @@
 </script>
 
 <style scoped>
-  .tab-span {
-    color: #999;
-  }
+    .tab-span {
+        color: #999;
+    }
 
 </style>

@@ -1,32 +1,32 @@
 <template>
-  <div class="index-main-div">
-    <div class="index-header-div">
-      <div class="index-header-child-div">
-        <infor-card shadow :color="infor1.color" :icon="infor1.icon" :icon-size="36">
-          <count-to :end="infor1.count" count-class="count-style"/>
-          <p>{{ infor1.title }}</p>
-        </infor-card>
-      </div>
-      <div class="index-header-child-div">
-        <infor-card shadow :color="infor2.color" :icon="infor2.icon" :icon-size="36">
-          <count-to :end="infor2.count" count-class="count-style"/>
-          <p>{{ infor2.title }}</p>
-        </infor-card>
-      </div>
+    <div class="index-main-div">
+        <div class="index-header-div">
+            <div class="index-header-child-div">
+                <infor-card shadow :color="infor1.color" :icon="infor1.icon" :icon-size="36">
+                    <count-to :end="infor1.count" count-class="count-style"/>
+                    <p>{{ infor1.title }}</p>
+                </infor-card>
+            </div>
+            <div class="index-header-child-div">
+                <infor-card shadow :color="infor2.color" :icon="infor2.icon" :icon-size="36">
+                    <count-to :end="infor2.count" count-class="count-style"/>
+                    <p>{{ infor2.title }}</p>
+                </infor-card>
+            </div>
+        </div>
+        <div>
+            <div id="id-allmap"></div>
+        </div>
+        <div>
+            <blog-chart style="height: 310px;margin-top: 40px"></blog-chart>
+        </div>
     </div>
-    <div>
-      <div id="id-allmap"></div>
-    </div>
-    <div>
-      <blog-chart style="height: 310px;margin-top: 40px"></blog-chart>
-    </div>
-  </div>
 </template>
 
 <script>
-    import InforCard from '../../components/end/inforCard.vue';
-    import countTo from '../../components/end/countTo.vue';
-    import BlogChart from '../../components/end/blogChart';
+    import InforCard from '../../components/end/InforCard.vue';
+    import countTo from '../../components/end/CountTo.vue';
+    import BlogChart from '../../components/end/BlogChart';
 
     export default {
         name: 'EndIndex',
@@ -91,16 +91,16 @@
                 myInmap.getMap().disableDragging();
                 let mapData = [
                     {
-                    name: '北京',
-                    geometry: {
-                        type: 'Point',
-                        coordinates: ['116.3', '39.9']
+                        name: '北京',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: ['116.3', '39.9']
+                        },
+                        style: {
+                            color: 'rgba(200, 200, 50, 0.7)',
+                            speed: 0.5,
+                        }
                     },
-                    style: {
-                        color: 'rgba(200, 200, 50, 0.7)',
-                        speed: 0.5,
-                    }
-                },
                     {
                         name: '上海',
                         geometry: {
@@ -157,7 +157,6 @@
                     },
                     data: mapData,
                 });
-                this.$log(overlay)
                 myInmap.add(overlay);
 
             },
@@ -170,33 +169,34 @@
 </script>
 
 <style scoped>
-  .index-main-div {
-    width: 80%;
-    margin: 1% auto;
-  }
+    .index-main-div {
+        width: 80%;
+        margin: 1% auto;
+        min-height: 1000px;
+    }
 
-  .index-header-div {
-    width: 100%;
-    margin: 20px auto;
-  }
+    .index-header-div {
+        width: 100%;
+        margin: 20px auto;
+    }
 
-  .index-header-child-div {
-    float: left;
-    width: 40%;
-    height: 120px;
-    padding-bottom: 10px;
-    margin: 5%;
-  }
+    .index-header-child-div {
+        float: left;
+        width: 40%;
+        height: 120px;
+        padding-bottom: 10px;
+        margin: 5%;
+    }
 
-  #id-allmap {
-    width: 100%;
-    height: 700px;
-  }
+    #id-allmap {
+        width: 100%;
+        height: 700px;
+    }
 </style>
 
 
 <style>
-  .count-style {
-    font-size: 50px;
-  }
+    .count-style {
+        font-size: 50px;
+    }
 </style>

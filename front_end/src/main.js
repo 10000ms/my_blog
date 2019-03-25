@@ -6,10 +6,11 @@ import store from './store/index';
 
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
-import LightTimeline from 'vue-light-timeline';
 
-import Console from './utils/Console';
-import Secret from './utils/Secret';
+import Console from './utils/console';
+import Secret from './utils/secret';
+
+import './assets/css/common.less'
 
 Vue.config.productionTip = false;
 Vue.prototype.$log = Console.log;
@@ -19,7 +20,6 @@ Vue.prototype.$secret = Secret;
 
 Vue.use(Vuex);
 Vue.use(iView);
-Vue.use(LightTimeline);
 
 new Vue({
     el: '#app',

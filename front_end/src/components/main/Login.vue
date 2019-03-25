@@ -1,22 +1,22 @@
 <template>
-  <Modal
-      v-model="show"
-      title="Common Modal dialog box title"
-      @on-ok="wantLogin"
-      ok-text="登陆"
-      cancel-text="取消">
-    <p slot="header" :style="headerStyle">
-      <span>登陆</span>
-    </p>
-    <div class="input-div">
-      <div class="single-input-div">
-        <Input v-model="account" placeholder="输入账户..." style="width: 100%"/>
-      </div>
-      <div class="single-input-div">
-        <Input v-model="password" placeholder="输入密码..." type="password" style="width: 100%"/>
-      </div>
-    </div>
-  </Modal>
+    <Modal
+        v-model="show"
+        title="Common Modal dialog box title"
+        @on-ok="wantLogin"
+        ok-text="登陆"
+        cancel-text="取消">
+        <p slot="header" :style="headerStyle">
+            <span>登陆</span>
+        </p>
+        <div class="input-div">
+            <div class="single-input-div">
+                <Input v-model="account" placeholder="输入账户..." style="width: 100%"/>
+            </div>
+            <div class="single-input-div">
+                <Input v-model="password" placeholder="输入密码..." type="password" style="width: 100%"/>
+            </div>
+        </div>
+    </Modal>
 </template>
 
 <script>
@@ -50,13 +50,13 @@
 </script>
 
 <style scoped>
-  .input-div {
-    padding: 20px;
-    text-align: center;
-  }
+    .input-div {
+        padding: 20px;
+        text-align: center;
+    }
 
-  .single-input-div {
-    margin: 20px;
-  }
+    .single-input-div {
+        margin: 20px;
+    }
 
 </style>

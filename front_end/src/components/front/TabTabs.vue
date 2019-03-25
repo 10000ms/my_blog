@@ -1,5 +1,7 @@
 <template>
-  <a :style="tabStyle" :href="url"><div class="tab-div">{{tab}}</div></a>
+    <a :style="tabStyle" :href="url">
+        <div class="tab-div">{{tab}}</div>
+    </a>
 </template>
 
 <script>
@@ -37,19 +39,21 @@
 </script>
 
 <style scoped>
-  .tab-div {
-    display: inline-block;
-    padding: 2px 20px;
-    border-radius: 30px;
-    border: 1px solid rgb(60, 60, 60);
-    color: rgb(60, 60, 60);
-    margin: 10px;
-  }
-  .tab-div > a {
-    color: inherit;
-  }
-  .tab-div:hover {
-    background-color: rgb(60, 60, 60);
-    color: rgb(255, 255, 255);
-  }
+    .tab-div {
+        display: inline-block;
+        padding: 2px 20px;
+        border-radius: 30px;
+        border: 1px solid rgb(60, 60, 60);
+        color: rgb(60, 60, 60);
+        margin: 10px;
+    }
+
+    .tab-div > a {
+        color: inherit;
+    }
+
+    .tab-div:hover {
+        background-color: rgb(60, 60, 60);
+        color: rgb(255, 255, 255);
+    }
 </style>

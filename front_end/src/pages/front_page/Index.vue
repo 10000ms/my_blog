@@ -1,22 +1,25 @@
 <template>
-  <div class="main">
-    <single-blog-tab v-for="b in blogs" :blogData="b" :key="b.id"></single-blog-tab>
-  </div>
+    <div>
+        <single-blog-tab v-for="b in blogs" :blogData="b" :key="b.id"></single-blog-tab>
+        <Page :total="100" :current="1" @on-change="changePage"></Page>
+    </div>
 </template>
 
 <script>
-    import SingleBlogTab from '../../components/front/SingleBlogTab'
+    import SingleBlogTab from '../../components/front/SingleBlogTab';
 
     export default {
-        name: "index",
-        components: {SingleBlogTab},
+        name: 'index',
+        components: {
+            SingleBlogTab,
+        },
 
         data() {
             return {
                 blogs: [
                     {
                         id: 1,
-                        title: 'asdasdad',
+                        title: '阿速達熟讀阿薩德',
                         tabs: ['11111', '222222', '33333'],
                         brief: 'asddddddddddddddasdadadada',
                         postTime: '2018-10-10',
@@ -29,7 +32,7 @@
                     },
                     {
                         id: 2,
-                        title: 'asdasdad',
+                        title: '阿水暖搜安娜上锁部分把的速度',
                         tabs: ['11111', '222222', '33333'],
                         brief: 'asddddddddddddddasdadadada',
                         postTime: '2018-10-10',
@@ -42,7 +45,7 @@
                     },
                     {
                         id: 3,
-                        title: 'asdasdad',
+                        title: '阿森纳新组成必备的补习班补补刀',
                         tabs: ['11111', '222222', '33333'],
                         brief: 'asddddddddddddddasdadadada',
                         postTime: '2018-10-10',
@@ -82,6 +85,11 @@
                     },
                 ],
             }
+        },
+        methods: {
+            changePage() {
+
+            },
         },
     }
 </script>

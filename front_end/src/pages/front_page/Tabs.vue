@@ -1,14 +1,14 @@
 <template>
-  <div class="main-tabs-page">
-    <span class="tabs-page-title-span">目前共计{{tabCount}}个标签</span>
-    <div class="tabs-container-div">
-      <tab-tabs v-for="t in tabs" :key="t.id" :tab="t.name" :count="t.count" :url="t.url"></tab-tabs>
+    <div>
+        <span class="content-title-items">目前共计{{tabCount}}个标签</span>
+        <div class="text-align-center-div">
+            <tab-tabs v-for="t in tabs" :key="t.id" :tab="t.name" :count="t.count" :url="t.url"></tab-tabs>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-    import TabTabs from '../../components/front/TabTabs'
+    import TabTabs from '../../components/front/TabTabs';
 
     export default {
         name: 'Tabs',
@@ -82,16 +82,5 @@
 </script>
 
 <style scoped>
-  .main-tabs-page {
-    padding: 30px;
-  }
 
-  .tabs-container-div {
-    text-align: center;
-  }
-
-  .tabs-page-title-span {
-    font-size: 15px;
-    color: rgb(40, 40, 40);
-  }
 </style>

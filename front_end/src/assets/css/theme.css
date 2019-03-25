@@ -1,0 +1,31 @@
+/*dropdown配色更改*/
+.ivu-select-dropdown {
+  background: linear-gradient(to left, #cc2b5e, #753a88) !important;
+  color: white;
+}
+.ivu-select-item {
+  background: linear-gradient(to left, #cc2b5e, #753a88) !important;
+  color: white !important;
+}
+.ivu-select-item :hover {
+  color: #2d8cf0 !important;
+}
+.ivu-select-item-selected {
+  color: #2d8cf0 !important;
+  font-weight: 800;
+}
+.ivu-menu-item:hover {
+  background: none !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.ivu-dropdown-item:hover {
+  background: inherit !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+/*选中菜单颜色*/
+.ivu-menu-item-active {
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 600;
+}
+/*# sourceMappingURL=theme.css.map */
