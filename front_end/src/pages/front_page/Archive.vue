@@ -3,7 +3,7 @@
         <timeline>
             <timeline-item v-for="b in blogs" :key="b.id" bg-color="rgba(246, 141, 66, 1)" icon-size="large">
                 <router-link :to="'/' + b.year + '/' + b.month + '/' + b.day + '/' + b.did">
-                    <span class="time-span">{{b.year}} - {{b.month}} - {{b.day}}:</span>
+                    <span class="time-span content-content-items">{{b.year}} - {{b.month}} - {{b.day}}:</span>
                     <span class="content-title-items">{{b.title}}</span>
                 </router-link>
             </timeline-item>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import { Timeline, TimelineItem } from 'vue-cute-timeline'
+    import { Timeline, TimelineItem } from 'vue-cute-timeline';
 
     export default {
         name: 'Archive',
@@ -107,7 +107,7 @@
                         readCount: 264,
                     },
                 ],
-            }
+            };
         },
     }
 </script>
@@ -117,6 +117,5 @@
         margin-right: 20px;
         float: left;
         width: 100px;
-        font-size: 15px;
     }
 </style>

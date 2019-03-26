@@ -1,37 +1,37 @@
 <template>
     <div>
         <Menu mode="horizontal" active-name="1" :style="menuStyle" @on-select="selectMethod">
-            <MenuItem name="index" class="menu-menu">
+            <MenuItem name="index" class="menu-menu content-content-items">
                 <span class="span-menu">
                     <Icon type="ios-home" size="16"/>
                     Index
                 </span>
             </MenuItem>
-            <MenuItem name="tabs" class="menu-menu">
+            <MenuItem name="tabs" class="menu-menu content-content-items">
                 <span class="span-menu">
                     <Icon type="md-pricetags" size="16"/>
                     Tabs
                 </span>
             </MenuItem>
-            <MenuItem name="categories" class="menu-menu">
+            <MenuItem name="categories" class="menu-menu content-content-items">
                 <span class="span-menu">
                     <Icon type="md-filing" size="16"/>
                     Categories
                 </span>
             </MenuItem>
-            <MenuItem name="archive" class="menu-menu">
+            <MenuItem name="archive" class="menu-menu content-content-items">
                 <span class="span-menu">
                     <Icon type="md-clock" size="16"/>
                     Archive
                 </span>
             </MenuItem>
-            <MenuItem name="aboutMe" class="menu-menu">
+            <MenuItem name="aboutMe" class="menu-menu content-content-items">
                 <span class="span-menu">
                     <Icon type="ios-quote" size="16"/>
                     About Me
                 </span>
             </MenuItem>
-            <div class="avatar-div">
+            <div class="avatar-div content-content-items">
                 <Dropdown trigger="click" @on-click="handleClick">
                     <a href="#">
                         <Avatar icon="md-person" :style="avatarStyle" size="large" :src="avatarURL"/>
@@ -39,29 +39,29 @@
                     <DropdownMenu slot="list">
                         <div v-if="!userName">
                             <DropdownItem name="login">
-                                <span class="dropdown-item">
+                                <span class="dropdown-item color-common-white-items">
                                     登录
                                 </span>
                             </DropdownItem>
                             <DropdownItem name="register">
-                                <span class="dropdown-item">
+                                <span class="dropdown-item color-common-white-items">
                                     注册
                                 </span>
                             </DropdownItem>
                         </div>
                         <div v-if="userName">
                             <DropdownItem :disabled="true">
-                                <span class="dropdown-item">
+                                <span class="dropdown-item color-common-white-items">
                                     欢迎：{{userName}}
                                 </span>
                             </DropdownItem>
                             <DropdownItem name="admin">
-                                <span class="dropdown-item">
+                                <span class="dropdown-item color-common-white-items">
                                     管理中心
                                 </span>
                             </DropdownItem>
                             <DropdownItem>
-                                <span class="dropdown-item">
+                                <span class="dropdown-item color-common-white-items">
                                     退出登录
                                 </span>
                             </DropdownItem>
@@ -96,7 +96,7 @@
                 // TODO： 放入vuex
                 userName: 123456,
                 avatarURL: null,
-            }
+            };
         },
 
         methods: {
@@ -117,37 +117,10 @@
                 // 換頁
                 this.$router.push({name: key});
             },
-
         },
     }
 </script>
 
 <style scoped>
-    .menu-menu {
-        font-size: 15px;
-        cursor: pointer;
-
-    }
-
-    .menu-menu {
-        color: rgba(255, 255, 255, 0.9) !important;
-    }
-
-    .menu-menu:hover {
-        color: rgb(45, 140, 240) !important;
-        font-size: 16px;
-    }
-
-    .avatar-div {
-        float: right;
-        margin-right: 50px;
-        font-size: 16px;
-    }
-
-    .dropdown-item {
-        font-size: 14px;
-        padding: 5px;
-        color: #fff;
-    }
 
 </style>

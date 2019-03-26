@@ -1,14 +1,16 @@
 <template>
-    <div class="main-div">
+    <div class="max-width height-min-height-div">
         <div class="child-div">
             <i-table size="large" border :columns="columns7" :data="data6"></i-table>
             <Page :total="100" :current="1" @on-change="changePage"></Page>
         </div>
         <div class="child-div">
             <div class="category-div" v-for="c in categories" :key="c.id">
-                <a :href="c.url" class="category-a"><span v-html="printLevel(getLevel(c.id))"
-                                                          style="font-size: 15px"></span>
-                    {{c.name}} <span class="count-span">({{c.count}})</span></a>
+                <a :href="c.url" class="color-common-black-items">
+                    <span v-html="printLevel(getLevel(c.id))" class="content-content-items"></span>
+                    {{c.name}}
+                    <span class="count-span">({{c.count}})</span>
+                </a>
             </div>
         </div>
     </div>
@@ -108,55 +110,55 @@
                                 h('Button', {
                                     props: {
                                         type: 'primary',
-                                        size: 'default'
+                                        size: 'default',
                                     },
                                     style: {
-                                        marginRight: '5px'
+                                        marginRight: '5px',
                                     },
                                     on: {
                                         click: () => {
                                             this.show(params.index)
-                                        }
-                                    }
+                                        },
+                                    },
                                 }, '修改'),
                                 h('Button', {
                                     props: {
                                         type: 'error',
-                                        size: 'default'
+                                        size: 'default',
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
-                                        }
-                                    }
+                                            this.remove(params.index);
+                                        },
+                                    },
                                 }, '刪除')
                             ]);
-                        }
-                    }
+                        },
+                    },
                 ],
                 data6: [
                     {
                         name: 'John Brown',
                         age: 18,
-                        address: 'New York No. 1 Lake Park'
+                        address: 'New York No. 1 Lake Park',
                     },
                     {
                         name: 'Jim Green',
                         age: 24,
-                        address: 'London No. 1 Lake Park'
+                        address: 'London No. 1 Lake Park',
                     },
                     {
                         name: 'Joe Black',
                         age: 30,
-                        address: 'Sydney No. 1 Lake Park'
+                        address: 'Sydney No. 1 Lake Park',
                     },
                     {
                         name: 'Jon Snow',
                         age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    }
-                ]
-            }
+                        address: 'Ottawa No. 2 Lake Park',
+                    },
+                ],
+            };
         },
         methods: {
             show(index) {
@@ -183,31 +185,5 @@
 </script>
 
 <style scoped>
-    .main-div {
-        width: 100%;
-        min-height: 100px;
-    }
 
-    .child-div {
-        margin: 1%;
-        width: 45%;
-        float: left;
-        text-align: left;
-        min-height: 1000px;
-    }
-
-    .category-div {
-        padding: 8px;
-        border-bottom: 1px solid rgba(60, 60, 60, 0.3);
-        font-size: 20px;
-
-    }
-
-    .count-span {
-        font-size: 14px;
-    }
-
-    .category-a {
-        color: rgb(60, 60, 60);
-    }
 </style>

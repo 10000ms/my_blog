@@ -13,7 +13,6 @@
         components: {
             SingleBlogTab,
         },
-
         data() {
             return {
                 blogs: [
@@ -84,7 +83,7 @@
                         readCount: 264,
                     },
                 ],
-            }
+            };
         },
         methods: {
             changePage() {

@@ -12,7 +12,7 @@
         data() {
             return {
                 input: '# hello',
-            }
+            };
         },
         computed: {
             compiledMarkdown: function () {

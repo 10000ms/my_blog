@@ -76,7 +76,7 @@
                         count: 5,
                     },
                 ],
-            }
+            };
         },
         mounted() {
 
@@ -97,14 +97,5 @@
 </script>
 
 <style scoped>
-    .category-div {
-        padding: 8px;
-        border-bottom: 1px solid rgba(60, 60, 60, 0.3);
-        font-size: 20px;
-    }
-
-    .count-span {
-        font-size: 15px;
-    }
 
 </style>

@@ -12,7 +12,9 @@
 
     export default {
         name: 'Tabs',
-        components: {TabTabs},
+        components: {
+            TabTabs,
+        },
         data() {
             return {
                 tabs: [
@@ -71,11 +73,11 @@
                         url: 'asd',
                     },
                 ],
-            }
+            };
         },
         computed: {
             tabCount() {
-                return this.tabs.length
+                return this.tabs.length;
             },
         },
     }

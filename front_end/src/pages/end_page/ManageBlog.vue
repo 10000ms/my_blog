@@ -1,6 +1,8 @@
 <template>
-    <div class="index-main-div">
-        <i-table size="large" border :columns="columns7" :data="data6"></i-table>
+    <div class="thin-content-div height-min-height-div">
+        <div class="margin-bottom-20">
+            <i-table size="large" border :columns="columns7" :data="data6"></i-table>
+        </div>
         <Page :total="100" :current="1" @on-change="changePage"></Page>
     </div>
 </template>
@@ -20,12 +22,12 @@
                             return h('div', [
                                 h('Icon', {
                                     props: {
-                                        type: 'person'
-                                    }
+                                        type: 'person',
+                                    },
                                 }),
-                                h('strong', params.row.name)
+                                h('strong', params.row.name),
                             ]);
-                        }
+                        },
                     },
                     {
                         title: '分类',
@@ -53,45 +55,45 @@
                                 h('Button', {
                                     props: {
                                         type: 'info',
-                                        size: 'default'
+                                        size: 'default',
                                     },
                                     style: {
-                                        marginRight: '5px'
+                                        marginRight: '5px',
                                     },
                                     on: {
                                         click: () => {
-                                            this.recommend(params.index)
+                                            this.recommend(params.index);
                                         }
                                     }
                                 }, '设置推荐'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
-                                        size: 'default'
+                                        size: 'default',
                                     },
                                     style: {
-                                        marginRight: '5px'
+                                        marginRight: '5px',
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.index)
+                                            this.show(params.index);
                                         }
                                     }
                                 }, '修改'),
                                 h('Button', {
                                     props: {
                                         type: 'error',
-                                        size: 'default'
+                                        size: 'default',
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
-                                        }
-                                    }
+                                            this.remove(params.index);
+                                        },
+                                    },
                                 }, '刪除')
                             ]);
-                        }
-                    }
+                        },
+                    },
                 ],
                 data6: [
                     {
@@ -113,9 +115,9 @@
                         name: 'Jon Snow',
                         age: 26,
                         address: 'Ottawa No. 2 Lake Park'
-                    }
-                ]
-            }
+                    },
+                ],
+            };
         },
         methods: {
             show(index) {
@@ -139,9 +141,5 @@
 </script>
 
 <style scoped>
-    .index-main-div {
-        width: 80%;
-        margin: 1% auto;
-        min-height: 1000px;
-    }
+
 </style>

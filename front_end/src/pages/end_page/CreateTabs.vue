@@ -1,6 +1,6 @@
 <template>
-    <div class="index-main-div">
-        <Input v-model="tab" placeholder="请输入标签..." size="large" style="width: 30%"/>
+    <div class="height-min-height-div thin-content-div">
+        <Input v-model="tab" placeholder="请输入标签..." size="large" class="min-input"/>
         <Button type="success" @click="submit" size="large">提交</Button>
     </div>
 </template>
@@ -11,7 +11,7 @@
         data() {
             return {
                 tab: '',
-            }
+            };
         },
         methods: {
             submit() {
@@ -23,9 +23,7 @@
 </script>
 
 <style scoped>
-    .index-main-div {
-        width: 80%;
-        margin: 1% auto;
-        min-height: 1000px;
+    .min-input {
+        width: 30%;
     }
 </style>

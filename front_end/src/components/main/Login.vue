@@ -8,12 +8,12 @@
         <p slot="header" :style="headerStyle">
             <span>登陆</span>
         </p>
-        <div class="input-div">
-            <div class="single-input-div">
-                <Input v-model="account" placeholder="输入账户..." style="width: 100%"/>
+        <div class="dialog-input-div">
+            <div class="dialog-single-input-div">
+                <Input v-model="account" placeholder="账户"/>
             </div>
-            <div class="single-input-div">
-                <Input v-model="password" placeholder="输入密码..." type="password" style="width: 100%"/>
+            <div class="dialog-single-input-div">
+                <Input v-model="password" placeholder="密码" type="password"/>
             </div>
         </div>
     </Modal>
@@ -35,28 +35,20 @@
                 },
                 account: '',
                 password: '',
-            }
+            };
         },
         methods: {
             openModal() {
-                this.show = true
+                this.show = true;
             },
 
             wantLogin() {
                 this.$Message.info('Clicked login');
             },
-        }
+        },
     }
 </script>
 
 <style scoped>
-    .input-div {
-        padding: 20px;
-        text-align: center;
-    }
-
-    .single-input-div {
-        margin: 20px;
-    }
 
 </style>

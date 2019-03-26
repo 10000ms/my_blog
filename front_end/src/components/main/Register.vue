@@ -8,24 +8,24 @@
         <p slot="header" :style="headerStyle">
             <span>注册</span>
         </p>
-        <div class="input-div">
-            <div class="single-input-div">
-                <Input v-model="account" placeholder="账户" style="width: 100%"/>
+        <div class="dialog-input-div">
+            <div class="dialog-single-input-div">
+                <Input v-model="account" placeholder="账户"/>
             </div>
-            <div class="single-input-div">
-                <Input v-model="password" placeholder="密码" type="password" style="width: 100%"/>
+            <div class="dialog-single-input-div">
+                <Input v-model="password" placeholder="密码" type="password"/>
             </div>
-            <div class="single-input-div">
-                <Input v-model="repeatPassword" placeholder="重复密码" type="password" style="width: 100%"/>
+            <div class="dialog-single-input-div">
+                <Input v-model="repeatPassword" placeholder="重复密码" type="password"/>
             </div>
-            <div class="single-input-div">
-                <Input v-model="userName" placeholder="用户名" style="width: 100%"/>
+            <div class="dialog-single-input-div">
+                <Input v-model="userName" placeholder="用户名"/>
             </div>
-            <div class="single-input-div">
-                <Input v-model="phone" placeholder="手机" style="width: 100%"/>
+            <div class="dialog-single-input-div">
+                <Input v-model="phone" placeholder="手机"/>
             </div>
-            <div class="single-input-div">
-                <Input v-model="email" placeholder="邮箱" type="email" style="width: 100%"/>
+            <div class="dialog-single-input-div">
+                <Input v-model="email" placeholder="邮箱" type="email"/>
             </div>
         </div>
     </Modal>
@@ -50,11 +50,11 @@
                 userName: '',
                 phone: '',
                 email: '',
-            }
+            };
         },
         methods: {
             openModal() {
-                this.show = true
+                this.show = true;
             },
 
             wantRegister() {
@@ -65,12 +65,5 @@
 </script>
 
 <style scoped>
-    .input-div {
-        padding: 20px;
-        text-align: center;
-    }
 
-    .single-input-div {
-        margin: 20px;
-    }
 </style>

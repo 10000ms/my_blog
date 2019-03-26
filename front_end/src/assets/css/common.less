@@ -9,6 +9,7 @@
 @height-min-height: 775px;
 
 @font-size-content-title: 20px;
+@font-size-content-content: 16px;
 
 * {
     font-family: "Fira Sans", "Verdana", "Geneva", sans-serif;
@@ -30,9 +31,14 @@ a {
     color: @color-common-black;
 }
 
+.color-common-white-items {
+    color: @color-common-white;
+}
+
 .basic-pages-div {
     text-align: center;
     height: 100%;
+    background-color: @color-common-white;
 }
 
 .right-main-div {
@@ -42,9 +48,13 @@ a {
 }
 
 .main-content {
-    background-color: @color-full-white;
+    background-color: @color-common-white;
     min-height: @height-min-height;
     padding: 20px 0;
+}
+
+.height-min-height-div {
+    min-height: @height-min-height;
 }
 
 .thin-content-div {
@@ -52,12 +62,99 @@ a {
     margin: 0 auto;
 }
 
-.content-title-items {
-    font-size: @font-size-content-title;
-    color: @color-common-black;
-    font-weight: bolder;
+.max-width {
+    width: 100%;
 }
 
 .content-title-items {
-    color: inherit;
+    font-size: @font-size-content-title;
+    color: @color-common-black;
+
+    :hover {
+        color: inherit;
+    }
+}
+
+.content-content-items {
+    font-size: @font-size-content-content;
+}
+
+.dialog-input-div {
+    text-align: center;
+}
+
+.dialog-single-input-div {
+    margin: 20px;
+}
+
+.menu-menu {
+    cursor: pointer;
+}
+
+.menu-menu {
+    color: rgba(255, 255, 255, 0.9) !important;
+
+    :hover {
+        color: rgb(45, 140, 240) !important;
+        font-size: 17px;
+    }
+}
+
+.avatar-div {
+    float: right;
+    margin-right: 50px;
+}
+
+.dropdown-item {
+    font-size: 14px;
+    padding: 5px;
+}
+
+//后端计数大小
+.count-style {
+    font-size: 50px;
+}
+
+.child-div {
+    margin: 1%;
+    width: 45%;
+    float: left;
+    text-align: left;
+    min-height: @height-min-height;
+}
+
+.child-input-div {
+    margin: 20px auto;
+}
+
+.child-border-div {
+    border: 1px #c8c8c8;
+    border-right-style: solid;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.category-div {
+    padding: 8px;
+    border-bottom: 1px solid rgba(60, 60, 60, 0.3);
+    font-size: 20px;
+}
+
+.count-span {
+    font-size: 14px;
+}
+
+.upload-items {
+    display: inline-block;
+    width:100px;
+}
+
+.upload-icon-items {
+    width: 100px;
+    height:100px;
+    line-height: 100px;
 }

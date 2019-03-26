@@ -1,12 +1,12 @@
 <template>
-    <div class="single-blog-div">
+    <div class="single-blog-div color-common-black-items">
         <div class="blog-header-div">
             <div class="read-count-div">
                 <Icon type="md-flame" size="30"/>
                 <span>{{blogData.readCount}}</span>
             </div>
             <div class="blog-title-div">
-      <span class="blog-title-span">
+      <span class="blog-title-span color-common-black-items">
         <router-link :to="'/' + blogData.year + '/' + blogData.month + '/' + blogData.day + '/' + blogData.did">{{blogData.title}}</router-link>
       </span>
             </div>
@@ -15,8 +15,8 @@
                 <span class="month">/ Dec</span>
             </time>
         </div>
-        <div class="main-content">
-            <div class="content">{{blogData.brief}}</div>
+        <div class="single-blog-main-content-div">
+            <div class="content color-common-black-items">{{blogData.brief}}</div>
             <div class="tabs-container">
                 <tab v-for="t in blogData.tabs" :tab="t" :key="t"></tab>
             </div>
@@ -26,18 +26,24 @@
 </template>
 
 <script>
-    import Tab from '../main/Tab'
+    import Tab from '../main/Tab';
 
     export default {
         name: 'SingleBlogTab',
-        components: {Tab},
+        components: {
+            Tab,
+        },
         props: {
             blogData: Object,
         },
         data() {
-            return {}
+            return {
+
+            };
         },
-        methods: {},
+        methods: {
+
+        },
     }
 </script>
 
@@ -50,28 +56,16 @@
         border-radius: 5px;
         text-align: justify;
         padding: 10px;
-        color: #333;
         position: relative;
         border: 2px solid #f1f1f1;
         border-left: 6px solid rgb(246, 141, 66);
     }
-
-    /*.single-blog-div:before {*/
-    /*content: "";*/
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*left: 0;*/
-    /*width: 120px;*/
-    /*height: 100%;*/
-    /*background: linear-gradient(left, #ddd 0%, #fff 100%);*/
-    /*}*/
 
     .blog-header-div {
         border-left: 1px solid #ccc;
         margin-left: 160px;
         padding: 15px 20px;
         position: relative;
-
     }
 
     .time {
@@ -94,7 +88,7 @@
         user-select: none;
     }
 
-    .main-content {
+    .single-blog-main-content-div {
         min-height: 150px;
         border-left: 1px solid #ccc;
         margin-left: 160px;
@@ -104,7 +98,7 @@
         position: relative;
     }
 
-    .main-content:before {
+    .single-blog-main-content-div:before {
         content: "";
         position: absolute;
         top: 15px;
@@ -122,7 +116,6 @@
 
     .blog-title-span > a {
         font-size: 2em;
-        color: #000;
     }
 
     .blog-title-span > a:hover {
@@ -131,7 +124,6 @@
     }
 
     .content {
-        color: #333;
         text-align: justify;
         font-size: 14px;
         text-shadow: 0 0 1px transparent;

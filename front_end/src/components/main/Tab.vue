@@ -12,7 +12,9 @@
             tab: String,
         },
         data() {
-            return {}
+            return {
+
+            };
         },
         methods: {},
     }

@@ -1,7 +1,7 @@
 <template>
-    <div class="side-bar">
-        <div class="main-profile-image"></div>
-        <span class="blog-name">{{blogName}}</span>
+    <div class="side-bar-div">
+        <div class="main-profile-image-div"></div>
+        <span class="blog-name-span">{{blogName}}</span>
         <div class="contact-div">
             <Icon type="logo-github" size="25"/>
             <Icon type="ios-mail" size="25"/>
@@ -10,12 +10,12 @@
             <span class="recommend-span" v-for="r in recommends" :key="r.title"
                   @click="toRecommend(r.id)">{{r.title}}</span>
         </div>
-        <div class="ad-container">
+        <div class="ad-container-div">
             <a :href="ad1URL">
                 <img :src="ad1" class="ad-image"/>
             </a>
         </div>
-        <div class="ad-container">
+        <div class="ad-container-div">
             <a :href="ad2URL">
                 <img :src="ad2" class="ad-image"/>
             </a>
@@ -25,7 +25,7 @@
 
 <script>
     export default {
-        name: "side-bar",
+        name: 'side-bar',
         data() {
             return {
                 blogName: 'asdadsd',
@@ -52,18 +52,18 @@
                 ad1URL: 'django',
                 ad2: 'vue',
                 ad2URL: 'vue',
-            }
+            };
         },
         methods: {
             toRecommend(id) {
-                this.$log(id)
+                this.$log(id);
             }
         },
     }
 </script>
 
 <style scoped>
-    .side-bar {
+    .side-bar-div {
         height: 100%;
         width: 350px;
         background: #512e92 url("../../assets/img/bg.jpg") no-repeat center center;
@@ -75,7 +75,7 @@
         text-align: center;
     }
 
-    .main-profile-image {
+    .main-profile-image-div {
         margin-right: auto;
         margin-left: auto;
         margin-top: 25%;
@@ -85,7 +85,7 @@
         background-color: black;
     }
 
-    .blog-name {
+    .blog-name-span {
         font-size: 40px;
         color: rgb(255, 255, 255);
     }
@@ -113,7 +113,7 @@
         color: rgb(45, 140, 240) !important;
     }
 
-    .ad-container {
+    .ad-container-div {
         margin-top: 8%;
         margin-left: auto;
         margin-right: auto;

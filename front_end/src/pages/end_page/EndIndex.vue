@@ -1,6 +1,6 @@
 <template>
-    <div class="index-main-div">
-        <div class="index-header-div">
+    <div class="thin-content-div height-min-height-div">
+        <div>
             <div class="index-header-child-div">
                 <infor-card shadow :color="infor1.color" :icon="infor1.icon" :icon-size="36">
                     <count-to :end="infor1.count" count-class="count-style"/>
@@ -42,16 +42,16 @@
                     title: '昨日浏览',
                     icon: 'md-book',
                     count: 803,
-                    color: '#2d8cf0'
+                    color: '#2d8cf0',
                 },
                 infor2: {
                     title: '总共浏览',
                     icon: 'md-infinite',
                     count: 150000,
-                    color: 'rgba(246, 141, 66, 1)'
+                    color: 'rgba(246, 141, 66, 1)',
                 },
                 mapStyle: {},
-            }
+            };
         },
         methods: {
             addScript() {
@@ -71,7 +71,7 @@
                         this.addInMap();
                         clearInterval(check);
                     }
-                }, 100)
+                }, 100);
             },
             addInMap() {
                 /*eslint-disable no-undef*/
@@ -153,12 +153,11 @@
                         fps: 90, //动画帧数
                         color: "#FAFA32",
                         size: 20,
-                        speed: 0.15
+                        speed: 0.15,
                     },
                     data: mapData,
                 });
                 myInmap.add(overlay);
-
             },
         },
         mounted() {
@@ -169,18 +168,8 @@
 </script>
 
 <style scoped>
-    .index-main-div {
-        width: 80%;
-        margin: 1% auto;
-        min-height: 1000px;
-    }
-
-    .index-header-div {
-        width: 100%;
-        margin: 20px auto;
-    }
-
     .index-header-child-div {
+        border: #000000 2px;
         float: left;
         width: 40%;
         height: 120px;
@@ -191,12 +180,5 @@
     #id-allmap {
         width: 100%;
         height: 700px;
-    }
-</style>
-
-
-<style>
-    .count-style {
-        font-size: 50px;
     }
 </style>
