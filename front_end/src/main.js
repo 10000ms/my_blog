@@ -11,6 +11,7 @@ import Console from './utils/console';
 import Secret from './utils/secret';
 
 import './assets/css/common.less'
+import './assets/css/theme.less'
 
 Vue.config.productionTip = false;
 Vue.prototype.$log = Console.log;
