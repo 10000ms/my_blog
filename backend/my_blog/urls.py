@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import bad_request
+from django.conf.urls import include
+
+from main.views.error import bad_request
 
 urlpatterns = [
+    path(r'', include('main.urls')),
     path('admin/', admin.site.urls),
 ]
 
