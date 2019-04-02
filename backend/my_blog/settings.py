@@ -128,6 +128,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 打印错误栈
+# 设置为True的时候，在关闭debug的时候也会进行错误栈打印
 DEBUG_PROPAGATE_EXCEPTIONS = False
 
 # restful framework相关
@@ -135,3 +136,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+# 更换用户模型
+AUTH_USER_MODEL = 'main.User'
