@@ -8,11 +8,17 @@ class WebsiteManage(models.Model):
     website_name = models.CharField('网站名', max_length=10)
     ICP_number = models.CharField('备案号', max_length=20)
     website_image = models.CharField('网站头像', max_length=256)
-    ad_1 = models.CharField('主页侧栏图片1', max_length=256)
-    ad_2 = models.CharField('主页侧栏图片2', max_length=256)
-    github = models.CharField('Github地址', max_length=256)
-    email = models.CharField('邮箱地址', max_length=256)
+    ad_1 = models.URLField('主页侧栏图片1')
+    ad_2 = models.URLField('主页侧栏图片2')
+    github = models.URLField('Github地址')
+    email = models.EmailField('邮箱地址')
     Friendship_link = models.CharField('友情链接地址', max_length=2000)
+
+    open_register = models.BooleanField('是否开放注册', default=False)
+    demo_model = models.BooleanField('是否开放demo模式', default=False)
 
     def __str__(self):
         return self.website_name
+
+    class Meta:
+        ordering = ['-id']

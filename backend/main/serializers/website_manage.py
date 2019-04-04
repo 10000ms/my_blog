@@ -10,6 +10,7 @@ class WebsiteManageSerializer(serializers.HyperlinkedModelSerializer):
         model = WebsiteManage
         fields = (
             'url',
+            'id',
             'about_me',
             'website_name',
             'ICP_number',
@@ -20,3 +21,9 @@ class WebsiteManageSerializer(serializers.HyperlinkedModelSerializer):
             'email',
             'Friendship_link',
         )
+
+    @staticmethod
+    def validate_website_name(value):
+        if 2 <= len(value) <= 15:
+            return value
+        raise serializers.ValidationError('网站名必须为2-15个字符')

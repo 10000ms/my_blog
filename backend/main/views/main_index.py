@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from ..models.user import User
-from ..serializers.user import UserSerializer
+from utils.api_common import create_response
+from ..models.blog import Blog
+from ..serializers.blog import BlogSerializer
 
 
 class MainIndex(APIView):
 
+    @method_decorator(cache_page(60 * 10))
     def get(self, request):
-        user = User.objects.all()
-        serializer_context = {
+        c = {
             'request': request,
         }
-        serializer = UserSerializer(user, many=True, context=serializer_context)
-        print(serializer.data)
-        return Response(serializer.data)
+        blog = Blog.objects.index_info()
+        serializer = BlogSerializer(blog, many=True, context=c)
+        return Response(create_response(data=[serializer.data, serializer.data]))

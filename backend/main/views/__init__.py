@@ -3,5 +3,5 @@
 from . import (
     error,
     main_index,
-    rest_test,
+    rest,
 )

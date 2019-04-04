@@ -21,7 +21,7 @@ from main.views.error import bad_request
 
 urlpatterns = [
     path(r'', include('main.urls')),
-    path('admin/', admin.site.urls),
+    path(r'admin/', admin.site.urls),
 ]
 
 handler404 = bad_request
