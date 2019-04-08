@@ -10,6 +10,7 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         model = Category
         fields = ('url', 'id', 'title', 'father_category')
         extra_kwargs = {'father_category': {'required': False}}
+        depth = 1
 
     @staticmethod
     def validate_title(value):

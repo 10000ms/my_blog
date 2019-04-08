@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
+from utils.model_str import str_for_model
+
 
 class WebsiteManage(models.Model):
 
@@ -18,7 +20,7 @@ class WebsiteManage(models.Model):
     demo_model = models.BooleanField('是否开放demo模式', default=False)
 
     def __str__(self):
-        return self.website_name
+        return str_for_model(self)
 
     class Meta:
         ordering = ['-id']
