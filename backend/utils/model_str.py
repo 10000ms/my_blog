@@ -2,6 +2,9 @@
 
 
 def str_for_model(model):
+    """
+    更改默认打印，更可读
+    """
     t = None
     if hasattr(model, 'title'):
         t = model.title

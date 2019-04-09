@@ -2,6 +2,6 @@
 
 from . import (
     error,
-    main_index,
+    init_index,
     rest,
 )

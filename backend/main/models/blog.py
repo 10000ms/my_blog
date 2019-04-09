@@ -20,6 +20,7 @@ class Blog(models.Model):
     content = models.TextField('正文')
     read_count = models.IntegerField('阅读数', default=0)
     like_count = models.IntegerField('喜欢数', default=0)
+    is_recommend = models.BooleanField('是否推荐', default=False)
 
     objects = blog.BlogManager()
 
@@ -27,4 +28,4 @@ class Blog(models.Model):
         return str_for_model(self)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-create_time']

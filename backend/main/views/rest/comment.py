@@ -4,12 +4,12 @@ from rest_framework import (
     permissions,
 )
 
-from ... import serializers
+from ...serializers.comment import CommentSerializer
 from ...models.comment import Comment
 
 
 class CommentViewSet(viewsets.ModelViewSet):
 
     queryset = Comment.objects.all()
-    serializer_class = serializers.comment.CommentSerializer
+    serializer_class = CommentSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )

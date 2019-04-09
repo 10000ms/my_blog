@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from rest_framework import viewsets
 
-from ... import serializers
-from ... import permissions as custom_permissions
+from ...serializers.blog import BlogSerializer
+from ...permissions import IsAuthorOrReadOnly
 from ...models.blog import Blog
 
 
 class BlogViewSet(viewsets.ModelViewSet):
 
     queryset = Blog.objects.all()
-    serializer_class = serializers.blog.BlogSerializer
-    permission_classes = (custom_permissions.IsAuthorOrReadOnly, )
+    serializer_class = BlogSerializer
+    permission_classes = (IsAuthorOrReadOnly, )
 
     def retrieve(self, request, *args, **kwargs):
         """

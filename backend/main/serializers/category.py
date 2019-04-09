@@ -6,10 +6,19 @@ from ..models.category import Category
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
+    father_category_pk = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), source='father_category', write_only=True, allow_null=True
+    )
+
     class Meta:
         model = Category
-        fields = ('url', 'id', 'title', 'father_category')
-        extra_kwargs = {'father_category': {'required': False}}
+        fields = (
+            'url',
+            'id',
+            'title',
+            'father_category',
+            'father_category_pk',
+        )
         depth = 1
 
     @staticmethod
@@ -21,6 +30,14 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
     def validate(self, data):
         # self.instance获取模型类实例
         # data['father_category'] 获取修改后的father_category模型类实例
-        if data['father_category'] and data['father_category'].id == self.instance.id:
-            raise serializers.ValidationError('父类型不能是自己！')
+        if 'father_category' in data and self.instance and data['father_category']:
+            # 检测循环
+            check_ids = [self.instance.id, ]
+            f = data['father_category']
+            while f:
+                if f.id in check_ids:
+                    raise serializers.ValidationError('类型循环！')
+                else:
+                    check_ids.append(f.id)
+                    f = f.father_category
         return data

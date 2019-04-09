@@ -4,8 +4,8 @@ from rest_framework import (
     permissions,
 )
 
-from ... import serializers
-from ... import permissions as custom_permissions
+from ...serializers.website_manage import WebsiteManageSerializer
+from ...permissions import ReadOnly
 from ...models.website_manage import WebsiteManage
 
 
@@ -15,5 +15,5 @@ class WebsiteManageViewSet(viewsets.ModelViewSet):
     pagination_class = None
     # 这个数据库只对第一条进行操作管理
     queryset = WebsiteManage.objects.all()[:1]
-    serializer_class = serializers.website_manage.WebsiteManageSerializer
-    permission_classes = (permissions.IsAdminUser | custom_permissions.ReadOnly, )
+    serializer_class = WebsiteManageSerializer
+    permission_classes = (permissions.IsAdminUser | ReadOnly, )

@@ -14,9 +14,8 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
         queryset=Category.objects.all(), source='category', write_only=True
     )
 
-    # TODO
     tabs_pk = serializers.PrimaryKeyRelatedField(
-        queryset=Tab.objects.all(), source='tabs', write_only=True
+        queryset=Tab.objects.all(), source='tabs', write_only=True, many=True
     )
 
     class Meta:

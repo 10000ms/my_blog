@@ -4,13 +4,13 @@ from rest_framework import (
     permissions,
 )
 
-from ... import serializers
-from ... import permissions as custom_permissions
+from ...serializers.user import UserSerializer
+from ...permissions import OpenRegister
 from ...models.user import User
 
 
 class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = serializers.user.UserSerializer
-    permission_classes = (permissions.IsAdminUser | custom_permissions.OpenRegister, )
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAdminUser | OpenRegister, )

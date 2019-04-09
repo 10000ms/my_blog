@@ -2,15 +2,32 @@
 from rest_framework import serializers
 
 from ..models.comment import Comment
+from ..models.user import User
+from ..models.blog import Blog
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
-    creator = serializers.CharField(source='creator.username', read_only=True)
+    creator_pk = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), source='creator', write_only=True
+    )
+
+    blog_pk = serializers.PrimaryKeyRelatedField(
+        queryset=Blog.objects.all(), source='blog', write_only=True
+    )
 
     class Meta:
         model = Comment
-        fields = ('url', 'id', 'title', 'creator', 'blog', 'content')
+        fields = (
+            'url',
+            'id',
+            'title',
+            'creator',
+            'creator_pk',
+            'blog',
+            'blog_pk',
+            'content',
+        )
         depth = 1
 
     @staticmethod

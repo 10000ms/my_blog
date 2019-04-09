@@ -8,7 +8,11 @@ class TabSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Tab
-        fields = ('url', 'id', 'title')
+        fields = (
+            'url',
+            'id',
+            'title',
+        )
 
     @staticmethod
     def validate_title(value):
