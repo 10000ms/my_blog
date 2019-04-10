@@ -6,6 +6,31 @@ from ..models.category import Category
 from ..models.tab import Tab
 
 
+class BaseMeta:
+
+    model = Blog
+    fields = (
+        'url',
+        'id',
+        'title',
+        'creator',
+        'author',
+        'create_time',
+        'last_change_time',
+        'category',
+        'category_pk',
+        'tabs',
+        'tabs_pk',
+        'brief',
+        'content',
+        'read_count',
+        'like_count',
+        'is_recommend',
+    )
+    read_only_fields = ('read_count', 'like_count', 'is_recommend')
+    depth = 1
+
+
 class BlogSerializer(serializers.HyperlinkedModelSerializer):
 
     creator = serializers.CharField(source='creator.username', read_only=True)
@@ -17,28 +42,6 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
     tabs_pk = serializers.PrimaryKeyRelatedField(
         queryset=Tab.objects.all(), source='tabs', write_only=True, many=True
     )
-
-    class Meta:
-        model = Blog
-        fields = (
-            'url',
-            'id',
-            'title',
-            'creator',
-            'author',
-            'create_time',
-            'last_change_time',
-            'category',
-            'category_pk',
-            'tabs',
-            'tabs_pk',
-            'brief',
-            'content',
-            'read_count',
-            'like_count',
-        )
-        read_only_fields = ('read_count', 'like_count')
-        depth = 1
 
     @staticmethod
     def validate_title(value):
@@ -57,3 +60,15 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
         if 1 <= len(value) <= 200:
             return value
         raise serializers.ValidationError('简介必须为1-200个字符')
+
+    class Meta(BaseMeta):
+        pass
+
+
+class BlogManageSerializer(BlogSerializer):
+    """
+    管理员类，可以修改是否推荐
+    """
+
+    class Meta(BaseMeta):
+        read_only_fields = ('read_count', 'like_count')

@@ -1,8 +1,0 @@
-你好 {{ user.username }},
-
-欢迎使用1000ms的小站
-
-请使用以下链接进行邮箱重置:
-
-{{ url_for('user.confirm', token=token, _external=True) }}
-

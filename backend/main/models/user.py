@@ -7,7 +7,7 @@ from utils.model_str import str_for_model
 
 class User(AbstractUser):
 
-    phone = models.CharField('电话号码', max_length=30, blank=True)
+    phone = models.CharField('电话号码', max_length=30, blank=True, unique=True)
     is_author = models.BooleanField('是否是作者', default=False)
 
     def __str__(self):

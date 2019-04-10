@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
-from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet
 
-from ...serializers.blog import BlogSerializer
+from ...serializers.blog import (
+    BlogSerializer,
+    BlogManageSerializer,
+)
 from ...permissions import IsAuthorOrReadOnly
 from ...models.blog import Blog
 
 
-class BlogViewSet(viewsets.ModelViewSet):
+class BlogViewSet(ModelViewSet):
 
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    manage_serializer_class = BlogManageSerializer
     permission_classes = (IsAuthorOrReadOnly, )
 
     def retrieve(self, request, *args, **kwargs):
@@ -20,3 +24,11 @@ class BlogViewSet(viewsets.ModelViewSet):
         o.read_count += 1
         o.save()
         return super().retrieve(request, *args, **kwargs)
+
+    def get_serializer_class(self):
+        """
+        管理员返回不同权限类
+        """
+        if self.request.user.is_staff:
+            return self.manage_serializer_class
+        return self.serializer_class

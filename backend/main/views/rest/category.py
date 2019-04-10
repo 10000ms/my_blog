@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 from rest_framework.response import Response
-from rest_framework import (
-    viewsets,
-    permissions,
-)
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.viewsets import ModelViewSet
 
 from ...serializers.category import CategorySerializer
 from ...models.category import Category
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(ModelViewSet):
 
     # category 不需要分页
     pagination_class = None
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def list(self, request, *args, **kwargs):
         """

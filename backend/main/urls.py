@@ -15,6 +15,6 @@ router.register(r'website-manage', views.rest.website_manage.WebsiteManageViewSe
 
 urlpatterns = [
     path(r'', include(router.urls)),
-    path(r'init_index/', views.init_index.MainIndex.as_view()),
+    path(r'init_index/', views.init_index.InitIndex.as_view()),
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -10,17 +10,6 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         queryset=Category.objects.all(), source='father_category', write_only=True, allow_null=True
     )
 
-    class Meta:
-        model = Category
-        fields = (
-            'url',
-            'id',
-            'title',
-            'father_category',
-            'father_category_pk',
-        )
-        depth = 1
-
     @staticmethod
     def validate_title(value):
         if 2 <= len(value) <= 15:
@@ -41,3 +30,14 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
                     check_ids.append(f.id)
                     f = f.father_category
         return data
+
+    class Meta:
+        model = Category
+        fields = (
+            'url',
+            'id',
+            'title',
+            'father_category',
+            'father_category_pk',
+        )
+        depth = 1
