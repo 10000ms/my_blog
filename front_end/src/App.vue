@@ -7,13 +7,8 @@
 <script>
     export default {
         name: 'app',
-        mounted() {
-            this.init()
-        },
         methods: {
-            init() {
-                this.$log(1111)
-            },
+
         },
         computed: {
             getWebMessages() {
@@ -21,6 +16,7 @@
             }
         },
         watch: {
+            // TODO: 不能正常使用
             getWebMessages: {
                 // 发送提示信息方法
                 handler(newer, older) {
@@ -28,6 +24,7 @@
                         // 增加的时候才进行处理
                         let m = newer[0];
                         this.$store.commit('webMessages/renewMessage');
+                        this.$log('get message');
                         switch (m.state) {
                             case 'info':
                                 this.$Message.info(m.message);

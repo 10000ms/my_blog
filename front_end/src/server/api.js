@@ -27,6 +27,10 @@ axios.defaults.timeout = 10000;
 axios.interceptors.response.use(
     response => {
         switch (response.data.code) {
+            // 测试返回信息会不会弹出提示
+            case 200:
+                store.commit('webMessages/commitMessage',createWebMessage('info', response.data.message));
+                break;
             case 400:
                 store.commit('webMessages/commitMessage',createWebMessage('error', response.data.message));
                 break;

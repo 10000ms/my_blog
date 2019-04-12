@@ -1,3 +1,5 @@
 import { get } from './api.js';
 
-export const index = p => get('api/v1/index', p);
+export default {
+    index: p => get('api/init_index', p),
+}

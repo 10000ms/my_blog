@@ -40,9 +40,14 @@
             SideBar,
             BlogFooter,
         },
+        mounted() {
+            this.init()
+        },
 
         methods: {
-
+            init() {
+                this.$log(this.$api.index())
+            },
         },
     };
 </script>
