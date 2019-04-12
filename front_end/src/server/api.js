@@ -4,8 +4,10 @@
 import axios from 'axios';
 
 import router from '../router/index';
-import store from '../store/index'
-import { createWebMessage } from '../utils/webMessage'
+import store from '../store/index';
+import { createWebMessage } from '../utils/webMessage';
+
+import { log } from '../utils/console'
 
 // 请求超时时间
 axios.defaults.timeout = 10000;
@@ -26,6 +28,7 @@ axios.defaults.timeout = 10000;
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
+        log(response);
         switch (response.data.code) {
             // 测试返回信息会不会弹出提示
             case 200:
