@@ -46,7 +46,11 @@
 
         methods: {
             init() {
-                this.$log(this.$api.index())
+                this.$api.index()
+                    .then(res => {
+                        this.$store.commit('website/commitInit', res.data['website_manage']);
+                        this.$store.commit('auth/commitInit', res.data['user']);
+                    });
             },
         },
     };

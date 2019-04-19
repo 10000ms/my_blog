@@ -1,10 +1,10 @@
 <template>
     <div class="side-bar-div">
-        <div class="main-profile-image-div"></div>
-        <span class="blog-name-span">{{blogName}}</span>
+        <div class="main-profile-image-div"><img :src="websiteImage" class="website-image"/></div>
+        <span class="blog-name-span">{{websiteName}}</span>
         <div class="contact-div">
-            <Icon type="logo-github" size="25"/>
-            <Icon type="ios-mail" size="25"/>
+            <a :href="github"><Icon type="logo-github" size="25"/></a>
+            <a :href="'mailto:' + email"><Icon type="ios-mail" size="25"/></a>
         </div>
         <div class="recommend-div">
             <span class="recommend-span" v-for="r in recommends" :key="r.title"
@@ -24,11 +24,12 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     export default {
         name: 'side-bar',
         data() {
             return {
-                blogName: 'asdadsd',
                 recommends: [
                     {
                         title: '1111111111111111111111111111111111111',
@@ -48,16 +49,24 @@
                     },
 
                 ],
-                ad1: 'django',
-                ad1URL: 'django',
-                ad2: 'vue',
-                ad2URL: 'vue',
             };
         },
         methods: {
             toRecommend(id) {
                 this.$log(id);
             }
+        },
+        computed: {
+            ...mapState('website', {
+                websiteName: state => state.websiteName,
+                websiteImage: state => state.websiteImage,
+                github: state => state.github,
+                email: state => state.email,
+                ad1URL: state => state.ad1URL,
+                ad1: state => state.ad1,
+                ad2URL: state => state.ad2URL,
+                ad2: state => state.ad2,
+            }),
         },
     }
 </script>
@@ -83,6 +92,7 @@
         height: 120px;
         border-radius: 999em;
         background-color: black;
+        overflow: hidden;
     }
 
     .blog-name-span {
@@ -122,6 +132,11 @@
         height: 10%;
         background-color: rgba(255, 255, 255, 0.2);
         overflow: hidden;
+    }
+
+    .website-image {
+        width: 100%;
+        height: 100%;
     }
 
     .ad-image {

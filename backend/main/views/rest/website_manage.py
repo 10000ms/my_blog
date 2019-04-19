@@ -11,7 +11,6 @@ class WebsiteManageViewSet(ModelViewSet):
 
     # website_manage 不需要分页
     pagination_class = None
-    # 这个数据库只对第一条进行操作管理
-    queryset = WebsiteManage.objects.all()[:1]
+    queryset = WebsiteManage.objects.all()
     serializer_class = WebsiteManageSerializer
     permission_classes = (IsAdminUser | ReadOnly, )

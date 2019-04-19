@@ -10,42 +10,8 @@
         methods: {
 
         },
-        computed: {
-            getWebMessages() {
-                return this.$store.state.webMessages.getMessages;
-            }
-        },
-        watch: {
-            // TODO: 不能正常使用
-            getWebMessages: {
-                // 发送提示信息方法
-                handler(newer, older) {
-                    if (newer.length > older.length) {
-                        // 增加的时候才进行处理
-                        let m = newer[0];
-                        this.$store.commit('webMessages/renewMessage');
-                        this.$log('get message');
-                        switch (m.state) {
-                            case 'info':
-                                this.$Message.info(m.message);
-                                break;
-                            case 'success':
-                                this.$Message.success(m.message);
-                                break;
-                            case 'warning':
-                                this.$Message.warning(m.message);
-                                break;
-                            case 'error':
-                                this.$Message.error(m.message);
-                                break;
-                            case 'loading':
-                                this.$Message.loading(m.message);
-                                break;
-                        }
-                    }
-                },
-                deep: true // 开启深度监听
-            },
+        mounted() {
+
         },
     }
 

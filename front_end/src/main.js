@@ -8,6 +8,7 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
 import { log } from './utils/console';
+import { axiosConfig }from './server/config';
 import Secret from './utils/secret';
 import ServerIndex from './server/index';
 
@@ -23,6 +24,9 @@ Vue.prototype.$api = ServerIndex;
 
 Vue.use(Vuex);
 Vue.use(iView);
+
+// 先绑定Message组建
+axiosConfig(Vue.prototype.$Message);
 
 new Vue({
     el: '#app',

@@ -22,8 +22,12 @@ class WebsiteManageSerializer(serializers.HyperlinkedModelSerializer):
             'ICP_number',
             'website_image',
             'ad_1',
+            'ad_1_url',
             'ad_2',
+            'ad_2_url',
             'github',
             'email',
-            'Friendship_link',
+            'friendship_link',
+            'open_register',
+            'demo_model',
         )

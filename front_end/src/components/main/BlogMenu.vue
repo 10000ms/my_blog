@@ -37,7 +37,7 @@
                         <Avatar icon="md-person" :style="avatarStyle" size="large" :src="avatarURL"/>
                     </a>
                     <DropdownMenu slot="list">
-                        <div v-if="!userName">
+                        <div v-if="! userId">
                             <DropdownItem name="login">
                                 <span class="dropdown-item color-common-white-items">
                                     登录
@@ -49,13 +49,13 @@
                                 </span>
                             </DropdownItem>
                         </div>
-                        <div v-if="userName">
+                        <div v-if="userId">
                             <DropdownItem :disabled="true">
                                 <span class="dropdown-item color-common-white-items">
-                                    欢迎：{{userName}}
+                                    欢迎：{{getFullName}}
                                 </span>
                             </DropdownItem>
-                            <DropdownItem name="admin">
+                            <DropdownItem name="admin" v-show="isSuperuser">
                                 <span class="dropdown-item color-common-white-items">
                                     管理中心
                                 </span>
@@ -76,8 +76,10 @@
 </template>
 
 <script>
-    import Login from './Login'
-    import Register from './Register'
+    import { mapState, mapGetters } from 'vuex';
+
+    import Login from './Login';
+    import Register from './Register';
 
     export default {
         name: 'BlogMenu',
@@ -97,6 +99,17 @@
                 userName: 123456,
                 avatarURL: null,
             };
+        },
+
+        computed: {
+            ...mapState('auth', {
+                userId: state => state.id,
+                isSuperuser: state => state.isSuperuser,
+            }),
+
+            ...mapGetters('auth', [
+                'getFullName',
+            ]),
         },
 
         methods: {

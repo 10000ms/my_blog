@@ -86,6 +86,7 @@ class UserViewSet(ModelViewSet):
         c = {
             'request': request,
         }
+        # TODO 抽离到model层做这个功能
         if list(filter(lambda a: a not in request.data, ['username', 'email', 'password', 'first_name', 'last_name',
                                                          'phone'])):
             raise ValidationError('必须含有username, email, password, first_name, last_name, phone')
