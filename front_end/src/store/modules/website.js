@@ -1,6 +1,6 @@
 const state = {
     aboutMe: '',
-    websiteName: '',
+    websiteName: '博客',
     ICPNumber: '',
     websiteImage: '',
     ad1: '',
@@ -17,7 +17,17 @@ const state = {
 
 const getters = {
     getFriendshipLink(state) {
-        return state.friendshipLink.split(';');
+        let raw_link = state.friendshipLink.split(';');
+        let res = [];
+        let link_id = 1;
+        for (let i = 0; i < raw_link.length; i++) {
+            res.push({
+                id: link_id,
+                link: raw_link[i]
+            })
+            link_id ++
+        }
+        return res;
     },
 };
 

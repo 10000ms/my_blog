@@ -2,7 +2,6 @@
 from django.db import models
 
 from ..middleware.current_user import get_current_user
-from .user import User
 from ..manager import blog
 from utils.model_str import str_for_model
 
@@ -10,7 +9,7 @@ from utils.model_str import str_for_model
 class Blog(models.Model):
 
     title = models.CharField('标题', max_length=256)
-    creator = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, default=get_current_user)
+    creator = models.ForeignKey('User', null=True, blank=True, on_delete=models.DO_NOTHING, default=get_current_user)
     author = models.CharField('作者', max_length=256)
     create_time = models.DateTimeField('创建时间', auto_now_add=True, editable=True)
     last_change_time = models.DateTimeField('最后修改', auto_now=True)

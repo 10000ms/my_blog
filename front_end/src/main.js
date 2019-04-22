@@ -21,7 +21,6 @@ Vue.prototype.$bus = new Vue();
 Vue.prototype.$secret = Secret;
 Vue.prototype.$api = ServerIndex;
 
-
 Vue.use(Vuex);
 Vue.use(iView);
 

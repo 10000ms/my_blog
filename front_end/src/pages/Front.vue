@@ -46,10 +46,15 @@
 
         methods: {
             init() {
-                this.$api.index()
+                let d = {
+                    mode: 'front',
+                };
+                this.$api.index(d)
                     .then(res => {
                         this.$store.commit('website/commitInit', res.data['website_manage']);
                         this.$store.commit('auth/commitInit', res.data['user']);
+                        this.$store.commit('blog/commitBlog', res.data['blog']);
+                        this.$store.commit('blog/commitBlogRecommend', res.data['blog_recommend']);
                     });
             },
         },

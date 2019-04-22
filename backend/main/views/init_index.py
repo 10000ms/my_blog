@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,32 +15,84 @@ from ..serializers.user import UserSerializer
 
 class InitIndex(APIView, PageNumberPagination):
 
-    # TODO：使用正确的缓存机制，因为其中包括登陆数据，所以需要将登陆部分出去，仅缓存blog和website_manage部分
-    # 前端根据当前页（前台还是后台），传参给本接口，获取不同的返回结果
+    # blog和blog_recommend数据缓存时间（分钟）
+    cache_minutes = 5
+
+    def _blog_from_cache(self, context):
+        """
+        获取blog信息缓存，因为信息都一样，所以context为任意用户的即可
+        """
+        b = cache.get('cache_init_index_blog')
+        if not b:
+            blog = Blog.objects.all()
+            blog_page = self.paginate_queryset(blog, self.request)
+            blog_serializer = BlogSerializer(blog_page, many=True, context=context)
+            # 同时保存分页信息
+            d = {
+                'blog': blog_serializer.data,
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link(),
+                'count': self.page.paginator.count,
+            }
+            cache.set('cache_init_index_blog', d, 60 * self.cache_minutes)
+            b = d
+        return b
+
+    def _blog_recommend_from_cache(self, context):
+        """
+        获取blog_recommend信息缓存，因为信息都一样，所以context为任意用户的即可
+        """
+        b = cache.get('cache_init_index_blog_recommend')
+        if not b:
+            blog_recommend = Blog.objects.recommend()
+            blog_recommend_serializer = BlogSerializer(blog_recommend, many=True, context=context)
+            b = blog_recommend_serializer.data
+            cache.set('cache_init_index_blog_recommend', b, 60 * self.cache_minutes)
+        return b
+
+    def _website_manage_from_cache(self, context):
+        """
+        获取website_manage信息缓存，因为信息都一样，所以context为任意用户的即可
+        """
+        w = cache.get('cache_init_index_website_manage')
+        if not w:
+            website_manage = WebsiteManage.objects.all()[:1]
+            website_manage_serializer = WebsiteManageSerializer(website_manage, many=True, context=context)
+            w = website_manage_serializer.data
+            if len(w) >= 1:
+                # 存在记录则直接返回第一条，保证返回的是字典而不是列表
+                w = website_manage_serializer.data[0]
+            cache.set('cache_init_index_website_manage', w, 60 * self.cache_minutes)
+        return w
+
     def get(self, request):
         c = {
             'request': request,
         }
-        blog = Blog.objects.all()
-        blog_page = self.paginate_queryset(blog, self.request)
-        blog_serializer = BlogSerializer(blog_page, many=True, context=c)
-        blog_recommend = Blog.objects.recommend()
-        blog_recommend_serializer = BlogSerializer(blog_recommend, many=True, context=c)
-        website_manage = WebsiteManage.objects.all()[:1]
-        website_manage_serializer = WebsiteManageSerializer(website_manage, many=True, context=c)
+        # 根据前后台返回不同的数据
+        mode = request.query_params.get('mode')
+        if not mode:
+            mode = 'front'
+        # 用户部分，通用，不缓存
         user_serializer = UserSerializer(request.user, context=c)
-        m = website_manage_serializer.data
-        if len(m) >= 1:
-            m = website_manage_serializer.data[0]
-        d = {
-            'blog': blog_serializer.data,
-            'blog_recommend': blog_recommend_serializer.data,
-            'website_manage': m,
-            'user': user_serializer.data,
-            'page': {
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link(),
-                'count': self.page.paginator.count,
-            },
-        }
+        if mode == 'front':
+            # 前台模式
+            blog = self._blog_from_cache(c)
+            d = {
+                'blog': blog['blog'],
+                'blog_recommend': self._blog_recommend_from_cache(c),
+                'website_manage': self._website_manage_from_cache(c),
+                'user': user_serializer.data,
+                'page': {
+                    'next': blog['next'],
+                    'previous': blog['previous'],
+                    'count': blog['count'],
+                },
+            }
+        else:
+            # 后台模式
+            d = {
+                'website_manage': self._website_manage_from_cache(c),
+                'user': user_serializer.data,
+            }
         return Response(create_response(data=d))

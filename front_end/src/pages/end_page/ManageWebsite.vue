@@ -75,7 +75,7 @@
         <span class="content-title-items">友情链接地址</span>
         <div class="child-input-div">
             <Input v-model="email" type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
-                   placeholder="请输入友情链接地址，;分割..." size="large" class="max-width"/>
+                   placeholder="请输入友情链接地址，;分割，前面带有前缀，http:// 等..." size="large" class="max-width"/>
         </div>
         <div class="child-input-div">
             <span class="content-title-items">是否开放注册:  </span>

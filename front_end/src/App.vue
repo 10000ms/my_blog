@@ -5,14 +5,24 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     export default {
         name: 'app',
         methods: {
 
         },
-        mounted() {
-
+        computed: {
+            ...mapState('website', {
+                websiteName: state => state.websiteName,
+            }),
         },
+        watch: {
+            websiteName(value) {
+                // 动态修改网页标题
+                document.title = value;
+            }
+        }
     }
 
 </script>
