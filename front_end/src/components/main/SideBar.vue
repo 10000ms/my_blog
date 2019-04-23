@@ -67,6 +67,10 @@
                 ad2URL: state => state.ad2URL,
                 ad2: state => state.ad2,
             }),
+
+            ...mapState('blog', {
+                blogRecommend: state => state.blogRecommend,
+            }),
         },
     }
 </script>
