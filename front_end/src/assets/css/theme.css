@@ -30,4 +30,10 @@
 .right-area {
   background-color: #ffffff;
 }
+.ivu-layout-header {
+  padding: 0;
+}
+.ivu-layout-footer {
+  padding: 0;
+}
 /*# sourceMappingURL=theme.css.map */

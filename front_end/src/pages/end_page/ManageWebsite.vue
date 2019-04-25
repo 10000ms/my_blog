@@ -100,6 +100,7 @@
 <script>
     export default {
         name: 'ManageWebsite',
+
         data() {
             return {
                 websiteName: '',
@@ -111,6 +112,7 @@
                 websiteLogo: [],
             };
         },
+
         methods: {
             submit() {
 

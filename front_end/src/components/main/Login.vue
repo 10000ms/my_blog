@@ -37,6 +37,7 @@
                 password: '',
             };
         },
+
         methods: {
             openModal() {
                 this.show = true;

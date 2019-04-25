@@ -95,8 +95,7 @@
                     'background-color': 'rgba(235, 150, 72, 0.7)',
                     'color': 'rgba(255, 255, 255, 1)',
                 },
-                // TODO： 放入vuex
-                userName: 123456,
+                // TODO： 增加这个功能
                 avatarURL: null,
             };
         },

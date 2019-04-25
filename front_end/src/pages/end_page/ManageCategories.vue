@@ -2,7 +2,13 @@
     <div class="max-width height-min-height-div">
         <div class="child-div">
             <i-table size="large" border :columns="columns7" :data="data6"></i-table>
-            <Page :total="100" :current="1" @on-change="changePage"></Page>
+            <Page
+                    :total="100"
+                    :current="1"
+                    @on-change="changePage"
+                    show-elevator
+                    show-total
+            />
         </div>
         <div class="child-div">
             <div class="category-div" v-for="c in categories" :key="c.id">
@@ -21,6 +27,7 @@
 
     export default {
         name: 'ManageBlog',
+
         data() {
             return {
                 categories: [
@@ -160,6 +167,7 @@
                 ],
             };
         },
+
         methods: {
             show(index) {
                 this.$Modal.info({

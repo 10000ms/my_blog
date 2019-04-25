@@ -9,14 +9,17 @@
 
     export default {
         name: 'app',
+
         methods: {
 
         },
+
         computed: {
             ...mapState('website', {
                 websiteName: state => state.websiteName,
             }),
         },
+
         watch: {
             websiteName(value) {
                 // 动态修改网页标题

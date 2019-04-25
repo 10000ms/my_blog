@@ -7,11 +7,13 @@
 <script>
     export default {
         name: 'TabTabs',
+
         props: {
             tab: String,
             count: Number,
             url: String,
         },
+
         methods: {
             getSize() {
                 let c = 0;
@@ -25,6 +27,7 @@
                 return c;
             },
         },
+
         computed: {
             tabStyle() {
                 return {

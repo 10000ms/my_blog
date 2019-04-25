@@ -4,21 +4,21 @@
         <side-bar></side-bar>
 
         <div class="right-main-div">
-            <layout>
-                <header>
+            <Layout>
+                <Header>
                     <!--菜单-->
                     <blog-menu></blog-menu>
-                </header>
+                </Header>
 
-                <content class="main-content">
+                <Content class="main-content">
                     <!--主要页面-->
                     <router-view/>
-                </content>
+                </Content>
 
-                <footer>
+                <Footer>
                     <blog-footer></blog-footer>
-                </footer>
-            </layout>
+                </Footer>
+            </Layout>
         </div>
 
         <!--返回顶部-->
@@ -35,13 +35,15 @@
 
     export default {
         name: 'app',
+
         components: {
             BlogMenu,
             SideBar,
             BlogFooter,
         },
+
         mounted() {
-            this.init()
+            this.init();
         },
 
         methods: {
@@ -51,10 +53,15 @@
                 };
                 this.$api.index(d)
                     .then(res => {
-                        this.$store.commit('website/commitInit', res.data['website_manage']);
+                        if (!(res.data['website_manage'] instanceof Array)) {
+                            this.$store.commit('website/commitInit', res.data['website_manage']);
+                        } else {
+                            this.$Message.warning('网站未进行初始化设置');
+                        }
                         this.$store.commit('auth/commitInit', res.data['user']);
                         this.$store.commit('blog/commitBlog', res.data['blog']);
                         this.$store.commit('blog/commitBlogRecommend', res.data['blog_recommend']);
+                        this.$store.commit('blog/commitIndexPage', res.data['page']);
                     });
             },
         },

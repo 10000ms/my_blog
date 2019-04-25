@@ -19,15 +19,18 @@
 
     export default {
         name: 'BlogFooter',
+
         data() {
             return {
 
             };
         },
+
         computed: {
             ...mapState('website', {
                 ICPNumber: state => state.ICPNumber,
             }),
+
             ...mapGetters('website', [
                 'getFriendshipLink',
             ]),

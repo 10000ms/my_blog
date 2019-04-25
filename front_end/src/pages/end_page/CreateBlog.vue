@@ -41,10 +41,11 @@
     import '../../assets/css/marked.less';
     import 'highlight.js/styles/xcode.css';
     import removeMd from 'remove-markdown';
-    import {Markdown} from '../../utils/markdown.js';
+    import { Markdown } from '../../utils/markdown.js';
 
     export default {
         name: 'CreateBlog',
+
         data() {
             return {
                 title: '',
@@ -91,6 +92,7 @@
                 ],
             };
         },
+
         methods: {
             changeAutoBrief(status) {
                 this.autoBrief = status;
@@ -108,6 +110,7 @@
 
             },
         },
+
         watch: {
             content(val) {
                 if (this.autoBrief) {
@@ -115,6 +118,7 @@
                 }
             }
         },
+
         computed: {
             compiledMarkdown() {
                 return Markdown(this.content);

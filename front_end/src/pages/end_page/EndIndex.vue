@@ -30,11 +30,13 @@
 
     export default {
         name: 'EndIndex',
+
         components: {
             BlogChart,
             InforCard,
             countTo,
         },
+
         data() {
             return {
                 ak: this.$secret.baiduMapAK,
@@ -53,6 +55,7 @@
                 mapStyle: {},
             };
         },
+
         methods: {
             addScript() {
                 let script = document.createElement('script');
@@ -160,6 +163,7 @@
                 myInmap.add(overlay);
             },
         },
+
         mounted() {
             this.addScript();
             this.addMap();

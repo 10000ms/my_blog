@@ -8,16 +8,19 @@
 
     export default {
         name: 'blogChart',
+
         data() {
             return {
                 dom: null
             }
         },
+
         methods: {
             resize() {
                 this.dom.resize()
             }
         },
+
         mounted() {
             const option = {
                 tooltip: {
@@ -112,12 +115,14 @@
                     },
                 ],
             };
+
             this.$nextTick(() => {
                 this.dom = echarts.init(this.$refs.dom);
                 this.dom.setOption(option);
                 on(window, 'resize', this.resize);
             });
         },
+
         beforeDestroy() {
             off(window, 'resize', this.resize);
         },

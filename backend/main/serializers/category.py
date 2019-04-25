@@ -4,7 +4,7 @@ from rest_framework import serializers
 from ..models.category import Category
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class BaseCategorySerializer(serializers.HyperlinkedModelSerializer):
 
     father_category_pk = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source='father_category', write_only=True, allow_null=True
@@ -41,3 +41,11 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
             'father_category_pk',
         )
         depth = 1
+
+
+class CategorySerializer(BaseCategorySerializer):
+    """
+    使得一层的father_category可以那得到id
+    """
+
+    father_category = BaseCategorySerializer(read_only=True)

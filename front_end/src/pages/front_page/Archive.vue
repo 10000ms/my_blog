@@ -16,6 +16,7 @@
 
     export default {
         name: 'Archive',
+
         components: {
             Timeline,
             TimelineItem,

@@ -18,9 +18,11 @@
 
     export default {
         name: 'InforCard',
+
         components: {
             CommonIcon
         },
+
         props: {
             left: {
                 type: Number,
@@ -43,10 +45,12 @@
                 default: false,
             },
         },
+
         computed: {
             leftWidth() {
                 return `${this.left}%`;
             },
+
             rightWidth() {
                 return `${100 - this.left}%`;
             },

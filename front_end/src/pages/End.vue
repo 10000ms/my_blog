@@ -1,20 +1,20 @@
 <template>
     <div class="main-page">
-        <layout>
-            <header>
+        <Layout>
+            <Header>
                 <!--菜单-->
                 <end-blog-menu></end-blog-menu>
-            </header>
+            </Header>
 
-            <content class="main-content">
+            <Content class="main-content">
                 <!--主要页面-->
                 <router-view/>
-            </content>
+            </Content>
 
-            <footer>
+            <Footer>
                 <blog-footer></blog-footer>
-            </footer>
-        </layout>
+            </Footer>
+        </Layout>
     </div>
 
 </template>
@@ -25,6 +25,7 @@
 
     export default {
         name: 'end',
+
         components: {
             EndBlogMenu,
             BlogFooter,

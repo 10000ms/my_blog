@@ -4,6 +4,8 @@ from rest_framework import serializers
 from ..models.blog import Blog
 from ..models.category import Category
 from ..models.tab import Tab
+from .tab import TabSerializer
+from .category import CategorySerializer
 
 
 class BaseMeta:
@@ -42,6 +44,9 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
     tabs_pk = serializers.PrimaryKeyRelatedField(
         queryset=Tab.objects.all(), source='tabs', write_only=True, many=True
     )
+
+    tabs = TabSerializer(many=True, read_only=True)
+    category = CategorySerializer(read_only=True)
 
     @staticmethod
     def validate_title(value):

@@ -3,13 +3,20 @@
         <div class="margin-bottom-20">
             <i-table size="large" border :columns="columns7" :data="data6"></i-table>
         </div>
-        <Page :total="100" :current="1" @on-change="changePage"></Page>
+        <Page
+                :total="100"
+                :current="1"
+                @on-change="changePage"
+                show-elevator
+                show-total
+        />
     </div>
 </template>
 
 <script>
     export default {
         name: 'ManageBlog',
+
         data() {
             return {
                 columns7: [
@@ -87,6 +94,7 @@
                 ],
             };
         },
+
         methods: {
             show(index) {
                 this.$Modal.info({

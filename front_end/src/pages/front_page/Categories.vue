@@ -15,6 +15,7 @@
 
     export default {
         name: 'Categories',
+
         data() {
             return {
                 // TODO：排序在服务端做
@@ -78,9 +79,11 @@
                 ],
             };
         },
+
         mounted() {
 
         },
+
         methods: {
             getLevel(categoryId) {
                 return categoryUtils.categoryGetLevel(categoryId, this.categories);
@@ -89,6 +92,7 @@
                 return categoryUtils.categoryPrintLevel(level);
             },
         },
+
         computed: {
 
         },

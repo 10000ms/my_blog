@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions
 
-from .models.website_manage import WebsiteManage
-
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """

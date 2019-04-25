@@ -1,23 +1,23 @@
 <template>
     <div class="side-bar-div">
-        <div class="main-profile-image-div"><img :src="websiteImage" class="website-image"/></div>
+        <div class="main-profile-image-div"><img :src="websiteImage" class="website-image" alt="网站头像"/></div>
         <span class="blog-name-span">{{websiteName}}</span>
         <div class="contact-div">
             <a :href="github"><Icon type="logo-github" size="25"/></a>
             <a :href="'mailto:' + email"><Icon type="ios-mail" size="25"/></a>
         </div>
         <div class="recommend-div">
-            <span class="recommend-span" v-for="r in recommends" :key="r.title"
+            <span class="recommend-span" v-for="r in blogRecommend" :key="r.id"
                   @click="toRecommend(r.id)">{{r.title}}</span>
         </div>
         <div class="ad-container-div">
             <a :href="ad1URL">
-                <img :src="ad1" class="ad-image"/>
+                <img :src="ad1" class="ad-image" alt="ad1"/>
             </a>
         </div>
         <div class="ad-container-div">
             <a :href="ad2URL">
-                <img :src="ad2" class="ad-image"/>
+                <img :src="ad2" class="ad-image" alt="ad2"/>
             </a>
         </div>
     </div>
@@ -28,34 +28,19 @@
 
     export default {
         name: 'side-bar',
+
         data() {
             return {
-                recommends: [
-                    {
-                        title: '1111111111111111111111111111111111111',
-                        id: '111111',
-                    },
-                    {
-                        title: 22222211111111,
-                        id: '222222',
-                    },
-                    {
-                        title: 333333,
-                        id: '333333',
-                    },
-                    {
-                        title: 444444,
-                        id: '444444',
-                    },
 
-                ],
             };
         },
+
         methods: {
             toRecommend(id) {
-                this.$log(id);
+                this.$router.push({name: 'blog', params: {id: id}});
             }
         },
+
         computed: {
             ...mapState('website', {
                 websiteName: state => state.websiteName,

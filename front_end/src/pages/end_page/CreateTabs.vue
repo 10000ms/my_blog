@@ -8,11 +8,13 @@
 <script>
     export default {
         name: 'CreateTabs',
+
         data() {
             return {
                 tab: '',
             };
         },
+
         methods: {
             submit() {
 

@@ -19,6 +19,7 @@
 <script>
     export default {
         name: 'CreateTabs',
+
         data() {
             return {
                 category: '',
@@ -43,6 +44,7 @@
                 ],
             };
         },
+
         methods: {
             submit() {
 

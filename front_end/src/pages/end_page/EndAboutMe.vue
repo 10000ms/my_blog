@@ -19,16 +19,19 @@
 
     export default {
         name: 'EndAboutMe',
+
         data() {
             return {
                 aboutMe: '',
             }
         },
+
         methods: {
             submit() {
 
             },
         },
+
         computed: {
             compiledMarkdown() {
                 return Markdown(this.aboutMe);

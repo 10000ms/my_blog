@@ -23,4 +23,4 @@ export const Markdown = (content) => {
             return hljs.highlightAuto(code, [lang]).value;
         }
     })
-}
+};

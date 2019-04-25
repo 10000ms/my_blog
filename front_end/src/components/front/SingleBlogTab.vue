@@ -3,22 +3,23 @@
         <div class="blog-header-div">
             <div class="read-count-div">
                 <Icon type="md-flame" size="30"/>
-                <span>{{blogData.readCount}}</span>
+                <span>{{readCount}}</span>
             </div>
             <div class="blog-title-div">
       <span class="blog-title-span color-common-black-items">
-        <router-link :to="'/' + blogData.year + '/' + blogData.month + '/' + blogData.day + '/' + blogData.did">{{blogData.title}}</router-link>
+        <router-link :to="'/blog/' + blogData.id + '/'">{{blogData.title}}</router-link>
       </span>
             </div>
             <time class="time">
-                <span class="day">29</span>
-                <span class="month">/ Dec</span>
+                <span class="day">{{getDay}}</span>
+                <span class="month">/ {{getMonth}}</span>
             </time>
         </div>
         <div class="single-blog-main-content-div">
             <div class="content color-common-black-items">{{blogData.brief}}</div>
             <div class="tabs-container">
-                <tab v-for="t in blogData.tabs" :tab="t" :key="t"></tab>
+                <!--    TODO: 做跳转-->
+                <tab v-for="t in blogData.tabs" :tab="t.title" :key="t.id"></tab>
             </div>
         </div>
     </div>
@@ -27,22 +28,43 @@
 
 <script>
     import Tab from '../main/Tab';
+    import  month  from '../../utils/month';
 
     export default {
         name: 'SingleBlogTab',
+
         components: {
             Tab,
         },
+
         props: {
             blogData: Object,
         },
+
         data() {
             return {
-
+                // 转化名称，使得符合js的标准
+                readCount: this.blogData.read_count,
+                // 获取创建时间
+                date: new Date(this.blogData.create_time),
             };
         },
-        methods: {
 
+        computed: {
+            getDay() {
+                if (this.date) {
+                    return this.date.getDate();
+                } else {
+                    return null;
+                }
+            },
+            getMonth() {
+                if (this.date) {
+                    return month.monthFromNumber(this.date.getMonth() + 1);
+                } else {
+                    return null;
+                }
+            },
         },
     }
 </script>

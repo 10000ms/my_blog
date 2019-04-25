@@ -13,6 +13,7 @@
 
     export default {
         name: 'CountTo',
+
         props: {
             init: {
                 type: Number,
@@ -107,17 +108,20 @@
                 default: '',
             },
         },
+
         data() {
             return {
                 counter: null,
                 unitText: ''
             };
         },
+
         computed: {
             counterId() {
                 return `count_to_${this._uid}`
             },
         },
+
         methods: {
             getHandleVal(val, len) {
                 return {
@@ -152,6 +156,7 @@
                 return res;
             },
         },
+
         mounted() {
             this.$nextTick(() => {
                 let endVal = this.getValue(this.end);
@@ -166,6 +171,7 @@
                 }, this.delay);
             });
         },
+
         watch: {
             end(newVal) {
                 let endVal = this.getValue(newVal);

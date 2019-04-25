@@ -12,9 +12,11 @@
 
     export default {
         name: 'Tabs',
+
         components: {
             TabTabs,
         },
+
         data() {
             return {
                 tabs: [
@@ -75,6 +77,7 @@
                 ],
             };
         },
+
         computed: {
             tabCount() {
                 return this.tabs.length;

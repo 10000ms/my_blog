@@ -8,15 +8,20 @@
 <script>
     export default {
         name: 'Tab',
+
         props: {
             tab: String,
         },
+
         data() {
             return {
 
             };
         },
-        methods: {},
+
+        methods: {
+
+        },
     }
 </script>
 

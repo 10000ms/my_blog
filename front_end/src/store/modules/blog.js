@@ -1,6 +1,7 @@
 const state = {
     blog: [],
     blogRecommend: [],
+    indexPage: [],
 };
 
 
@@ -15,6 +16,9 @@ const mutations = {
     },
     commitBlogRecommend(state, blogRecommend) {
         state.blogRecommend = blogRecommend;
+    },
+    commitIndexPage(state, indexPage) {
+        state.indexPage = indexPage;
     },
 };
 

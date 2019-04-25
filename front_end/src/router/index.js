@@ -53,7 +53,7 @@ export default new Router({
                     component: Tabs,
                 },
                 {
-                    path: ':year/:month/:day/:id',
+                    path: 'blog/:id',
                     name: 'blog',
                     component: Blog,
                 },

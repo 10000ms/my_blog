@@ -7,9 +7,11 @@
 
     export default {
         name: 'CommonIcon',
+
         components: {
             Icons,
         },
+
         props: {
             type: {
                 type: String,
@@ -18,6 +20,7 @@
             color: String,
             size: Number,
         },
+
         computed: {
             iconType() {
                 return this.type.indexOf('_') === 0 ? 'Icons' : 'Icon';
@@ -32,6 +35,7 @@
                 return this.color || '';
             },
         },
+
         methods: {
             getCustomIconName(iconName) {
                 return iconName.slice(1)
