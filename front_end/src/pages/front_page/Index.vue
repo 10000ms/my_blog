@@ -14,7 +14,6 @@
 
 <script>
     import { mapState } from 'vuex';
-    import scroll from '../../utils/scroll';
     import SingleBlogTab from '../../components/front/SingleBlogTab';
 
     export default {
@@ -33,11 +32,13 @@
 
         methods: {
             changePage(page) {
+                this.$Loading.start();
+                this.$store.commit('blog/commitBlog', []);
                 this.$api.blogs({page: page})
                     .then(res => {
                         this.$store.commit('blog/commitBlog', res.data);
-                        // 跳转页面顶部
-                        scroll.toTop();
+                        this.$store.commit('blog/commitIndexPage', res.page);
+                        this.$Loading.finish();
                     });
             },
         },

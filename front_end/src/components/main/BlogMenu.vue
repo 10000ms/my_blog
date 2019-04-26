@@ -43,7 +43,7 @@
                                     登录
                                 </span>
                             </DropdownItem>
-                            <DropdownItem name="register">
+                            <DropdownItem name="register" v-show="openRegister">
                                 <span class="dropdown-item color-common-white-items">
                                     注册
                                 </span>
@@ -60,7 +60,7 @@
                                     管理中心
                                 </span>
                             </DropdownItem>
-                            <DropdownItem>
+                            <DropdownItem name="logout">
                                 <span class="dropdown-item color-common-white-items">
                                     退出登录
                                 </span>
@@ -105,6 +105,9 @@
                 userId: state => state.id,
                 isSuperuser: state => state.isSuperuser,
             }),
+            ...mapState('website', {
+                openRegister: state => state.openRegister,
+            }),
 
             ...mapGetters('auth', [
                 'getFullName',
@@ -118,12 +121,26 @@
                         this.$refs.loginModel.openModal();
                         break;
                     case 'register':
-                        this.$refs.registerModel.openModal();
+                        if (this.openRegister) {
+                            this.$refs.registerModel.openModal();
+                        } else {
+                            this.$Message.error('本网站不开放注册')
+                        }
                         break;
                     case 'admin':
                         this.$router.push({name: 'endIndex'});
                         break;
+                    case 'logout':
+                        this.logout();
+                        break;
                 }
+            },
+            logout() {
+                this.$api.logout()
+                    .then(() => {
+                        this.$store.commit('auth/commitInit', []);
+                        this.$Message.info('已退出登录')
+                    });
             },
             selectMethod(key) {
                 // 換頁

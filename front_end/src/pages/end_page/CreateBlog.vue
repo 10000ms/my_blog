@@ -5,7 +5,7 @@
                 <Button type="success" long @click="submit" size="large">提交</Button>
             </div>
             <span class="content-title-items">标题</span>
-            <Input v-model="title" placeholder="请输入标题..." class="child-input-div" size="large"/>
+            <i-input v-model="title" placeholder="请输入标题..." class="child-input-div" size="large"/>
             <span class="content-title-items">标签</span>
             <div class="child-input-div">
                 <i-select v-model="selectTabs" class="max-width" :multiple="true" size="large">
@@ -20,7 +20,7 @@
                 </i-select>
             </div>
             <span class="content-title-items">简介</span>
-            <Input v-model="brief" placeholder="请输入简介..." type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
+            <i-input v-model="brief" placeholder="请输入简介..." type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
                    class="child-input-div" size="large"/>
             <div class="child-input-div">
                 <span class="content-title-items">是否自动生成简介:  </span>
@@ -30,7 +30,7 @@
                 </i-switch>
             </div>
             <span class="content-title-items">正文</span>
-            <Input v-model="content" placeholder="请输入正文内容..." type="textarea" :autosize="{ minRows: 10, maxRows: 100 }"
+            <i-input v-model="content" placeholder="请输入正文内容..." type="textarea" :autosize="{ minRows: 10, maxRows: 100 }"
                    size="large"/>
         </div>
         <div class="child-div markdown-div" v-html="compiledMarkdown"></div>

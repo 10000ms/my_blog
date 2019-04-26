@@ -8,7 +8,7 @@
         </div>
         <span class="content-title-items">标签</span>
         <div class="child-input-div">
-            <Input v-model="category" placeholder="请输入标签..." size="large" style="width: 100%"/>
+            <i-input v-model="category" placeholder="请输入标签..." size="large" style="width: 100%"/>
         </div>
         <div class="child-input-div">
             <Button type="success" long @click="submit" size="large">提交</Button>

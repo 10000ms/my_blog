@@ -2,11 +2,11 @@
     <div class="height-min-height-div thin-content-div">
         <span class="content-title-items">网站名</span>
         <div class="child-input-div">
-            <Input v-model="websiteName" placeholder="请输入网站名..." size="large" class="max-width"/>
+            <i-input v-model="websiteName" placeholder="请输入网站名..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">网站备案号</span>
         <div class="child-input-div">
-            <Input v-model="ICPNumber" placeholder="请输入备案号..." size="large" class="max-width"/>
+            <i-input v-model="ICPNumber" placeholder="请输入备案号..." size="large" class="max-width"/>
         </div>
         <div class="child-input-div">
             <span class="content-title-items">网站头像</span>
@@ -66,15 +66,15 @@
         </div>
         <span class="content-title-items">Github地址</span>
         <div class="child-input-div">
-            <Input v-model="githubAddress" placeholder="请输入Github地址..." size="large" class="max-width"/>
+            <i-input v-model="githubAddress" placeholder="请输入Github地址..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">邮箱地址</span>
         <div class="child-input-div">
-            <Input v-model="email" placeholder="请输入邮箱地址..." size="large" class="max-width"/>
+            <i-input v-model="email" placeholder="请输入邮箱地址..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">友情链接地址</span>
         <div class="child-input-div">
-            <Input v-model="email" type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
+            <i-input v-model="email" type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
                    placeholder="请输入友情链接地址，;分割，前面带有前缀，http:// 等..." size="large" class="max-width"/>
         </div>
         <div class="child-input-div">

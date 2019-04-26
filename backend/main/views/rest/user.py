@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db.models.query import QuerySet
+from django.contrib.auth import logout
 
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
@@ -50,6 +51,12 @@ class UserViewSet(ModelViewSet):
             return Response(create_response(data=res))
         else:
             raise ValidationError('登陆失败')
+
+    @action(detail=False, methods=['post'])
+    def logout(self, request):
+        if request.user.is_authenticated:
+            logout(request)
+        return Response(create_response(msg='登出成功'))
 
     @action(detail=False, methods=['post'])
     def register(self, request):

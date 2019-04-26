@@ -4,16 +4,19 @@
         title="Common Modal dialog box title"
         @on-ok="wantLogin"
         ok-text="登陆"
-        cancel-text="取消">
+        cancel-text="取消"
+        :loading="loading"
+        :closable="true"
+    >
         <p slot="header" :style="headerStyle">
             <span>登陆</span>
         </p>
         <div class="dialog-input-div">
             <div class="dialog-single-input-div">
-                <Input v-model="account" placeholder="账户"/>
+                <i-input v-model="account" placeholder="账户"/>
             </div>
             <div class="dialog-single-input-div">
-                <Input v-model="password" placeholder="密码" type="password"/>
+                <i-input v-model="password" placeholder="密码" type="password"/>
             </div>
         </div>
     </Modal>
@@ -35,6 +38,7 @@
                 },
                 account: '',
                 password: '',
+                loading: true,
             };
         },
 
@@ -44,7 +48,28 @@
             },
 
             wantLogin() {
-                this.$Message.info('Clicked login');
+                if (this.account.length < 6 || this.password.length < 6) {
+                    this.$Message.warning('帐号密码错误');
+                } else {
+                    let d = {
+                        username: this.account,
+                        password: this.password,
+                    };
+                    this.$api.login(d)
+                        .then(res => {
+                            this.$store.commit('auth/commitInit', res.data);
+                            this.show = false;
+                            this.$Message.info('登陆成功');
+                        })
+                        .catch(error => {
+                            this.$Message.warning(error.msg);
+                        });
+                }
+                // 关闭这一轮的loading，并且保证下一轮存在loading
+                this.loading = false;
+                this.$nextTick(() => {
+                    this.loading = true;
+                });
             },
         },
     }

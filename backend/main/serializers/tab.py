@@ -18,4 +18,5 @@ class TabSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'id',
             'title',
+            'count',
         )

@@ -27,6 +27,11 @@ Vue.use(iView);
 // 先绑定Message组建
 axiosConfig(Vue.prototype.$Message);
 
+// 配置loading条
+Vue.prototype.$Loading.config({
+    height: 5,
+});
+
 new Vue({
     el: '#app',
     router,

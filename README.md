@@ -12,11 +12,19 @@
 4. 404：未找到对应请求资源
 5. 500：服务器内部错误
 
+其他错误码参考django rest framework的错误码：[官方文档地址](https://www.django-rest-framework.org/api-guide/status-codes/)
+
 # 后端model防止错误的循环引用
 
 1. model类的ForeignKey内的使用字符串
 2. manager类不要引用model类，要使用自身model类的relation field的时候，使用self.relation_field.model来获取相关联的model
 
+# mysql数据库
+
+建表语句
+```
+CREATE DATABASE  `my_blog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
 # 备注
 ## 后端机密信息

@@ -1,6 +1,6 @@
 <template>
     <div class="height-min-height-div thin-content-div">
-        <Input v-model="tab" placeholder="请输入标签..." size="large" class="min-input"/>
+        <i-input v-model="tab" placeholder="请输入标签..." size="large" class="min-input"/>
         <Button type="success" @click="submit" size="large">提交</Button>
     </div>
 </template>
