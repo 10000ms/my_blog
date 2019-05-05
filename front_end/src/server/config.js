@@ -92,8 +92,10 @@ export const axiosConfig = function(message) {
             if (process.env.NODE_ENV === 'development') {
                 log('in development error response', error.response);
             }
-            if (error.response.status && 499 < error.response.status < 600) {
+            if (error.response.status && 499 < error.response.status && error.response.status < 600) {
                 message.error(codeMsg[500]);
+            } else if (error.response.status === 404) {
+                message.error(codeMsg[404]);
             }
             return Promise.reject(error.response);
         },

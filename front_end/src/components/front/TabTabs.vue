@@ -1,7 +1,9 @@
 <template>
-    <a :style="tabStyle" :href="url">
-        <div class="tab-div color-common-black-items">{{tab}}</div>
-    </a>
+    <div :style="tabStyle">
+        <router-link :to="'/search/' + mode + '/' + id + '/'">
+            <div class="tab-div color-common-black-items">{{tab}}</div>
+        </router-link>
+    </div>
 </template>
 
 <script>
@@ -11,20 +13,29 @@
         props: {
             tab: String,
             count: Number,
-            url: String,
+            id: Number,
+        },
+
+        data() {
+            return {
+                mode: 'tabQuery'
+            }
         },
 
         methods: {
             getSize() {
                 let c = 0;
                 if (this.count < 40) {
-                    c = parseInt(this.count / 2);
+                    c = parseInt((this.count / 2).toString());
                 } else {
                     c = 20;
                 }
                 c = 12 + c;
                 c = c.toString() + 'px';
                 return c;
+            },
+            urlFromId(id) {
+                this.$log(id);
             },
         },
 

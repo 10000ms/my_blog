@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Index from '../pages/front_page/Index';
+import searchMode from '../pages/front_page/searchMode';
 import Archive from '../pages/front_page/Archive';
 import AboutMe from '../pages/front_page/AboutMe';
 import Categories from '../pages/front_page/Categories';
@@ -31,6 +32,11 @@ export default new Router({
                     path: '',
                     name: 'index',
                     component: Index,
+                },
+                {
+                    path: 'search/:mode/:query',
+                    name: 'searchMode',
+                    component: searchMode,
                 },
                 {
                     path: 'archive',
