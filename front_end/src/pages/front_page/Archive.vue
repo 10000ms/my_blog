@@ -2,12 +2,22 @@
     <div class="thin-content-div text-align-left-div">
         <timeline>
             <timeline-item v-for="b in blogs" :key="b.id" bg-color="rgba(246, 141, 66, 1)" icon-size="large">
-                <router-link :to="'/' + b.year + '/' + b.month + '/' + b.day + '/' + b.did">
-                    <span class="time-span content-content-items">{{b.year}} - {{b.month}} - {{b.day}}:</span>
+                <router-link :to="'/blog/' + b.id + '/'">
+                    <span class="time-span content-content-items">{{getTime(b.create_time)}}:</span>
                     <span class="content-title-items">{{b.title}}</span>
                 </router-link>
             </timeline-item>
         </timeline>
+        <div class="text-align-center-div">
+            <Page
+                    :total="blogsPage['count']"
+                    :current="currentPage"
+                    @on-change="changePage"
+                    v-if="blogsPage['count'] > 10"
+                    show-elevator
+                    show-total
+            />
+        </div>
     </div>
 </template>
 
@@ -24,91 +34,51 @@
 
         data() {
             return {
-                blogs: [
-                    {
-                        id: 1,
-                        title: '阿速達熟讀阿薩德',
-                        tabs: ['11111', '222222', '33333'],
-                        brief: 'asddddddddddddddasdadadada',
-                        postTime: '2018-10-10',
-                        author: 'asdsadas',
-                        year: 2018,
-                        month: 9,
-                        day: 7,
-                        did: 2,
-                        readCount: 100,
-                    },
-                    {
-                        id: 2,
-                        title: '阿水暖搜安娜上锁部分把的速度',
-                        tabs: ['11111', '222222', '33333'],
-                        brief: 'asddddddddddddddasdadadada',
-                        postTime: '2018-10-10',
-                        author: 'asdsadas',
-                        year: 2018,
-                        month: 10,
-                        day: 2,
-                        did: 2,
-                        readCount: 5,
-                    },
-                    {
-                        id: 3,
-                        title: '阿森纳新组成必备的补习班补补刀',
-                        tabs: ['11111', '222222', '33333'],
-                        brief: 'asddddddddddddddasdadadada',
-                        postTime: '2018-10-10',
-                        author: 'asdsadas',
-                        year: 2018,
-                        month: 10,
-                        day: 2,
-                        did: 2,
-                        url: 'asdadasdad',
-                        readCount: 0,
-                    },
-                    {
-                        id: 4,
-                        title: 'asdasdad',
-                        tabs: ['11111', '222222', '33333'],
-                        brief: 'asddddddddddddddasdadadada',
-                        postTime: '2018-10-10',
-                        author: 'asdsadas',
-                        year: 2018,
-                        month: 10,
-                        day: 2,
-                        did: 2,
-                        url: 'asdadasdad',
-                        readCount: 1000,
-                    },
-                    {
-                        id: 5,
-                        title: 'asdasdad',
-                        tabs: ['11111', '222222', '33333'],
-                        brief: 'asddddddddddddddasdadadada',
-                        postTime: '2018-10-10',
-                        author: 'asdsadas',
-                        year: 2018,
-                        month: 10,
-                        day: 2,
-                        did: 2,
-                        url: 'asdadasdad',
-                        readCount: 999,
-                    },
-                    {
-                        id: 6,
-                        title: 'asdasdad',
-                        tabs: ['11111', '222222', '33333'],
-                        brief: 'asddddddddddddddasdadadada',
-                        postTime: '2018-10-10',
-                        author: 'asdsadas',
-                        year: 2018,
-                        month: 10,
-                        day: 2,
-                        did: 2,
-                        url: 'asdadasdad',
-                        readCount: 264,
-                    },
-                ],
+                blogs: [],
+                blogsPage: {},
+                currentPage: 1,
             };
+        },
+
+        mounted() {
+            this.init();
+        },
+
+        methods: {
+            init() {
+                this.dataFromServer();
+            },
+
+            changePage(page) {
+                this.dataFromServer(page);
+            },
+
+            dataFromServer(page=null) {
+                let dict = {};
+                if (page) {
+                    dict.page = page
+                }
+                this.$Loading.start();
+                this.$api.blogs({page: page})
+                    .then(res => {
+                        this.blogs = res.data;
+                        this.blogsPage = res.page;
+                        this.$Loading.finish();
+                    });
+            },
+
+            /**
+             * 获取时间字符串
+             * @param timeString
+             * @returns {string}
+             */
+            getTime(timeString) {
+                let date = new Date(timeString);
+                let year = date.getFullYear().toString();
+                let month = (date.getMonth() + 1).toString();
+                let day = date.getDate().toString();
+                return `${year} - ${month} - ${day}`;
+            },
         },
     }
 </script>

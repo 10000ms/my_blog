@@ -3,11 +3,17 @@ from django.db import models
 
 from utils.model_str import str_for_model
 
+from .blog import Blog
+
 
 class Category(models.Model):
 
     title = models.CharField('分类', max_length=30)
     father_category = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
+
+    @property
+    def count(self):
+        return Blog.objects.count_category(self.id)
 
     def category_index(self):
         """

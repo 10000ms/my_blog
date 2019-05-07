@@ -12,13 +12,26 @@
 
         data() {
             return {
-                AboutMe: '',
+                aboutMe: '',
             };
+        },
+
+        mounted() {
+            this.init()
+        },
+
+        methods: {
+            init() {
+                this.$api.aboutMe()
+                    .then(res => {
+                        this.aboutMe = res.data['about_me'];
+                    });
+            },
         },
 
         computed: {
             compiledMarkdown: function () {
-                return Markdown(this.AboutMe);
+                return Markdown(this.aboutMe);
             },
         },
     }

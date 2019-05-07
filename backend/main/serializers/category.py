@@ -39,6 +39,7 @@ class BaseCategorySerializer(serializers.HyperlinkedModelSerializer):
             'title',
             'father_category',
             'father_category_pk',
+            'count',
         )
         depth = 1
 

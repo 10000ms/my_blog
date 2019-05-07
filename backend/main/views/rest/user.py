@@ -46,7 +46,7 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def login(self, request):
-        if User.custom_objects.custom_login(request) is True:
+        if User.objects.custom_login(request) is True:
             res = UserSerializer(request.user, context={'request': request}).data
             return Response(create_response(data=res))
         else:
@@ -64,7 +64,7 @@ class UserViewSet(ModelViewSet):
         p = WebsiteManage.objects.all()[:1]
         if len(p) == 0 or not p.open_register:
             raise PermissionDenied('本网站不开放注册')
-        if User.custom_objects.custom_register(request) is True:
+        if User.objects.custom_register(request) is True:
             res = UserSerializer(request.user, context={'request': request}).data
             return Response(create_response(data=res))
         else:

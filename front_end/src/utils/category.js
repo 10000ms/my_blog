@@ -3,9 +3,9 @@ export default {
         for (let i = 0; i < categories.length; i++) {
             let c = categories[i];
             if (c.id === categoryId) {
-                if (c.fid !== 0) {
+                if (c.father_category !== null) {
                     nowLevel++;
-                    nowLevel = this.categoryGetLevel(c.fid, categories, nowLevel);
+                    nowLevel = this.categoryGetLevel(c.father_category.id, categories, nowLevel);
                     break;
                 }
             }

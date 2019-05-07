@@ -139,7 +139,6 @@
             },
             recommend(index) {
                 this.$log(index)
-
             },
             changePage() {
 

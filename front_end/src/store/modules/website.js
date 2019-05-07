@@ -1,5 +1,4 @@
 const state = {
-    aboutMe: '',
     websiteName: '博客',
     ICPNumber: '',
     websiteImage: '',
@@ -16,6 +15,11 @@ const state = {
 
 
 const getters = {
+    /**
+     * 获取友联
+     * @param state
+     * @returns {Array}
+     */
     getFriendshipLink(state) {
         let raw_link = state.friendshipLink.split(';');
         let res = [];
@@ -35,7 +39,6 @@ const getters = {
 const mutations = {
     commitInit(state, website_manage) {
         if (website_manage) {
-            state.aboutMe = website_manage['about_me'];
             state.websiteName = website_manage['website_name'];
             state.ICPNumber = website_manage['ICP_number'];
             state.websiteImage = website_manage['website_image'];

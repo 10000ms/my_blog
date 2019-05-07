@@ -1,5 +1,6 @@
 <template>
     <div>
+        <span class="content-title-items" v-show="isEmpty">没有对应查询结果</span>
         <single-blog-tab v-for="b in blogs" :blogData="b" :key="b.id"></single-blog-tab>
         <Page
                 :total="blogCount"
@@ -26,9 +27,10 @@
             return {
                 currentPage: 1,
                 blogs: [],
-                blogsPage: [],
-                mode: '',
-                query: '',
+                blogsPage: {},
+                mode: this.$route.params.mode,
+                query: this.$route.params.query,
+                isEmpty: false,
             };
         },
 
@@ -38,38 +40,37 @@
 
         methods: {
             init() {
-                this.mode = this.$route.params.mode;
-                this.query = this.$route.params.query;
-                let queryDict = {
-                    query: this.query,
-                };
-                this.$api[this.mode](queryDict)
-                    .then(res => {
-                        this.blogs = res.data;
-                        this.blogsPage = res.page;
-                        this.$Loading.finish();
-                    });
-
+                this.dataFromServer();
             },
+
             changePage(page) {
-                this.$Loading.start();
-                this.blogs = [];
+                this.dataFromServer(page);
+            },
+
+            dataFromServer(page=null) {
                 let queryDict = {
-                    page: page,
                     query: this.query,
                 };
+                if (page) {
+                    queryDict.page = page
+                }
+                this.$Loading.start();
                 this.$api[this.mode](queryDict)
                     .then(res => {
                         this.blogs = res.data;
                         this.blogsPage = res.page;
                         this.$Loading.finish();
+                        if (this.blogs.length === 0) {
+                            // 没有结果返回显示空
+                            this.isEmpty = true;
+                        }
                     });
             },
         },
 
         computed: {
             blogCount() {
-                if (this.blogsPage.length > 0) {
+                if ('count' in this.blogsPage) {
                     return this.blogsPage['count'];
                 } else {
                     return 0;

@@ -18,7 +18,7 @@
 
         data() {
             return {
-                mode: 'tabQuery'
+                mode: 'tabQuery',
             }
         },
 
@@ -33,9 +33,6 @@
                 c = 12 + c;
                 c = c.toString() + 'px';
                 return c;
-            },
-            urlFromId(id) {
-                this.$log(id);
             },
         },
 

@@ -1,8 +1,10 @@
 <template>
-    <div>
-        <Icon type="ios-pricetag"/>
-        <span class="tab-span">{{tab}}</span>
-    </div>
+    <router-link :to="'/search/' + mode + '/' + id + '/'">
+        <div>
+            <Icon type="ios-pricetag"/>
+            <span class="tab-span">{{tab}}</span>
+        </div>
+    </router-link>
 </template>
 
 <script>
@@ -11,11 +13,12 @@
 
         props: {
             tab: String,
+            id: Number,
         },
 
         data() {
             return {
-
+                mode: 'tabQuery',
             };
         },
 

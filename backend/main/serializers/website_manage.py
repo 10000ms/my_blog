@@ -17,7 +17,6 @@ class WebsiteManageSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url',
             'id',
-            'about_me',
             'website_name',
             'ICP_number',
             'website_image',

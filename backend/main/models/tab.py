@@ -12,10 +12,10 @@ class Tab(models.Model):
 
     @property
     def count(self):
-        return Blog.objects.filter(tabs__id__contains=self.id).count()
+        return Blog.objects.count_tabs(self.id)
 
     def __str__(self):
         return str_for_model(self)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['id']

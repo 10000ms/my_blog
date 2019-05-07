@@ -2,9 +2,13 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 
 from ...serializers.category import CategorySerializer
 from ...models.category import Category
+from ...serializers.blog import BlogSerializer
+from ...models.blog import Blog
+from .blog import BlogViewSet
 
 
 class CategoryViewSet(ModelViewSet):
@@ -32,3 +36,12 @@ class CategoryViewSet(ModelViewSet):
         serializer.instance = sorted(queryset, key=lambda c: c.category_index())
 
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def query(self, request):
+        query_id = int(request.query_params.get('query'))
+        blog = Blog.objects.query_category(query_id)
+        page_class = BlogViewSet.pagination_class()
+        blog_page = page_class.paginate_queryset(blog, request)
+        blog_serializer = BlogSerializer(blog_page, many=True, context={'request': request})
+        return page_class.get_paginated_response(blog_serializer.data)

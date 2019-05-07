@@ -18,8 +18,7 @@
         <div class="single-blog-main-content-div">
             <div class="content color-common-black-items">{{blogData.brief}}</div>
             <div class="tabs-container">
-                <!--    TODO: 做跳转-->
-                <tab v-for="t in blogData.tabs" :tab="t.title" :key="t.id"></tab>
+                <tab v-for="t in blogData.tabs" :tab="t.title" :id="t.id" :key="t.id"></tab>
             </div>
         </div>
     </div>

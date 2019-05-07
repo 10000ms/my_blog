@@ -9,15 +9,15 @@ import Blog from '../pages/front_page/Blog';
 import Tabs from '../pages/front_page/Tabs';
 import Front from '../pages/Front';
 import End from '../pages/End';
-import EndIndex from '../pages/end_page/EndIndex'
-import CreateBlog from '../pages/end_page/CreateBlog'
-import ManageBlog from '../pages/end_page/ManageBlog'
-import CreateTabs from '../pages/end_page/CreateTabs'
-import ManageTabs from '../pages/end_page/ManageTabs'
-import CreateCategories from '../pages/end_page/CreateCategories'
-import ManageCategories from '../pages/end_page/ManageCategories'
-import EndAboutMe from '../pages/end_page/EndAboutMe'
-import ManageWebsite from '../pages/end_page/ManageWebsite'
+import EndIndex from '../pages/end_page/EndIndex';
+import CreateBlog from '../pages/end_page/CreateBlog';
+import ManageBlog from '../pages/end_page/ManageBlog';
+import CreateTabs from '../pages/end_page/CreateTabs';
+import ManageTabs from '../pages/end_page/ManageTabs';
+import CreateCategories from '../pages/end_page/CreateCategories';
+import ManageCategories from '../pages/end_page/ManageCategories';
+import EndAboutMe from '../pages/end_page/EndAboutMe';
+import ManageWebsite from '../pages/end_page/ManageWebsite';
 
 Vue.use(Router);
 

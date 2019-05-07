@@ -21,7 +21,7 @@ class TabViewSet(ModelViewSet):
     @action(detail=False, methods=['get'])
     def query(self, request):
         query_id = int(request.query_params.get('query'))
-        blog = Blog.objects.filter(tabs__id__contains=query_id)
+        blog = Blog.objects.query_tab(query_id)
         page_class = BlogViewSet.pagination_class()
         blog_page = page_class.paginate_queryset(blog, request)
         blog_serializer = BlogSerializer(blog_page, many=True, context={'request': request})
