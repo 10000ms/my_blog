@@ -117,4 +117,7 @@ a {
   height: 100px;
   line-height: 100px;
 }
+.block-item {
+  display: block;
+}
 /*# sourceMappingURL=common.css.map */

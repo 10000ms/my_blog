@@ -2,19 +2,17 @@
 from rest_framework import serializers
 
 from ..models.comment import Comment
-from ..models.user import User
 from ..models.blog import Blog
+from .user import UserSerializer
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
-    creator_pk = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), source='creator', write_only=True
+    blog_pk = serializers.PrimaryKeyRelatedField(
+        queryset=Blog.objects.all(), source='blog', write_only=True, required=False
     )
 
-    blog_pk = serializers.PrimaryKeyRelatedField(
-        queryset=Blog.objects.all(), source='blog', write_only=True
-    )
+    creator = UserSerializer(read_only=True)
 
     @staticmethod
     def validate_title(value):
@@ -35,7 +33,6 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'title',
             'creator',
-            'creator_pk',
             'blog',
             'blog_pk',
             'content',

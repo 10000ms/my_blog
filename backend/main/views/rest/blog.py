@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from ...serializers.blog import (
     BlogSerializer,
@@ -7,6 +10,7 @@ from ...serializers.blog import (
 )
 from ...permissions import IsAuthorOrReadOnly
 from ...models.blog import Blog
+from utils.api_common import create_response
 
 
 class BlogViewSet(ModelViewSet):
@@ -32,3 +36,9 @@ class BlogViewSet(ModelViewSet):
         if self.request.user.is_staff:
             return self.manage_serializer_class
         return self.serializer_class
+
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    def heart(self, request):
+        blog_id = int(request.data['id'])
+        Blog.objects.heart(blog_id)
+        return Response(create_response())

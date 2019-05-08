@@ -1,5 +1,5 @@
 <template>
-    <div class="single-blog-div color-common-black-items">
+    <div class="single-content-div color-common-black-items">
         <div class="blog-header-div">
             <div class="read-count-div">
                 <Icon type="md-flame" size="30"/>
@@ -69,7 +69,7 @@
 </script>
 
 <style scoped>
-    .single-blog-div {
+    .single-content-div {
         width: 95%;
         margin: 0 auto 20px auto;
         background-color: #ffffff;

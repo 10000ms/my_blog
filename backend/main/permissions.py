@@ -22,3 +22,16 @@ class ReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return bool(request.method in permissions.SAFE_METHODS)
+
+
+class IsCreatorOrReadOnly(permissions.BasePermission):
+    """
+    只允许创建者编辑
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # 允许所有非修改的安全方法
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # 剩下的修改非安全方法只允许创建者进行修改
+        return obj.creator == request.user

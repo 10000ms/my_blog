@@ -1,7 +1,7 @@
 <template>
     <router-link :to="'/search/' + mode + '/' + id + '/'">
         <div>
-            <Icon type="ios-pricetag"/>
+            <Icon type="ios-pricetag" color="#999"/>
             <span class="tab-span">{{tab}}</span>
         </div>
     </router-link>

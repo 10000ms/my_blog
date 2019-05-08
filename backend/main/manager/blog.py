@@ -18,3 +18,8 @@ class BlogManager(models.Manager):
 
     def count_category(self, category_id):
         return self.filter(category__id=category_id).count()
+
+    def heart(self, blog_id):
+        b = self.get(id=blog_id)
+        b.like_count += 1
+        b.save()

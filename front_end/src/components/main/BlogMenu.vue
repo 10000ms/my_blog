@@ -83,7 +83,10 @@
 
     export default {
         name: 'BlogMenu',
-        components: {Register, Login},
+        components: {
+            Register,
+            Login,
+        },
 
         data() {
             return {

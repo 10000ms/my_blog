@@ -8,7 +8,7 @@ class CustomJSONRenderer(JSONRenderer):
 
     def render(self, data, accepted_media_type=None, renderer_context=None):
         # 已经有对应格式的返回不进行改写
-        if 'code' in data and 'msg' in data:
+        if data and 'code' in data and 'msg' in data:
             response_data = data
         else:
             response_data = create_response(data=data)

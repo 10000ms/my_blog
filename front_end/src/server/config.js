@@ -41,8 +41,9 @@ const getMsg = function(response) {
 export const axiosConfig = function(message) {
     // 请求超时时间
     axios.defaults.timeout = 10000;
-    // post请求头
+    // 请求头
     axios.defaults.headers.post['Content-Type'] = 'application/json';
+    axios.defaults.headers.put['Content-Type'] = 'application/json';
 
     // // 请求拦截器, 添加头部X-CSRFTOKEN
     axios.interceptors.request.use(
@@ -96,6 +97,8 @@ export const axiosConfig = function(message) {
                 message.error(codeMsg[500]);
             } else if (error.response.status === 404) {
                 message.error(codeMsg[404]);
+            } else if (error.response.status === 403) {
+                message.error(codeMsg[403]);
             }
             return Promise.reject(error.response);
         },
