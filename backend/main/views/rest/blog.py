@@ -58,7 +58,7 @@ class BlogViewSet(ModelViewSet):
         Blog.objects.add_recommend(blog_id)
         return Response(create_response())
 
-    @action(detail=False, methods=['post'], url_path='add-recommend', permission_classes=[IsAdminUser])
+    @action(detail=False, methods=['post'], url_path='cancel-recommend', permission_classes=[IsAdminUser])
     def cancel_recommend(self, request):
         blog_id = int(request.data['id'])
         Blog.objects.cancel_recommend(blog_id)

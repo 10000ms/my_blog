@@ -19,6 +19,8 @@ export default {
     aboutMe: () => get('api/about-me/', null),
 
     createBlog: p => post(`api/blog/`, p),
+    changeBlog: (id, p) => put(`api/blog/${id}/`, p),
+    deleteBlog: id => deleteAjax(`api/blog/${id}/`, null),
     addRecommend: p => post('api/blog/add-recommend/', p),
     cancelRecommend: p => post('api/blog/cancel-recommend/', p),
 }

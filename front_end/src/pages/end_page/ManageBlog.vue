@@ -11,6 +11,15 @@
                 show-elevator
                 show-total
         />
+        <Modal
+                v-model="deleteModal"
+                title="删除警告"
+                @on-ok="doRemove"
+                :closable="true"
+                scrollable
+        >
+            <p>是否确定删除，删除后不可恢复！</p>
+        </Modal>
     </div>
 </template>
 
@@ -116,6 +125,8 @@
                 blogs: [],
                 blogsPage: {},
                 currentPage: 1,
+                deleteModal: false,
+                deleteModalId: null,
             };
         },
 
@@ -155,20 +166,56 @@
                 this.dataFromServer(page);
             },
 
-            change(index) {
-                this.$log('in change', index);
+            change(blogId) {
+                this.$router.push({name: 'change-blog', params: {mode: 'change'}, query: {id: blogId}});
             },
 
-            remove(index) {
-                this.$log('in remove', index);
+            /**
+             * 因为删除是危险方法，所以需要再次确认再进行删除
+             */
+            remove(blogId) {
+                this.deleteModalId = blogId;
+                this.deleteModal = true;
             },
 
-            recommend(index) {
-                this.$log('in recommend', index);
+            /**
+             * 真正执行删除方法
+             */
+            doRemove() {
+                if (this.deleteModalId) {
+                    this.$api.deleteBlog(this.deleteModalId)
+                        .then(() => {
+                            this.$Message.info('删除成功');
+                            // 重置页面数据
+                            this.dataFromServer(this.currentPage);
+                            // 清空删除id数据
+                            this.deleteModalId = null;
+                        })
+                }
             },
 
-            cancelRecommend(index) {
-                this.$log('in cancelRecommend', index);
+            recommend(blogId) {
+                let dict = {
+                    id: blogId,
+                };
+                this.$api.addRecommend(dict)
+                    .then(() => {
+                        this.$Message.info('设置推荐成功');
+                        // 重置页面数据
+                        this.dataFromServer(this.currentPage);
+                    })
+            },
+
+            cancelRecommend(blogId) {
+                let dict = {
+                    id: blogId,
+                };
+                this.$api.cancelRecommend(dict)
+                    .then(() => {
+                        this.$Message.info('取消推荐成功');
+                        // 重置页面数据
+                        this.dataFromServer(this.currentPage);
+                    })
             },
         }
     }

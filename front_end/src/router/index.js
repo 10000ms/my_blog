@@ -10,7 +10,7 @@ import Tabs from '../pages/front_page/Tabs';
 import Front from '../pages/Front';
 import End from '../pages/End';
 import EndIndex from '../pages/end_page/EndIndex';
-import CreateBlog from '../pages/end_page/CreateBlog';
+import BlogOperation from '../pages/end_page/BlogOperation';
 import ManageBlog from '../pages/end_page/ManageBlog';
 import CreateTabs from '../pages/end_page/CreateTabs';
 import ManageTabs from '../pages/end_page/ManageTabs';
@@ -77,7 +77,13 @@ export default new Router({
                 {
                     path: 'create-blog',
                     name: 'create-blog',
-                    component: CreateBlog,
+                    component: BlogOperation,
+                },
+                {
+                    path: 'change-blog/:mode',
+                    name: 'change-blog',
+                    component: BlogOperation,
+                    params: {mode: 'change'},
                 },
                 {
                     path: 'manage-blog',
