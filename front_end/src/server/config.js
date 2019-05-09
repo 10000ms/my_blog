@@ -65,26 +65,28 @@ export const axiosConfig = function(message) {
             if (process.env.NODE_ENV === 'development') {
                 log('in development response', response);
             }
-            let m = getMsg(response);
-            switch (response.data.code) {
-                case 400:
-                    message.error(m);
-                    return Promise.reject(response);
-                case 403:
-                    message.warning(m);
-                    router.push({
-                        path: '/',
-                    });
-                    return Promise.reject(response);
-                case 404:
-                    message.warning(m);
-                    router.push({
-                        path: '/',
-                    });
-                    return Promise.reject(response);
-                case 500:
-                    message.error(m);
-                    return
+            if (response.status < 200 || response.status > 299) {
+                let m = getMsg(response);
+                switch (response.data.code) {
+                    case 400:
+                        message.error(m);
+                        return Promise.reject(response);
+                    case 403:
+                        message.warning(m);
+                        router.push({
+                            path: '/',
+                        });
+                        return Promise.reject(response);
+                    case 404:
+                        message.warning(m);
+                        router.push({
+                            path: '/',
+                        });
+                        return Promise.reject(response);
+                    case 500:
+                        message.error(m);
+                        return
+                }
             }
             return Promise.resolve(response);
         },

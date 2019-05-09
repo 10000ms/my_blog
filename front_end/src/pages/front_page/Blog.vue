@@ -20,9 +20,12 @@
             <div class="content-title-items thin-content-div text-align-left-div comment-title-div">
                 <span>Comment: </span>
                 <span v-if="comments.length === 0">Empty</span>
-                <Button type="primary" ghost class="operation-button" @click="addComment">Add comment</Button>
+                <Button v-if="loginUserId" type="primary" ghost class="operation-button" @click="addComment">
+                    Add comment
+                </Button>
+                <Button v-if="!loginUserId" type="primary" ghost class="operation-button">登录之后添加评论</Button>
             </div>
-            <comment v-for="c in comments" :key="c.id" :commentData="c"></comment>
+            <comment v-for="c in comments" :key="c.id" :commentData="c" v-on:renewComment="renewComment()"></comment>
             <Page
                     :total="indexPage['count']"
                     :current="currentPage"
@@ -31,7 +34,7 @@
                     show-elevator
                     show-total
             />
-            <comment-operation ref="CommentOperationModel" :blogId="id"></comment-operation>
+            <comment-operation ref="CommentOperationModel" :blogId="id" v-on:renewComment="getCommentData()"></comment-operation>
         </div>
     </div>
 </template>
@@ -40,6 +43,9 @@
     import '../../assets/css/marked.less';
     import 'highlight.js/styles/xcode.css';
     import { Markdown } from '../../utils/markdown.js';
+    import time from '../../utils/time.js';
+
+    import { mapState } from 'vuex';
 
     import Comment from '../../components/front/Comment';
     import CommentOperation from '../../components/front/CommentOperation';
@@ -79,7 +85,7 @@
                         this.id = res.data.id;
                         this.title = res.data.title;
                         this.content = res.data.content;
-                        this.time = this.getTimeString(res.data.create_time);
+                        this.time = time.getTimeString(res.data.create_time);
                         this.author = res.data.author;
                         this.category = res.data.category.title;
                         this.like = res.data.like_count;
@@ -100,25 +106,6 @@
                         this.indexPage = res.page;
                         this.$Loading.finish();
                     });
-            },
-
-            getTimeString(timeString) {
-                let date = new Date(timeString);
-                let year = date.getFullYear().toString();
-                let month = (date.getMonth() + 1).toString();
-                if (month.length < 2) {
-                    month = '0' + month;
-                }
-                let day = date.getDate().toString();
-                if (day.length < 2) {
-                    day = '0' + day;
-                }
-                let hour = date.getHours().toString();
-                let minute = date.getMinutes().toString();
-                if (minute.length < 2) {
-                    minute = '0' + minute;
-                }
-                return `${year} - ${month} - ${day} ${hour}:${minute}`;
             },
 
             /**
@@ -144,6 +131,9 @@
             },
 
             getCommentData(page=null) {
+                // this.$Loading.start();
+                this.comments = [];
+                this.indexPage = {};
                 let dict = {
                     id: this.id,
                 };
@@ -154,6 +144,7 @@
                     .then(res => {
                         this.comments = res.data;
                         this.indexPage = res.page;
+                        // this.$Loading.finish();
                     })
             },
 
@@ -166,6 +157,10 @@
             compiledMarkdown() {
                 return Markdown(this.content);
             },
+
+            ...mapState('auth', {
+                loginUserId: state => state.id,
+            }),
         },
     }
 </script>

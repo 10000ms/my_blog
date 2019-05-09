@@ -17,7 +17,13 @@
             <span class="content-title-span block-item">Comment:</span>
             <span class="content-content-items" style="white-space: pre;">{{content}}</span>
         </div>
-        <comment-operation ref="CommentOperationModel" :commentData="commentData" mode="change"></comment-operation>
+        <comment-operation
+                ref="CommentOperationModel"
+                :commentData="commentData"
+                mode="change"
+                v-on:renewComment="$emit('renewComment')"
+        >
+        </comment-operation>
     </div>
 </template>
 
@@ -58,8 +64,9 @@
 
             deleteComment() {
                 this.$api.deleteComment(this.id)
-                    .then(res => {
-                        this.$log(res);
+                    .then(() => {
+                        this.$Message.info('删除评论成功');
+                        this.$emit('renewComment');
                     })
                     .catch(error => {
                         this.$Message.warning(error.msg);

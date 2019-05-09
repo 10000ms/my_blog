@@ -5,6 +5,7 @@
         @on-ok="submitComment"
         :loading="loading"
         :closable="true"
+        scrollable
     >
         <p slot="header" :style="headerStyle">
             <span>{{showTitle}}</span>
@@ -21,6 +22,8 @@
 </template>
 
 <script>
+    import message from '../../utils/message';
+
     export default {
         name: 'CommentOperation',
 
@@ -29,10 +32,12 @@
                 type: Object,
                 require: false,
             },
+
             blogId: {
                 type: Number,
                 require: false,
             },
+
             mode: {
                 type: String,
                 default: 'create',
@@ -91,9 +96,11 @@
                         .then(() => {
                             this.$Message.info('修改成功');
                             this.show = false;
+                            // 发送事件
+                            this.$emit('renewComment');
                         })
                         .catch(error => {
-                            this.$Message.warning(error.msg);
+                            message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 }
                 // 关闭这一轮的loading，并且保证下一轮存在loading
@@ -104,8 +111,13 @@
             },
 
             createSubmitComment() {
-                if (this.title.length < 2 || this.content.length < 2) {
-                    this.$Message.warning('标题或内容长度太短');
+                if (
+                    this.title.length < 2
+                    || this.content.length < 2
+                    || this.title.length > 15
+                    || this.content.length > 1000
+                ) {
+                    this.$Message.warning('标题或内容长度太长或太短');
                 } else {
                     let d = {
                         blog_pk: this.blogId,
@@ -116,9 +128,11 @@
                         .then(() => {
                             this.$Message.info('评论成功');
                             this.show = false;
+                            // 发送事件
+                            this.$emit('renewComment');
                         })
                         .catch(error => {
-                            this.$Message.warning(error.msg);
+                            message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 }
                 // 关闭这一轮的loading，并且保证下一轮存在loading

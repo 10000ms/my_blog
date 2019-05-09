@@ -6,16 +6,18 @@
             </div>
             <span class="content-title-items">标题</span>
             <i-input v-model="title" placeholder="请输入标题..." class="child-input-div" size="large"/>
+            <span class="content-title-items">作者</span>
+            <i-input v-model="author" placeholder="请输入作者..." class="child-input-div" size="large"/>
             <span class="content-title-items">标签</span>
             <div class="child-input-div">
                 <i-select v-model="selectTabs" class="max-width" :multiple="true" size="large">
-                    <i-option v-for="item in tabs" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    <i-option v-for="item in tabs" :value="item.id" :key="item.id">{{ item.title }}</i-option>
                 </i-select>
             </div>
             <span class="content-title-items">分类</span>
             <div class="child-input-div">
                 <i-select v-model="selectCategories" class="max-width" size="large">
-                    <i-option v-for="item in categories" :value="item.value" :key="item.value">{{ item.label }}
+                    <i-option v-for="item in categories" :value="item.id" :key="item.id">{{ item.title }}
                     </i-option>
                 </i-select>
             </div>
@@ -43,6 +45,8 @@
     import removeMd from 'remove-markdown';
     import { Markdown } from '../../utils/markdown.js';
 
+    import message from '../../utils/message';
+
     export default {
         name: 'CreateBlog',
 
@@ -51,52 +55,35 @@
                 title: '',
                 brief: '',
                 content: '',
+                author: '',
                 autoBrief: true,
                 selectTabs: [],
                 selectCategories: '',
-                tabs: [
-                    {
-                        value: 'New York1',
-                        label: 'New York1',
-                    },
-                    {
-                        value: 'New York2',
-                        label: 'New York2',
-                    },
-                    {
-                        value: 'New York3',
-                        label: 'New York3',
-                    },
-                    {
-                        value: 'New York4',
-                        label: 'New York4',
-                    },
-                ],
-                categories: [
-                    {
-                        value: 'New York1',
-                        label: 'New York1',
-                    },
-                    {
-                        value: 'New York2',
-                        label: 'New York2',
-                    },
-                    {
-                        value: 'New York3',
-                        label: 'New York3',
-                    },
-                    {
-                        value: 'New York4',
-                        label: 'New York4',
-                    },
-                ],
+                tabs: [],
+                categories: [],
             };
         },
 
+        mounted() {
+            this.init();
+        },
+
         methods: {
+            init() {
+                this.$api.tab()
+                    .then(res => {
+                        this.tabs = res.data;
+                    });
+                this.$api.category()
+                    .then(res => {
+                        this.categories = res.data;
+                    });
+            },
+
             changeAutoBrief(status) {
                 this.autoBrief = status;
             },
+
             getBrief(val) {
                 let res = '';
                 if (val.length > 200) {
@@ -106,8 +93,24 @@
                 }
                 return removeMd(res);
             },
-            submit() {
 
+            submit() {
+                let d = {
+                    title: this.title,
+                    author: this.author,
+                    brief: this.brief,
+                    content: this.content,
+                    tabs_pk: this.selectTabs,
+                    category_pk: this.selectCategories,
+                };
+                this.$api.createBlog(d)
+                    .then(() => {
+                        this.$Message.info('发表成功');
+                        this.$router.push({name: 'manage-blog'});
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
         },
 

@@ -1,12 +1,13 @@
 <template>
     <div class="thin-content-div height-min-height-div">
         <div class="margin-bottom-20">
-            <i-table size="large" border :columns="columns7" :data="data6"></i-table>
+            <i-table size="large" border :columns="columns" :data="blogs"></i-table>
         </div>
         <Page
-                :total="100"
-                :current="1"
+                :total="blogsPage['count']"
+                :current="currentPage"
                 @on-change="changePage"
+                v-if="blogsPage['count'] > 10"
                 show-elevator
                 show-total
         />
@@ -14,42 +15,36 @@
 </template>
 
 <script>
+    import time from '../../utils/time.js';
+
     export default {
         name: 'ManageBlog',
 
         data() {
             return {
-                columns7: [
+                columns: [
                     {
                         title: '标题',
-                        key: 'name',
-                        width: 600,
+                        key: 'title',
+                        width: 400,
                         fixed: 'left',
                         render: (h, params) => {
                             return h('div', [
-                                h('Icon', {
-                                    props: {
-                                        type: 'person',
-                                    },
-                                }),
-                                h('strong', params.row.name),
+                                h('strong', params.row.title),
                             ]);
                         },
                     },
                     {
                         title: '分类',
-                        key: 'age',
-                        width: 210,
+                        key: 'category',
                     },
                     {
                         title: '创建时间',
-                        key: 'address',
-                        width: 225,
+                        key: 'create_time',
                     },
                     {
                         title: '修改时间',
-                        key: 'address',
-                        width: 225,
+                        key: 'last_change_time',
                     },
                     {
                         title: '操作',
@@ -61,18 +56,34 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
+                                        type: 'success',
+                                        size: 'default',
+                                    },
+                                    style: {
+                                        marginRight: '5px',
+                                        display:(params.row.is_recommend)?"none":"inline-block",
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.recommend(params.row.id);
+                                        }
+                                    }
+                                }, '设置推荐'),
+                                h('Button', {
+                                    props: {
                                         type: 'info',
                                         size: 'default',
                                     },
                                     style: {
                                         marginRight: '5px',
+                                        display:(! params.row.is_recommend)?"none":"inline-block",
                                     },
                                     on: {
                                         click: () => {
-                                            this.recommend(params.index);
+                                            this.cancelRecommend(params.row.id);
                                         }
                                     }
-                                }, '设置推荐'),
+                                }, '取消推荐'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -83,7 +94,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.index);
+                                            this.change(params.row.id);
                                         }
                                     }
                                 }, '修改'),
@@ -94,54 +105,70 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index);
+                                            this.remove(params.row.id);
                                         },
                                     },
-                                }, '刪除')
+                                }, '刪除'),
                             ]);
                         },
                     },
                 ],
-                data6: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park'
-                    },
-                ],
+                blogs: [],
+                blogsPage: {},
+                currentPage: 1,
             };
         },
 
-        methods: {
-            show(index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-                })
-            },
-            remove(index) {
-                this.data6.splice(index, 1);
-            },
-            recommend(index) {
-                this.$log(index)
-            },
-            changePage() {
+        mounted() {
+            this.init();
+        },
 
+        methods: {
+            init() {
+                this.dataFromServer()
+            },
+
+            dataFromServer(page=null) {
+                let dict = {};
+                if (page) {
+                    dict.page = page
+                }
+                this.$Loading.start();
+                this.$api.blogs({page: page})
+                    .then(res => {
+                        this.blogs = this.dealDataFromRaw(res.data);
+                        this.blogsPage = res.page;
+                        this.$Loading.finish();
+                    });
+            },
+
+            dealDataFromRaw(rawData) {
+                for (let i = 0; i < rawData.length; i++) {
+                    rawData[i].create_time =  time.getTimeString(rawData[i].create_time);
+                    rawData[i].last_change_time =  time.getTimeString(rawData[i].last_change_time);
+                    rawData[i].category = rawData[i].category.title;
+                }
+                return rawData;
+            },
+
+            changePage(page) {
+                this.dataFromServer(page);
+            },
+
+            change(index) {
+                this.$log('in change', index);
+            },
+
+            remove(index) {
+                this.$log('in remove', index);
+            },
+
+            recommend(index) {
+                this.$log('in recommend', index);
+            },
+
+            cancelRecommend(index) {
+                this.$log('in cancelRecommend', index);
             },
         }
     }

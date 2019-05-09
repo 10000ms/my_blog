@@ -2,7 +2,10 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import (
+    AllowAny,
+    IsAdminUser,
+)
 
 from ...serializers.blog import (
     BlogSerializer,
@@ -19,6 +22,12 @@ class BlogViewSet(ModelViewSet):
     serializer_class = BlogSerializer
     manage_serializer_class = BlogManageSerializer
     permission_classes = (IsAuthorOrReadOnly, )
+
+    def perform_create(self, serializer):
+        """
+        自动创建创建者
+        """
+        serializer.save(creator=self.request.user)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -41,4 +50,16 @@ class BlogViewSet(ModelViewSet):
     def heart(self, request):
         blog_id = int(request.data['id'])
         Blog.objects.heart(blog_id)
+        return Response(create_response())
+
+    @action(detail=False, methods=['post'], url_path='add-recommend', permission_classes=[IsAdminUser])
+    def add_recommend(self, request):
+        blog_id = int(request.data['id'])
+        Blog.objects.add_recommend(blog_id)
+        return Response(create_response())
+
+    @action(detail=False, methods=['post'], url_path='add-recommend', permission_classes=[IsAdminUser])
+    def cancel_recommend(self, request):
+        blog_id = int(request.data['id'])
+        Blog.objects.cancel_recommend(blog_id)
         return Response(create_response())

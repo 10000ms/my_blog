@@ -7,6 +7,7 @@
         cancel-text="取消"
         :loading="loading"
         :closable="true"
+        scrollable
     >
         <p slot="header" :style="headerStyle">
             <span>注册</span>

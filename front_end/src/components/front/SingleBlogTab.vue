@@ -27,7 +27,7 @@
 
 <script>
     import Tab from '../main/Tab';
-    import  month  from '../../utils/month';
+    import  time  from '../../utils/time';
 
     export default {
         name: 'SingleBlogTab',
@@ -59,7 +59,7 @@
             },
             getMonth() {
                 if (this.date) {
-                    return month.monthFromNumber(this.date.getMonth() + 1);
+                    return time.monthFromNumber(this.date.getMonth() + 1);
                 } else {
                     return null;
                 }

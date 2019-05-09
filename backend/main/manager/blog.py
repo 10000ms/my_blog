@@ -23,3 +23,13 @@ class BlogManager(models.Manager):
         b = self.get(id=blog_id)
         b.like_count += 1
         b.save()
+
+    def add_recommend(self, blog_id):
+        b = self.get(id=blog_id)
+        b.is_recommend = True
+        b.save()
+
+    def cancel_recommend(self, blog_id):
+        b = self.get(id=blog_id)
+        b.is_recommend = False
+        b.save()
