@@ -80,6 +80,7 @@
 
     import Login from './Login';
     import Register from './Register';
+    import message from '../../utils/message';
 
     export default {
         name: 'BlogMenu',
@@ -143,6 +144,9 @@
                     .then(() => {
                         this.$store.commit('auth/commitInit', []);
                         this.$Message.info('已退出登录')
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
             selectMethod(key) {

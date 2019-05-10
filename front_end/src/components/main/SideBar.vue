@@ -74,14 +74,7 @@
     }
 
     .main-profile-image-div {
-        margin-right: auto;
-        margin-left: auto;
         margin-top: 25%;
-        width: 120px;
-        height: 120px;
-        border-radius: 999em;
-        background-color: black;
-        overflow: hidden;
     }
 
     .blog-name-span {
@@ -114,23 +107,5 @@
 
     .ad-container-div {
         margin-top: 8%;
-        margin-left: auto;
-        margin-right: auto;
-        width: 80%;
-        border-radius: 5px;
-        height: 10%;
-        background-color: rgba(255, 255, 255, 0.2);
-        overflow: hidden;
-    }
-
-    .website-image {
-        width: 100%;
-        height: 100%;
-    }
-
-    .ad-image {
-        height: 100%;
-        width: 100%;
-        border-radius: 5px;
     }
 </style>

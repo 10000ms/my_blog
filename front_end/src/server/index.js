@@ -12,9 +12,25 @@ export default {
     login: p => post('api/users/login/', p),
     register: p => post('api/users/register/', p),
     logout: () => post('api/users/logout/', null),
-    tab: () => get('api/tab/', null),
+    tab: (id=null) => {
+        let url;
+        if (id) {
+            url = `api/tab/${id}/`
+        } else {
+            url = 'api/tab/'
+        }
+        return  get(url, null);
+    },
     tabQuery: p => get('api/tab/query/', p),
-    category: () => get('api/category/', null),
+    category: (id=null) => {
+        let url;
+        if (id) {
+            url = `api/category/${id}/`
+        } else {
+            url = 'api/category/'
+        }
+        return  get(url, null);
+    },
     categoryQuery: p => get('api/category/query/', p),
     aboutMe: () => get('api/about-me/', null),
 
@@ -23,4 +39,13 @@ export default {
     deleteBlog: id => deleteAjax(`api/blog/${id}/`, null),
     addRecommend: p => post('api/blog/add-recommend/', p),
     cancelRecommend: p => post('api/blog/cancel-recommend/', p),
+    createTab: p => post(`api/tab/`, p),
+    changeTab: (id, p) => put(`api/tab/${id}/`, p),
+    deleteTab: id => deleteAjax(`api/tab/${id}/`, null),
+    createCategory: p => post(`api/category/`, p),
+    changeCategory: (id, p) => put(`api/category/${id}/`, p),
+    deleteCategory: id => deleteAjax(`api/category/${id}/`, null),
+    changeAboutMe: (id, p) => put(`api/about-me/${id}/`, p),
+    websiteManage: () => get('api/website-manage/', null),
+    changeWebsiteManage: (id, p) => put(`api/website-manage/${id}/`, p),
 }

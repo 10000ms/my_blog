@@ -14,7 +14,9 @@
 
 <script>
     import { mapState } from 'vuex';
+
     import SingleBlogTab from '../../components/front/SingleBlogTab';
+    import message from '../../utils/message';
 
     export default {
         name: 'index',
@@ -39,6 +41,9 @@
                         this.$store.commit('blog/commitBlog', res.data);
                         this.$store.commit('blog/commitIndexPage', res.page);
                         this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
         },

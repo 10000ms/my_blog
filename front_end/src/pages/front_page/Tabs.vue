@@ -9,6 +9,7 @@
 
 <script>
     import TabTabs from '../../components/front/TabTabs';
+    import message from '../../utils/message';
 
     export default {
         name: 'Tabs',
@@ -29,9 +30,14 @@
 
         methods: {
             init() {
+                this.$Loading.start();
                 this.$api.tab()
                     .then(res => {
                         this.tabs = res.data;
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
         },

@@ -25,6 +25,7 @@
 
 <script>
     import time from '../../utils/time.js';
+    import message from '../../utils/message';
 
     export default {
         name: 'ManageBlog',
@@ -136,7 +137,7 @@
 
         methods: {
             init() {
-                this.dataFromServer()
+                this.dataFromServer();
             },
 
             dataFromServer(page=null) {
@@ -150,6 +151,9 @@
                         this.blogs = this.dealDataFromRaw(res.data);
                         this.blogsPage = res.page;
                         this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
 
@@ -157,7 +161,9 @@
                 for (let i = 0; i < rawData.length; i++) {
                     rawData[i].create_time =  time.getTimeString(rawData[i].create_time);
                     rawData[i].last_change_time =  time.getTimeString(rawData[i].last_change_time);
-                    rawData[i].category = rawData[i].category.title;
+                    if (rawData[i].category) {
+                        rawData[i].category = rawData[i].category.title;
+                    }
                 }
                 return rawData;
             },
@@ -191,6 +197,9 @@
                             // 清空删除id数据
                             this.deleteModalId = null;
                         })
+                        .catch(error => {
+                            message.dealReturnMessage(error.msg, this, 'warning');
+                        });
                 }
             },
 
@@ -204,6 +213,9 @@
                         // 重置页面数据
                         this.dataFromServer(this.currentPage);
                     })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
 
             cancelRecommend(blogId) {
@@ -216,6 +228,9 @@
                         // 重置页面数据
                         this.dataFromServer(this.currentPage);
                     })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
         }
     }

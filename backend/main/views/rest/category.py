@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+from django.db.models.deletion import ProtectedError
+
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
+from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.permissions import IsAdminUser
 
+from utils.api_common import create_response
+from ...permissions import ReadOnly
 from ...serializers.category import CategorySerializer
 from ...models.category import Category
 from ...serializers.blog import BlogSerializer
@@ -17,7 +22,7 @@ class CategoryViewSet(ModelViewSet):
     pagination_class = None
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAdminUser | ReadOnly, )
 
     def list(self, request, *args, **kwargs):
         """
@@ -36,6 +41,17 @@ class CategoryViewSet(ModelViewSet):
         serializer.instance = sorted(queryset, key=lambda c: c.category_index())
 
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+        重写方法，触犯ProtectedError时正确返回
+        """
+        instance = self.get_object()
+        try:
+            self.perform_destroy(instance)
+        except ProtectedError:
+            return Response(create_response(msg='关联对象不能直接删除！'), status=400)
+        return Response(status=HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['get'])
     def query(self, request):

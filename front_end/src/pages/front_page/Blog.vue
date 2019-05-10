@@ -25,7 +25,7 @@
                 </Button>
                 <Button v-if="!loginUserId" type="primary" ghost class="operation-button">登录之后添加评论</Button>
             </div>
-            <comment v-for="c in comments" :key="c.id" :commentData="c" v-on:renewComment="renewComment()"></comment>
+            <comment v-for="c in comments" :key="c.id" :commentData="c" v-on:renew-comment="renewComment()"></comment>
             <Page
                     :total="indexPage['count']"
                     :current="currentPage"
@@ -34,21 +34,22 @@
                     show-elevator
                     show-total
             />
-            <comment-operation ref="CommentOperationModel" :blogId="id" v-on:renewComment="getCommentData()"></comment-operation>
+            <comment-operation ref="CommentOperationModel" :blogId="id" v-on:renew-comment="getCommentData()"></comment-operation>
         </div>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import '../../assets/css/marked.less';
     import 'highlight.js/styles/xcode.css';
     import { Markdown } from '../../utils/markdown.js';
-    import time from '../../utils/time.js';
-
-    import { mapState } from 'vuex';
 
     import Comment from '../../components/front/Comment';
     import CommentOperation from '../../components/front/CommentOperation';
+    import time from '../../utils/time.js';
+    import message from '../../utils/message';
 
     export default {
         name: 'Blog',
@@ -91,6 +92,9 @@
                         this.like = res.data.like_count;
                         // 获取完文章再拿评论
                         this.getCommentData();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
 
@@ -105,6 +109,9 @@
                         this.comments = res.data;
                         this.indexPage = res.page;
                         this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
 
@@ -121,6 +128,9 @@
                             this.like ++;
                             this.isLike = true;
                         })
+                        .catch(error => {
+                            message.dealReturnMessage(error.msg, this, 'warning');
+                        });
                 } else {
                     this.$Message.info('已点赞');
                 }
@@ -131,25 +141,35 @@
             },
 
             getCommentData(page=null) {
-                // this.$Loading.start();
-                this.comments = [];
-                this.indexPage = {};
                 let dict = {
                     id: this.id,
                 };
                 if (page) {
                     dict.page = page
                 }
+                this.$Loading.start();
                 this.$api.blogComment(dict)
                     .then(res => {
                         this.comments = res.data;
                         this.indexPage = res.page;
-                        // this.$Loading.finish();
+                        this.$Loading.finish();
                     })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
 
             renewComment() {
                 this.getCommentData(this.currentPage);
+            },
+        },
+
+        watch: {
+            /**
+             * 地址改变的时候重新初始化
+             */
+            '$route'() {
+                this.init()
             },
         },
 

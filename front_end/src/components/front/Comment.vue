@@ -21,7 +21,7 @@
                 ref="CommentOperationModel"
                 :commentData="commentData"
                 mode="change"
-                v-on:renewComment="$emit('renewComment')"
+                v-on:renew-comment="$emit('renew-comment')"
         >
         </comment-operation>
     </div>
@@ -45,11 +45,7 @@
 
         data() {
             return {
-                id: this.commentData.id,
-                title: this.commentData.title,
-                user: this.commentData.creator.username,
-                userId: this.commentData.creator.id,
-                content: this.commentData.content,
+
             };
         },
 
@@ -66,7 +62,7 @@
                 this.$api.deleteComment(this.id)
                     .then(() => {
                         this.$Message.info('删除评论成功');
-                        this.$emit('renewComment');
+                        this.$emit('renew-comment');
                     })
                     .catch(error => {
                         this.$Message.warning(error.msg);
@@ -78,6 +74,26 @@
             ...mapState('auth', {
                 loginUserId: state => state.id,
             }),
+
+            id() {
+                return this.commentData.id;
+            },
+
+            title() {
+                return this.commentData.title;
+            },
+
+            user() {
+                return this.commentData.creator.username;
+            },
+
+            userId() {
+                return this.commentData.creator.id;
+            },
+
+            content() {
+                return this.commentData.content;
+            },
         },
     }
 </script>

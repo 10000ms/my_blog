@@ -97,7 +97,7 @@
                             this.$Message.info('修改成功');
                             this.show = false;
                             // 发送事件
-                            this.$emit('renewComment');
+                            this.$emit('renew-comment');
                         })
                         .catch(error => {
                             message.dealReturnMessage(error.msg, this, 'warning');
@@ -129,7 +129,7 @@
                             this.$Message.info('评论成功');
                             this.show = false;
                             // 发送事件
-                            this.$emit('renewComment');
+                            this.$emit('renew-comment');
                         })
                         .catch(error => {
                             message.dealReturnMessage(error.msg, this, 'warning');

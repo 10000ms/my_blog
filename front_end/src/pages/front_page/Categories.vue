@@ -14,6 +14,7 @@
 
 <script>
     import categoryUtils from '../../utils/category';
+    import message from '../../utils/message';
 
     export default {
         name: 'Categories',
@@ -31,9 +32,14 @@
 
         methods: {
             init() {
+                this.$Loading.start();
                 this.$api.category()
                     .then(res => {
                         this.categories = res.data;
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
             getLevel(categoryId) {

@@ -33,6 +33,8 @@
     import BlogMenu from '../components/main/BlogMenu';
     import BlogFooter from '../components/main/BlogFooter';
 
+    import message from '../utils/message';
+
     export default {
         name: 'app',
 
@@ -62,6 +64,9 @@
                         this.$store.commit('blog/commitBlog', res.data['blog']);
                         this.$store.commit('blog/commitBlogRecommend', res.data['blog_recommend']);
                         this.$store.commit('blog/commitIndexPage', res.data['page']);
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
         },

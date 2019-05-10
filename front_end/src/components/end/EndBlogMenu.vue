@@ -32,7 +32,7 @@
                         标签管理
                     </span>
                 </template>
-                <MenuItem name="create-tabs">
+                <MenuItem name="create-tab">
                     <span class="dropdown-item color-common-white-items">
                         新标签
                     </span>
@@ -50,7 +50,7 @@
                         类型管理
                     </span>
                 </template>
-                <MenuItem name="create-categories">
+                <MenuItem name="create-category">
                     <span class="dropdown-item color-common-white-items">
                         新类型
                     </span>

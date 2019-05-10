@@ -12,7 +12,7 @@ class AboutMeViewSet(ModelViewSet):
 
     # about me 不需要分页
     pagination_class = None
-    queryset = WebsiteManage.objects.all()[:1]
+    queryset = WebsiteManage.objects.all()
     serializer_class = AboutMeSerializer
     permission_classes = (IsAdminUser | ReadOnly, )
 

@@ -44,7 +44,7 @@
     import '../../assets/css/marked.less';
     import 'highlight.js/styles/xcode.css';
     import removeMd from 'remove-markdown';
-    import {Markdown} from '../../utils/markdown.js';
+    import { Markdown } from '../../utils/markdown.js';
 
     import message from '../../utils/message';
 
@@ -76,10 +76,16 @@
                 this.$api.tab()
                     .then(res => {
                         this.tabs = res.data;
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
                 this.$api.category()
                     .then(res => {
                         this.categories = res.data;
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
                 // 如果是修改模式
                 if (this.$route.params.mode && this.$route.params.mode === 'change') {
@@ -93,8 +99,13 @@
                             this.brief = res.data.brief;
                             this.content = res.data.content;
                             this.author = res.data.author;
-                            this.selectCategories = res.data.category.id;
+                            if (res.data.category) {
+                                this.selectCategories = res.data.category.id;
+                            }
                             this.selectTabs = this.listToIdList(res.data.tabs);
+                        })
+                        .catch(error => {
+                            message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 }
             },
@@ -110,7 +121,6 @@
                     res.push(rawList[i].id);
                 }
                 return res
-
             },
 
             changeAutoBrief(status) {
@@ -175,6 +185,10 @@
         },
 
         watch: {
+            /**
+             * 内容改变的时候才会触发自动简介
+             * @param val
+             */
             content(val) {
                 if (this.autoBrief) {
                     this.brief = this.getBrief(val);

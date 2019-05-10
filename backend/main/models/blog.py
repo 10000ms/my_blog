@@ -9,11 +9,11 @@ from utils.model_str import str_for_model
 class Blog(models.Model):
 
     title = models.CharField('标题', max_length=256)
-    creator = models.ForeignKey('User', null=True, blank=True, on_delete=models.DO_NOTHING, default=get_current_user)
+    creator = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT, default=get_current_user)
     author = models.CharField('作者', max_length=256)
     create_time = models.DateTimeField('创建时间', auto_now_add=True, editable=True)
     last_change_time = models.DateTimeField('最后修改', auto_now=True)
-    category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL)
     tabs = models.ManyToManyField('Tab')
     brief = models.CharField('简介', max_length=256)
     content = models.TextField('正文')

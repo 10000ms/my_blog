@@ -15,6 +15,7 @@
 
 <script>
     import SingleBlogTab from '../../components/front/SingleBlogTab';
+    import message from '../../utils/message';
 
     export default {
         name: 'searchMode',
@@ -64,6 +65,9 @@
                             // 没有结果返回显示空
                             this.isEmpty = true;
                         }
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
         },

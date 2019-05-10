@@ -15,20 +15,50 @@
 <script>
     import '../../assets/css/marked.less';
     import 'highlight.js/styles/xcode.css';
-    import {Markdown} from '../../utils/markdown.js';
+    import { Markdown } from '../../utils/markdown.js';
+
+    import message from '../../utils/message';
 
     export default {
         name: 'EndAboutMe',
 
         data() {
             return {
+                id: null,
                 aboutMe: '',
             }
         },
 
-        methods: {
-            submit() {
+        mounted() {
+            this.init();
+        },
 
+        methods: {
+            init() {
+                this.$Loading.start();
+                this.$api.aboutMe()
+                    .then(res => {
+                        this.aboutMe = res.data.about_me;
+                        this.id = res.data.id;
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
+            },
+
+            submit() {
+                let p = {
+                    about_me: this.aboutMe,
+                };
+                this.$api.changeAboutMe(this.id, p)
+                    .then(() => {
+                        this.$Message.info('修改成功');
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
         },
 

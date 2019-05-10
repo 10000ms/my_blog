@@ -8,65 +8,36 @@
         <div class="child-input-div">
             <i-input v-model="ICPNumber" placeholder="请输入备案号..." size="large" class="max-width"/>
         </div>
+        <span class="content-title-items">网站头像</span>
+        <div class="main-profile-image-div"><img :src="websiteImage" class="website-image" alt="网站头像"/></div>
         <div class="child-input-div">
-            <span class="content-title-items">网站头像</span>
-            <div class="child-input-div">
-                <Upload
-                    ref="upload"
-                    :show-upload-list="false"
-                    :on-success="handleSuccess"
-                    :format="['jpg','jpeg','png']"
-                    :max-size="2048"
-                    :on-format-error="handleFormatError"
-                    :on-exceeded-size="handleMaxSize"
-                    type="drag"
-                    action="//jsonplaceholder.typicode.com/posts/"
-                    class="upload-items">
-                    <div class="upload-icon-items">
-                        <Icon type="ios-camera" size="20"></Icon>
-                    </div>
-                </Upload>
-            </div>
+            <i-input v-model="websiteImage" placeholder="请输入网站头像地址..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">主页侧栏图片1</span>
+        <div class="ad-container-div">
+            <img :src="ad1" class="ad-image" alt="ad1"/>
+        </div>
         <div class="child-input-div">
-            <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :on-success="handleSuccess"
-                :format="['jpg','jpeg','png']"
-                :max-size="2048"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                type="drag"
-                action="//jsonplaceholder.typicode.com/posts/"
-                class="upload-items">
-                <div class="upload-icon-items">
-                    <Icon type="ios-camera" size="20"></Icon>
-                </div>
-            </Upload>
+            <i-input v-model="ad1" placeholder="请输入主页侧栏图片1地址..." size="large" class="max-width"/>
+        </div>
+        <span class="content-title-items">主页侧栏图片1跳转url</span>
+        <div class="child-input-div">
+            <i-input v-model="ad1URL" placeholder="请输入主页侧栏图片1跳转url..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">主页侧栏图片2</span>
+        <div class="ad-container-div">
+            <img :src="ad2" class="ad-image" alt="ad1"/>
+        </div>
         <div class="child-input-div">
-            <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :on-success="handleSuccess"
-                :format="['jpg','jpeg','png']"
-                :max-size="2048"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                type="drag"
-                action="//jsonplaceholder.typicode.com/posts/"
-                class="upload-items">
-                <div class="upload-icon-items">
-                    <Icon type="ios-camera" size="20"></Icon>
-                </div>
-            </Upload>
+            <i-input v-model="ad2" placeholder="请输入主页侧栏图片2地址..." size="large" class="max-width"/>
+        </div>
+        <span class="content-title-items">主页侧栏图片2跳转url</span>
+        <div class="child-input-div">
+            <i-input v-model="ad2URL" placeholder="请输入主页侧栏图片2跳转url..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">Github地址</span>
         <div class="child-input-div">
-            <i-input v-model="githubAddress" placeholder="请输入Github地址..." size="large" class="max-width"/>
+            <i-input v-model="github" placeholder="请输入Github地址..." size="large" class="max-width"/>
         </div>
         <span class="content-title-items">邮箱地址</span>
         <div class="child-input-div">
@@ -74,19 +45,19 @@
         </div>
         <span class="content-title-items">友情链接地址</span>
         <div class="child-input-div">
-            <i-input v-model="email" type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
-                   placeholder="请输入友情链接地址，;分割，前面带有前缀，http:// 等..." size="large" class="max-width"/>
+            <i-input v-model="friendshipLink" type="textarea" :autosize="{ minRows: 3, maxRows: 10 }"
+                     placeholder="请输入友情链接地址，;分割，前面带有前缀，http:// 等..." size="large" class="max-width"/>
         </div>
         <div class="child-input-div">
             <span class="content-title-items">是否开放注册:  </span>
-            <i-switch v-model="openRegister" @on-change="changeOpenRegister">
+            <i-switch v-model="openRegister">
                 <span slot="open">是</span>
                 <span slot="close">否</span>
             </i-switch>
         </div>
         <div class="child-input-div">
             <span class="content-title-items">是否打开demo模式:  </span>
-            <i-switch v-model="demoModel" @on-change="changeDemoModel">
+            <i-switch v-model="demoModel">
                 <span slot="open">是</span>
                 <span slot="close">否</span>
             </i-switch>
@@ -98,48 +69,85 @@
 </template>
 
 <script>
+    import message from '../../utils/message';
+
     export default {
         name: 'ManageWebsite',
 
         data() {
             return {
+                id: null,
                 websiteName: '',
                 ICPNumber: '',
-                githubAddress: '',
+                github: '',
                 email: '',
+                websiteImage: '',
+                ad1: '',
+                ad1URL: '',
+                ad2: '',
+                ad2URL: '',
+                friendshipLink: '',
                 openRegister: false,
                 demoModel: false,
-                websiteLogo: [],
             };
         },
 
+        mounted() {
+            this.init();
+        },
+
         methods: {
+            init() {
+                this.$Loading.start();
+                this.$api.websiteManage()
+                    .then(res => {
+                        if (res.data) {
+                            this.id = res.data.id;
+                            this.websiteName = res.data.website_name;
+                            this.ICPNumber = res.data.ICP_number;
+                            this.github = res.data.github;
+                            this.email = res.data.email;
+                            this.websiteImage = res.data.website_image;
+                            this.ad1 = res.data.ad_1;
+                            this.ad1URL = res.data.ad_1_url;
+                            this.ad2 = res.data.ad_2;
+                            this.ad2URL = res.data.ad_2_url;
+                            this.friendshipLink = res.data.friendship_link;
+                            this.openRegister = res.data.open_register;
+                            this.demoModel = res.data.demo_model;
+                        }
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
+            },
+
             submit() {
-
+                this.$Loading.start();
+                let p = {
+                    website_name: this.websiteName,
+                    ICP_number: this.ICPNumber,
+                    github: this.github,
+                    email: this.email,
+                    website_image: this.websiteImage,
+                    ad_1: this.ad1,
+                    ad_1_url: this.ad1URL,
+                    ad_2: this.ad2,
+                    ad_2_url: this.ad2URL,
+                    friendship_link: this.friendshipLink,
+                    open_register: this.openRegister,
+                    demo_model: this.demoModel,
+                };
+                this.$api.changeWebsiteManage(this.id, p)
+                    .then(() => {
+                        this.$Message.info('修改成功');
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
-            handleSuccess(res, file) {
-                file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-                file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-            },
-            handleFormatError(file) {
-                this.$Notice.warning({
-                    title: 'The file format is incorrect',
-                    desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.',
-                });
-            },
-            handleMaxSize(file) {
-                this.$Notice.warning({
-                    title: 'Exceeding file size limit',
-                    desc: 'File  ' + file.name + ' is too large, no more than 2M.',
-                });
-            },
-            changeOpenRegister() {
-
-            },
-            changeDemoModel() {
-
-            },
-
         },
     }
 </script>

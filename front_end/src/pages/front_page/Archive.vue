@@ -24,6 +24,8 @@
 <script>
     import { Timeline, TimelineItem } from 'vue-cute-timeline';
 
+    import message from '../../utils/message';
+
     export default {
         name: 'Archive',
 
@@ -64,6 +66,9 @@
                         this.blogs = res.data;
                         this.blogsPage = res.page;
                         this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
 

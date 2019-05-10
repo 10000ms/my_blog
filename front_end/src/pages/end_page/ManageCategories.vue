@@ -1,111 +1,61 @@
 <template>
     <div class="max-width height-min-height-div">
         <div class="child-div">
-            <i-table size="large" border :columns="columns7" :data="data6"></i-table>
-            <Page
-                    :total="100"
-                    :current="1"
-                    @on-change="changePage"
-                    show-elevator
-                    show-total
-            />
+            <i-table size="large" border :columns="columns" :data="categories"></i-table>
         </div>
         <div class="child-div">
             <div class="category-div" v-for="c in categories" :key="c.id">
-                <a :href="c.url" class="color-common-black-items">
-                    <span v-html="printLevel(getLevel(c.id))" class="content-content-items"></span>
-                    {{c.name}}
-                    <span class="count-span">({{c.count}})</span>
-                </a>
+                <span v-html="printLevel(getLevel(c.id))" class="content-content-items"></span>
+                {{c.title}}
+                <span class="count-span">({{c.count}})</span>
             </div>
         </div>
+        <Modal
+                v-model="deleteModal"
+                title="删除警告"
+                @on-ok="doRemove"
+                :closable="true"
+                scrollable
+        >
+            <p>是否确定删除，删除后不可恢复！</p>
+        </Modal>
     </div>
 </template>
 
 <script>
     import categoryUtils from '../../utils/category';
+    import message from '../../utils/message';
 
     export default {
         name: 'ManageBlog',
 
         data() {
             return {
-                categories: [
-                    {
-                        id: 1,
-                        name: '111',
-                        fid: 0,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 2,
-                        name: '112',
-                        fid: 1,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 3,
-                        name: '113',
-                        fid: 1,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 4,
-                        name: '131',
-                        fid: 3,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 5,
-                        name: '222',
-                        fid: 0,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 6,
-                        name: '333',
-                        fid: 0,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 7,
-                        name: '444',
-                        fid: 0,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                    {
-                        id: 8,
-                        name: '555',
-                        fid: 0,
-                        url: 'asdasd',
-                        count: 5,
-                    },
-                ],
-                columns7: [
+                categories: [],
+                columns: [
                     {
                         title: '标签',
-                        key: 'name',
+                        key: 'title',
                         render: (h, params) => {
                             return h('div', [
-                                h('Icon', {
-                                    props: {
-                                        type: 'person'
-                                    }
-                                }),
-                                h('strong', params.row.name)
+                                h('strong', params.row.title)
                             ]);
-                        }
+                        },
                     },
                     {
                         title: '父类型',
-                        key: 'address',
+                        key: 'father_category',
+                        render: (h, params) => {
+                            if (params.row.father_category) {
+                                return h('div', [
+                                    h('span', params.row.father_category.title),
+                                ]);
+                            } else {
+                                return h('div', [
+                                    h('span', ''),
+                                ]);
+                            }
+                        },
                     },
                     {
                         title: '操作',
@@ -124,7 +74,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.index)
+                                            this.change(params.row.id);
                                         },
                                     },
                                 }, '修改'),
@@ -135,7 +85,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index);
+                                            this.remove(params.row.id);
                                         },
                                     },
                                 }, '刪除')
@@ -143,48 +93,55 @@
                         },
                     },
                 ],
-                data6: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                    },
-                ],
+                deleteModalId: null,
+                deleteModal: false,
             };
         },
 
-        methods: {
-            show(index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-                })
-            },
-            remove(index) {
-                this.data6.splice(index, 1);
-            },
-            changePage() {
+        mounted() {
+            this.init();
+        },
 
+        methods: {
+            init() {
+                this.$api.category()
+                    .then(res => {
+                        this.categories = res.data;
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
+            },
+
+            change(CategoryId) {
+                this.$router.push({name: 'change-category', params: {mode: 'change'}, query: {id: CategoryId}});
+            },
+
+            remove(CategoryId) {
+                this.deleteModalId = CategoryId;
+                this.deleteModal = true;
+            },
+
+            doRemove() {
+                if (this.deleteModalId) {
+                    this.$api.deleteCategory(this.deleteModalId)
+                        .then(() => {
+                            this.$Message.info('删除成功');
+                            // 重置页面数据
+                            this.init();
+                            // 清空删除id数据
+                            this.deleteModalId = null;
+                        })
+                        .catch(error => {
+                            message.dealReturnMessage(error.msg, this, 'warning');
+                        })
+                }
             },
 
             getLevel(categoryId) {
                 return categoryUtils.categoryGetLevel(categoryId, this.categories);
             },
+
             printLevel(level) {
                 return categoryUtils.categoryPrintLevel(level);
             },

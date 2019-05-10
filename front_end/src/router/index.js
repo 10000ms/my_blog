@@ -12,9 +12,9 @@ import End from '../pages/End';
 import EndIndex from '../pages/end_page/EndIndex';
 import BlogOperation from '../pages/end_page/BlogOperation';
 import ManageBlog from '../pages/end_page/ManageBlog';
-import CreateTabs from '../pages/end_page/CreateTabs';
+import TabOperation from '../pages/end_page/TabOperation';
 import ManageTabs from '../pages/end_page/ManageTabs';
-import CreateCategories from '../pages/end_page/CreateCategories';
+import CategoryOperation from '../pages/end_page/CategoryOperation';
 import ManageCategories from '../pages/end_page/ManageCategories';
 import EndAboutMe from '../pages/end_page/EndAboutMe';
 import ManageWebsite from '../pages/end_page/ManageWebsite';
@@ -83,7 +83,6 @@ export default new Router({
                     path: 'change-blog/:mode',
                     name: 'change-blog',
                     component: BlogOperation,
-                    params: {mode: 'change'},
                 },
                 {
                     path: 'manage-blog',
@@ -91,9 +90,14 @@ export default new Router({
                     component: ManageBlog,
                 },
                 {
-                    path: 'create-tabs',
-                    name: 'create-tabs',
-                    component: CreateTabs,
+                    path: 'create-tab',
+                    name: 'create-tab',
+                    component: TabOperation,
+                },
+                {
+                    path: 'change-tab/:mode',
+                    name: 'change-tab',
+                    component: TabOperation,
                 },
                 {
                     path: 'manage-tabs',
@@ -101,9 +105,14 @@ export default new Router({
                     component: ManageTabs,
                 },
                 {
-                    path: 'create-categories',
-                    name: 'create-categories',
-                    component: CreateCategories,
+                    path: 'create-category',
+                    name: 'create-category',
+                    component: CategoryOperation,
+                },
+                {
+                    path: 'change-category/:mode',
+                    name: 'change-category',
+                    component: CategoryOperation,
                 },
                 {
                     path: 'manage-categories',

@@ -1,36 +1,41 @@
 <template>
     <div class="height-min-height-div thin-content-div">
         <div class="margin-bottom-20">
-            <i-table size="large" border :columns="columns7" :data="data6"></i-table>
+            <i-table size="large" border :columns="columns" :data="tabs"></i-table>
         </div>
-        <Page
-                :total="100"
-                :current="1"
-                @on-change="changePage"
-                show-elevator
-                show-total
-        />
+
+        <Modal
+                v-model="deleteModal"
+                title="删除警告"
+                @on-ok="doRemove"
+                :closable="true"
+                scrollable
+        >
+            <p>是否确定删除，删除后不可恢复！</p>
+        </Modal>
     </div>
 </template>
 
 <script>
+    import message from '../../utils/message';
+
     export default {
         name: 'ManageBlog',
 
         data() {
             return {
-                columns7: [
+                columns: [
                     {
                         title: '标签',
-                        key: 'name',
+                        key: 'title',
                         render: (h, params) => {
                             return h('div', [
                                 h('Icon', {
                                     props: {
-                                        type: 'person'
+                                        type: 'ios-pricetag'
                                     },
                                 }),
-                                h('strong', params.row.name)
+                                h('strong', params.row.title),
                             ]);
                         },
                     },
@@ -51,7 +56,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.index);
+                                            this.change(params.row.id);
                                         },
                                     },
                                 }, '修改'),
@@ -62,7 +67,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index);
+                                            this.remove(params.row.id);
                                         },
                                     },
                                 }, '刪除'),
@@ -70,45 +75,54 @@
                         },
                     },
                 ],
-                data6: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                    },
-                ],
+                tabs: [],
+                deleteModal: false,
+                deleteModalId: null,
             };
         },
 
-        methods: {
-            show(index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-                })
-            },
-            remove(index) {
-                this.data6.splice(index, 1);
-            },
-            changePage() {
+        mounted() {
+            this.init();
+        },
 
+        methods: {
+            init() {
+                this.$Loading.start();
+                this.$api.tab()
+                    .then(res => {
+                        this.tabs = res.data;
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
             },
-        }
+
+            change(tabId) {
+                this.$router.push({name: 'change-tab', params: {mode: 'change'}, query: {id: tabId}});
+            },
+
+            remove(tabId) {
+                this.deleteModalId = tabId;
+                this.deleteModal = true;
+            },
+
+            doRemove() {
+                if (this.deleteModalId) {
+                    this.$api.deleteTab(this.deleteModalId)
+                        .then(() => {
+                            this.$Message.info('删除成功');
+                            // 重置页面数据
+                            this.init();
+                            // 清空删除id数据
+                            this.deleteModalId = null;
+                        })
+                        .catch(error => {
+                            message.dealReturnMessage(error.msg, this, 'warning');
+                        });
+                }
+            },
+        },
     }
 </script>
 

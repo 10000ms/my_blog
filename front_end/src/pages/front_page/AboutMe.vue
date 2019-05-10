@@ -7,6 +7,8 @@
     import 'highlight.js/styles/xcode.css';
     import { Markdown } from '../../utils/markdown.js';
 
+    import message from '../../utils/message';
+
     export default {
         name: 'AboutMe',
 
@@ -22,9 +24,14 @@
 
         methods: {
             init() {
+                this.$Loading.start();
                 this.$api.aboutMe()
                     .then(res => {
-                        this.aboutMe = res.data['about_me'];
+                        this.aboutMe = res.data.about_me;
+                        this.$Loading.finish();
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
         },
