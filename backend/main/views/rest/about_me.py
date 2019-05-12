@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.core.cache import cache
+from django.conf import settings
+
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
@@ -20,18 +23,24 @@ class AboutMeViewSet(ModelViewSet):
         """
         返回单个对象
         """
-        queryset = self.filter_queryset(self.get_queryset())
+        # 缓存
+        b = cache.get('about_me')
+        if not b:
+            queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+            serializer = self.get_serializer(queryset, many=True)
 
-        # 返回单个对象
-        res = serializer.data
-        if isinstance(res, list) and len(res) > 0:
-            res = res[0]
+            # 返回单个对象
+            res = serializer.data
+            if isinstance(res, list) and len(res) > 0:
+                res = res[0]
 
-        return Response(res)
+            cache.set('about_me', res, 60 * settings.CACHE_TIME)
+            b = res
+
+        return Response(b)

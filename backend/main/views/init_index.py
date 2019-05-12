@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.cache import cache
+from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,7 +35,7 @@ class InitIndex(APIView, PageNumberPagination):
                 'previous': self.get_previous_link(),
                 'count': self.page.paginator.count,
             }
-            cache.set('cache_init_index_blog', d, 60 * self.cache_minutes)
+            cache.set('cache_init_index_blog', d, 60 * settings.CACHE_TIME)
             b = d
         return b
 
@@ -47,7 +48,7 @@ class InitIndex(APIView, PageNumberPagination):
             blog_recommend = Blog.objects.recommend()
             blog_recommend_serializer = BlogSerializer(blog_recommend, many=True, context=context)
             b = blog_recommend_serializer.data
-            cache.set('cache_init_index_blog_recommend', b, 60 * self.cache_minutes)
+            cache.set('cache_init_index_blog_recommend', b, 60 * settings.CACHE_TIME)
         return b
 
     def _website_manage_from_cache(self, context):
@@ -62,7 +63,7 @@ class InitIndex(APIView, PageNumberPagination):
             if len(w) >= 1:
                 # 存在记录则直接返回第一条，保证返回的是字典而不是列表
                 w = website_manage_serializer.data[0]
-            cache.set('cache_init_index_website_manage', w, 60 * self.cache_minutes)
+            cache.set('cache_init_index_website_manage', w, 60 * settings.CACHE_TIME)
         return w
 
     def get(self, request):

@@ -146,3 +146,9 @@ REST_FRAMEWORK = {
 
 # 更换用户模型
 AUTH_USER_MODEL = 'main.User'
+
+
+# 自定义设置区
+
+# 缓存时间（分钟）
+CACHE_TIME = 5

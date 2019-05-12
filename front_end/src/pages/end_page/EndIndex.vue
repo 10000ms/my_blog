@@ -13,6 +13,30 @@
                     <p>{{ infor2.title }}</p>
                 </infor-card>
             </div>
+            <div class="index-header-child-div">
+                <infor-card shadow :color="infor3.color" :icon="infor3.icon" :icon-size="36">
+                    <count-to :end="infor1.count" count-class="count-style"/>
+                    <p>{{ infor3.title }}</p>
+                </infor-card>
+            </div>
+            <div class="index-header-child-div">
+                <infor-card shadow :color="infor4.color" :icon="infor4.icon" :icon-size="36">
+                    <count-to :end="infor2.count" count-class="count-style"/>
+                    <p>{{ infor4.title }}</p>
+                </infor-card>
+            </div>
+            <div class="index-header-child-div">
+                <infor-card shadow :color="infor5.color" :icon="infor5.icon" :icon-size="36">
+                    <count-to :end="infor1.count" count-class="count-style"/>
+                    <p>{{ infor5.title }}</p>
+                </infor-card>
+            </div>
+            <div class="index-header-child-div">
+                <infor-card shadow :color="infor6.color" :icon="infor6.icon" :icon-size="36">
+                    <count-to :end="infor2.count" count-class="count-style"/>
+                    <p>{{ infor6.title }}</p>
+                </infor-card>
+            </div>
         </div>
         <div>
             <div id="id-allmap"></div>
@@ -44,13 +68,37 @@
                     title: '昨日浏览',
                     icon: 'md-book',
                     count: 803,
-                    color: '#2d8cf0',
+                    color: 'rgb(45,140,240)',
                 },
                 infor2: {
                     title: '总共浏览',
                     icon: 'md-infinite',
                     count: 150000,
-                    color: 'rgba(246, 141, 66, 1)',
+                    color: 'rgb(245,141,66)',
+                },
+                infor3: {
+                    title: '昨日评论',
+                    icon: 'md-chatbubbles',
+                    count: 150000,
+                    color: 'rgb(45,140,240)',
+                },
+                infor4: {
+                    title: '总共评论',
+                    icon: 'md-infinite',
+                    count: 150000,
+                    color: 'rgb(245,141,66)',
+                },
+                infor5: {
+                    title: '昨日点赞',
+                    icon: 'md-heart-outline',
+                    count: 150000,
+                    color: 'rgb(45,140,240)',
+                },
+                infor6: {
+                    title: '总共点赞',
+                    icon: 'md-infinite',
+                    count: 150000,
+                    color: 'rgb(245,141,66)',
                 },
                 mapStyle: {},
             };
@@ -178,7 +226,7 @@
         width: 40%;
         height: 120px;
         padding-bottom: 10px;
-        margin: 5%;
+        margin: 1% 5%;
     }
 
     #id-allmap {

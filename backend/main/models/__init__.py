@@ -7,4 +7,7 @@ from . import (
     tab,
     user,
     website_manage,
+    date_record,
+    region,
+    region_record,
 )

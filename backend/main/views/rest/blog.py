@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.core.cache import cache
+from django.conf import settings
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -31,12 +34,16 @@ class BlogViewSet(ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         """
-        重写blog这个方法，增加阅读计数功能
+        重写blog这个方法，增加阅读计数功能以及缓存支持
         """
         o = self.get_object()
         o.read_count += 1
         o.save()
-        return super().retrieve(request, *args, **kwargs)
+        b = cache.get('blog_{}'.format(o.id))
+        if not b:
+            serializer = self.get_serializer(o)
+            cache.set('blog_{}'.format(o.id), serializer.data, 60 * settings.CACHE_TIME)
+        return Response(b)
 
     def get_serializer_class(self):
         """
