@@ -23,10 +23,14 @@ class RegionRecordManager(models.Manager):
         if city_id != 0:
             region_manage = self.model.region.field.remote_field.model.objects
             region = region_manage.city_from_city_id(city_id)
+            if region is None:
+                raw_region_string = s['region'].decode('utf-8')
+                # TODO: 测试
+                region_list = raw_region_string.split('|')
+                province = region_list[2]
+                city = region_list[3]
+                region = region_manage.create_city(city_id, city, province)
             if region is not None:
                 m = self._today_record(region)
                 m.count += 1
                 m.save()
-            else:
-                # TODO
-                pass

@@ -10,8 +10,8 @@ class Region(models.Model):
     province = models.CharField('省份', max_length=10)
     city = models.CharField('城市', max_length=20)
     city_id = models.IntegerField('city_id', default=0)
-    x = models.FloatField('x', default=0.0)
-    y = models.FloatField('y', default=0.0)
+    lat = models.FloatField('纬度值', default=0.0)
+    lng = models.FloatField('经度值', default=0.0)
 
     objects = region.RegionManager()
 
