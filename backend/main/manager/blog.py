@@ -33,3 +33,8 @@ class BlogManager(models.Manager):
         b = self.get(id=blog_id)
         b.is_recommend = False
         b.save()
+
+    def add_read_count(self, blog_id):
+        b = self.get(id=blog_id)
+        b.read_count += 1
+        b.save()

@@ -12,5 +12,5 @@ class CustomJSONRenderer(JSONRenderer):
             response_data = data
         else:
             response_data = create_response(data=data)
-        response = super(CustomJSONRenderer, self).render(response_data, accepted_media_type, renderer_context)
+        response = super().render(response_data, accepted_media_type, renderer_context)
         return response

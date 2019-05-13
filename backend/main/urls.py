@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.urls import include, path
+from django.conf import settings
 from rest_framework import routers
 
 from . import views
@@ -17,5 +18,8 @@ router.register(r'about-me', views.rest.about_me.AboutMeViewSet, basename='about
 urlpatterns = [
     path(r'api/', include(router.urls)),
     path(r'api/init-index/', views.init_index.InitIndex.as_view()),
-    path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path(r'api/test/', views.test.Test.as_view()))
+    urlpatterns.append(path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')))

@@ -152,3 +152,9 @@ AUTH_USER_MODEL = 'main.User'
 
 # 缓存时间（分钟）
 CACHE_TIME = 5
+
+# 是否记录地区，这个功能会影响性能
+RECORD_REGION = True
+
+# 百度AK密匙，用于获取IP的经纬度
+BAIDU_AK = secret.BAIDU_AK

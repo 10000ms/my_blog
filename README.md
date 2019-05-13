@@ -17,7 +17,7 @@
 # 后端model防止错误的循环引用
 
 1. model类的ForeignKey内的使用字符串
-2. manager类不要引用model类，要使用自身model类的relation field的时候，使用self.relation_field.model来获取相关联的model
+2. manager类不要引用model类，要使用自身model类的relation field的model的时候，使用self.model.{{relation field}}.field.remote_field.model获得对应model类
 
 # mysql数据库
 
@@ -39,6 +39,12 @@ SECRET_KEY =
 DATABASE_ACCOUNT = 
 DATABASE_PASSWORD = 
 ```
+
+## ip与位置
+1. ip搜索比较消耗时间，所以可以选择关闭
+2. ip对应地址使用本地搜索，提高效率
+3. 城市经纬度使用baidu map的api进行，获取匹配前端百度地图的结果
+4. TODO：使用异步任务拆分这部分功能
 
 ## 前端机密信息
 后端机密信息信息存放在后端根目录下的`secret.py`文件里，这个文件不会被git同步，需要自行添加。

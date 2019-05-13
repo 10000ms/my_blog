@@ -9,9 +9,10 @@ import struct
 import io
 import socket
 import sys
+import os
 
 
-class Ip2Region(object):
+class Ip2Region:
     __INDEX_BLOCK_LENGTH = 12
     __TOTAL_HEADER_LENGTH = 8192
 
@@ -24,7 +25,11 @@ class Ip2Region(object):
     __index_count = 0
     __db_bin_str = ''
 
-    def __init__(self, db_file):
+    db_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ip2region.db')
+
+    def __init__(self, db_file=None):
+        if not db_file:
+            db_file = self.db_file
         self.init_database(db_file)
 
     def search(self, ip):

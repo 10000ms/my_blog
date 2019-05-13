@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.cache import cache
 from django.conf import settings
+from django.db import transaction
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
@@ -16,6 +17,7 @@ from ...serializers.blog import (
 )
 from ...permissions import IsAuthorOrReadOnly
 from ...models.blog import Blog
+from ...models.date_record import DateRecord
 from utils.api_common import create_response
 
 
@@ -32,17 +34,33 @@ class BlogViewSet(ModelViewSet):
         """
         serializer.save(creator=self.request.user)
 
+    @staticmethod
+    def get_client_ip(request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
     def retrieve(self, request, *args, **kwargs):
         """
         重写blog这个方法，增加阅读计数功能以及缓存支持
         """
-        o = self.get_object()
-        o.read_count += 1
-        o.save()
-        b = cache.get('blog_{}'.format(o.id))
+        blog_id = int(kwargs[self.lookup_field])
+        with transaction.atomic():
+            # 自身的阅读计数
+            Blog.objects.add_read_count(blog_id)
+            # 合计的阅读计数
+            DateRecord.objects.add_read_count()
+            if settings.RECORD_REGION:
+                ip = self.get_client_ip(request)
+        b = cache.get('blog_{}'.format(blog_id))
         if not b:
+            o = self.get_object()
             serializer = self.get_serializer(o)
-            cache.set('blog_{}'.format(o.id), serializer.data, 60 * settings.CACHE_TIME)
+            b = serializer.data
+            cache.set('blog_{}'.format(o.id), b, 60 * settings.CACHE_TIME)
         return Response(b)
 
     def get_serializer_class(self):
@@ -56,6 +74,8 @@ class BlogViewSet(ModelViewSet):
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def heart(self, request):
         blog_id = int(request.data['id'])
+        # 合计的点赞计数
+        DateRecord.objects.add_like_count()
         Blog.objects.heart(blog_id)
         return Response(create_response())
 
