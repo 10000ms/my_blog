@@ -78,7 +78,7 @@ class InitIndex(APIView, PageNumberPagination):
         c = cache.get('cache_init_index_count_data')
         if not c:
             c = {
-                'date': DateRecord.objects.end_index_data(),
+                'day': DateRecord.objects.end_index_data(),
                 'region': RegionRecord.objects.end_index_data(),
             }
             cache.set('cache_init_index_count_data', c, 60 * settings.CACHE_TIME)

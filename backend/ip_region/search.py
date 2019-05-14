@@ -11,6 +11,8 @@ import socket
 import sys
 import os
 
+from utils.logging import logger
+
 
 class Ip2Region:
     __INDEX_BLOCK_LENGTH = 12
@@ -76,7 +78,7 @@ class Ip2Region:
         try:
             self.__f = io.open(db_file, 'rb')
         except IOError as e:
-            print('[Error]: %s' % e)
+            logger.error('[Error]: %s' % e)
             sys.exit()
 
     def return_data(self, data_ptr):

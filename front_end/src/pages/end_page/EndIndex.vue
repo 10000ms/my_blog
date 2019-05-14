@@ -15,25 +15,25 @@
             </div>
             <div class="index-header-child-div">
                 <infor-card shadow :color="infor3.color" :icon="infor3.icon" :icon-size="36">
-                    <count-to :end="infor1.count" count-class="count-style"/>
+                    <count-to :end="infor3.count" count-class="count-style"/>
                     <p>{{ infor3.title }}</p>
                 </infor-card>
             </div>
             <div class="index-header-child-div">
                 <infor-card shadow :color="infor4.color" :icon="infor4.icon" :icon-size="36">
-                    <count-to :end="infor2.count" count-class="count-style"/>
+                    <count-to :end="infor4.count" count-class="count-style"/>
                     <p>{{ infor4.title }}</p>
                 </infor-card>
             </div>
             <div class="index-header-child-div">
                 <infor-card shadow :color="infor5.color" :icon="infor5.icon" :icon-size="36">
-                    <count-to :end="infor1.count" count-class="count-style"/>
+                    <count-to :end="infor5.count" count-class="count-style"/>
                     <p>{{ infor5.title }}</p>
                 </infor-card>
             </div>
             <div class="index-header-child-div">
                 <infor-card shadow :color="infor6.color" :icon="infor6.icon" :icon-size="36">
-                    <count-to :end="infor2.count" count-class="count-style"/>
+                    <count-to :end="infor6.count" count-class="count-style"/>
                     <p>{{ infor6.title }}</p>
                 </infor-card>
             </div>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import InforCard from '../../components/end/InforCard.vue';
     import countTo from '../../components/end/CountTo.vue';
     import BlogChart from '../../components/end/BlogChart';
@@ -64,56 +66,26 @@
         data() {
             return {
                 ak: this.$secret.baiduMapAK,
-                infor1: {
-                    title: '昨日浏览',
-                    icon: 'md-book',
-                    count: 803,
-                    color: 'rgb(45,140,240)',
-                },
-                infor2: {
-                    title: '总共浏览',
-                    icon: 'md-infinite',
-                    count: 150000,
-                    color: 'rgb(245,141,66)',
-                },
-                infor3: {
-                    title: '昨日评论',
-                    icon: 'md-chatbubbles',
-                    count: 150000,
-                    color: 'rgb(45,140,240)',
-                },
-                infor4: {
-                    title: '总共评论',
-                    icon: 'md-infinite',
-                    count: 150000,
-                    color: 'rgb(245,141,66)',
-                },
-                infor5: {
-                    title: '昨日点赞',
-                    icon: 'md-heart-outline',
-                    count: 150000,
-                    color: 'rgb(45,140,240)',
-                },
-                infor6: {
-                    title: '总共点赞',
-                    icon: 'md-infinite',
-                    count: 150000,
-                    color: 'rgb(245,141,66)',
-                },
                 mapStyle: {},
             };
         },
 
         methods: {
             addScript() {
-                let script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = 'http://api.map.baidu.com/api?v=3.0&ak=' + this.$secret.baiduMapAK + '&callback=init';
-                document.head.appendChild(script);
-                let script2 = document.createElement('script');
-                script2.type = 'text/javascript';
-                script2.src = 'http://unpkg.com/inmap/dist/inmap.min.js';
-                document.head.appendChild(script2);
+                if (! document.getElementById('id-script-baidu-map')) {
+                    let script = document.createElement('script');
+                    script.id = 'id-script-baidu-map';
+                    script.type = 'text/javascript';
+                    script.src = 'http://api.map.baidu.com/api?v=3.0&ak=' + this.$secret.baiduMapAK + '&callback=init';
+                    document.head.appendChild(script);
+                }
+                if (! document.getElementById('id-script-inmap')) {
+                    let script2 = document.createElement('script');
+                    script2.type = 'id-script-inmap';
+                    script2.type = 'text/javascript';
+                    script2.src = 'http://unpkg.com/inmap/dist/inmap.js';
+                    document.head.appendChild(script2);
+                }
             },
             addMap() {
                 let check = setInterval(() => {
@@ -140,68 +112,10 @@
                 });
                 // 设置禁止拖拽
                 myInmap.getMap().disableDragging();
-                let mapData = [
-                    {
-                        name: '北京',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: ['116.3', '39.9']
-                        },
-                        style: {
-                            color: 'rgba(200, 200, 50, 0.7)',
-                            speed: 0.5,
-                        }
-                    },
-                    {
-                        name: '上海',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: ['121.29', '31.11']
-                        },
-                        style: {
-                            color: '#6EE7FF',
-                            speed: 1,
-                            size: 40,
-                        }
-                    },
-                    {
-                        name: '福建',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: ['117.984943', '26.050118']
-                        },
-                        style: {
-                            color: '#90EE90',
-                            speed: 0.45,
-                        }
-                    },
-                    {
-                        name: '广东',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: ['113.394818', '23.408004']
-                        },
-                        style: {
-                            color: '#f8983a',
-                            speed: 0.9,
-                        }
-                    },
-                    {
-                        name: '广西',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: ['108.924274', '23.552255']
-                        },
-                        style: {
-                            color: '#FAFA32',
-                            speed: 0.8,
-                            size: 50,
-                        }
-                    },
-                ];
+                let mapData = this.mapData;
                 let overlay = new inMap.PointAnimationOverlay({
                     style: {
-                        fps: 90, //动画帧数
+                        fps: 30, //动画帧数
                         color: "#FAFA32",
                         size: 20,
                         speed: 0.15,
@@ -210,11 +124,142 @@
                 });
                 myInmap.add(overlay);
             },
+
+            randomColor() {
+                let color = [
+                    '#aac721',
+                    '#FAFA32',
+                    '#f8983a',
+                    '#6EE7FF',
+                    '#90EE90',
+                    '#f86563',
+                    '#CFE8FF',
+                    '#e0a6ff',
+                ];
+                let index = Math.round(Math.random() * color.length);
+                return color[index];
+            },
+
+            /**
+             * 计算size
+             * @param number
+             * @returns {number}
+             */
+            mapSize(number) {
+                number = parseInt(number);
+                let res = 0;
+                if (number === 0) {
+                    return  0;
+                }
+                if (number === 1) {
+                    res = 1;
+                } else if (number < 10) {
+                    res = 4;
+                } else if (number < 100) {
+                    res = 10;
+                } else if (number < 1000) {
+                    res = 25;
+                } else if (number < 10000) {
+                    res = 40;
+                } else {
+                    res = 50;
+                }
+                return res
+            },
+
+            createMapDict(city, lat, lng, size) {
+                return {
+                    name: city,
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [lng, lat]
+                    },
+                    style: {
+                        color: this.randomColor(),
+                        speed: 1,
+                        size: this.mapSize(size),
+                    }
+                };
+            },
         },
 
         mounted() {
             this.addScript();
             this.addMap();
+        },
+
+        computed: {
+            ...mapState('count', {
+                day: state => state.day,
+                region: state => state.region,
+            }),
+
+            infor1() {
+                return {
+                    title: '昨日浏览',
+                    icon: 'md-book',
+                    count: this.day.seven_day[0].read_count,
+                    color: 'rgb(45,140,240)',
+                };
+            },
+
+            infor2() {
+                return {
+                    title: '总共浏览',
+                    icon: 'md-infinite',
+                    count: this.day.total.read_count,
+                    color: 'rgb(245,141,66)',
+                };
+            },
+
+            infor3() {
+                return {
+                    title: '昨日评论',
+                    icon: 'md-chatbubbles',
+                    count: this.day.seven_day[0].comment_count,
+                    color: 'rgb(45,140,240)',
+                };
+            },
+
+            infor4() {
+                return {
+                    title: '总共评论',
+                    icon: 'md-infinite',
+                    count: this.day.total.comment_count,
+                    color: 'rgb(245,141,66)',
+                };
+            },
+            infor5() {
+                return {
+                    title: '昨日点赞',
+                    icon: 'md-heart-outline',
+                    count: this.day.seven_day[0].like_count,
+                    color: 'rgb(45,140,240)',
+                };
+            },
+
+            infor6() {
+                return {
+                    title: '总共点赞',
+                    icon: 'md-infinite',
+                    count: this.day.total.like_count,
+                    color: 'rgb(245,141,66)',
+                };
+            },
+
+            mapData() {
+                let res = [];
+                for (let i = 0; i < this.region.length; i++) {
+                    this.$log('region__count', this.region[i].region__count);
+                    res.push(this.createMapDict(
+                        this.region[i].region__city,
+                        this.region[i].region__lat,
+                        this.region[i].region__lng,
+                        this.region[i].count,
+                    ))
+                }
+                return res
+            }
         },
     }
 </script>

@@ -35,7 +35,7 @@ class DateRecordManager(models.Manager):
             'like_count': self.aggregate(count=models.Sum('like_count'))['count'],
             'comment_count': self.aggregate(count=models.Sum('comment_count'))['count'],
         }
-        seven_day = {}
+        seven_day = []
         for d in range(1, 8):
             temp_date = date.today() - timedelta(days=d)
             q = self.filter(date=temp_date)
@@ -49,11 +49,12 @@ class DateRecordManager(models.Manager):
                 like_count = 0
                 comment_count = 0
             temp_dict = {
+                'date': str(temp_date),
                 'read_count': read_count,
                 'like_count': like_count,
                 'comment_count': comment_count,
             }
-            seven_day.update({str(temp_date): temp_dict})
+            seven_day.append(temp_dict)
         r = {
             'total': total,
             'seven_day': seven_day,
