@@ -27,6 +27,9 @@ CREATE DATABASE  `my_blog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode
 ```
 
 # 备注
+## 百度地图AK
+直接百度地图开发者中心注册帐号，创建应用即可获得AK
+
 ## 后端机密信息
 后端机密信息信息存放在后端根目录下的`secret.py`文件里，这个文件不会被git同步，需要自行添加。
 
@@ -38,6 +41,9 @@ SECRET_KEY =
 # 数据库用户及密码
 DATABASE_ACCOUNT = 
 DATABASE_PASSWORD = 
+
+# 百度AK密匙，用于获取IP的经纬度
+BAIDU_AK = 
 ```
 
 ## ip与位置

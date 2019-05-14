@@ -8,8 +8,10 @@ from rest_framework.pagination import PageNumberPagination
 
 from utils.api_common import create_response
 from ..models.blog import Blog
-from ..serializers.blog import BlogSerializer
 from ..models.website_manage import WebsiteManage
+from ..models.region_record import RegionRecord
+from ..models.date_record import DateRecord
+from ..serializers.blog import BlogSerializer
 from ..serializers.website_manage import WebsiteManageSerializer
 from ..serializers.user import UserSerializer
 
@@ -39,7 +41,8 @@ class InitIndex(APIView, PageNumberPagination):
             b = d
         return b
 
-    def _blog_recommend_from_cache(self, context):
+    @staticmethod
+    def _blog_recommend_from_cache(context):
         """
         获取blog_recommend信息缓存，因为信息都一样，所以context为任意用户的即可
         """
@@ -51,7 +54,8 @@ class InitIndex(APIView, PageNumberPagination):
             cache.set('cache_init_index_blog_recommend', b, 60 * settings.CACHE_TIME)
         return b
 
-    def _website_manage_from_cache(self, context):
+    @staticmethod
+    def _website_manage_from_cache(context):
         """
         获取website_manage信息缓存，因为信息都一样，所以context为任意用户的即可
         """
@@ -65,6 +69,20 @@ class InitIndex(APIView, PageNumberPagination):
                 w = website_manage_serializer.data[0]
             cache.set('cache_init_index_website_manage', w, 60 * settings.CACHE_TIME)
         return w
+
+    @staticmethod
+    def _count_data_from_cache():
+        """
+        获取统计信息缓存
+        """
+        c = cache.get('cache_init_index_count_data')
+        if not c:
+            c = {
+                'date': DateRecord.objects.end_index_data(),
+                'region': RegionRecord.objects.end_index_data(),
+            }
+            cache.set('cache_init_index_count_data', c, 60 * settings.CACHE_TIME)
+        return c
 
     def get(self, request):
         c = {
@@ -90,10 +108,13 @@ class InitIndex(APIView, PageNumberPagination):
                     'count': blog['count'],
                 },
             }
-        else:
+        elif mode == 'end':
             # 后台模式
             d = {
                 'website_manage': self._website_manage_from_cache(c),
                 'user': user_serializer.data,
+                'count_data': self._count_data_from_cache(),
             }
+        else:
+            d = None
         return Response(create_response(data=d))

@@ -147,6 +147,36 @@ REST_FRAMEWORK = {
 # 更换用户模型
 AUTH_USER_MODEL = 'main.User'
 
+# logging 设置
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime}: {process:d}-{thread:d}: {module}-{levelname}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'my_blog.custom': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
+
 
 # 自定义设置区
 

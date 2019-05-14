@@ -18,6 +18,7 @@ from ...serializers.blog import (
 from ...permissions import IsAuthorOrReadOnly
 from ...models.blog import Blog
 from ...models.date_record import DateRecord
+from ...models.region_record import RegionRecord
 from utils.api_common import create_response
 
 
@@ -54,7 +55,9 @@ class BlogViewSet(ModelViewSet):
             # 合计的阅读计数
             DateRecord.objects.add_read_count()
             if settings.RECORD_REGION:
+                # 增加来源地址的统计
                 ip = self.get_client_ip(request)
+                RegionRecord.objects.add_ip(ip)
         b = cache.get('blog_{}'.format(blog_id))
         if not b:
             o = self.get_object()
