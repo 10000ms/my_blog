@@ -59,8 +59,8 @@
                     this.$api.login(d)
                         .then(res => {
                             this.$store.commit('auth/commitInit', res.data);
-                            this.show = false;
                             this.$Message.info('登陆成功');
+                            this.show = false;
                         })
                         .catch(error => {
                             this.$Message.warning(error.msg);

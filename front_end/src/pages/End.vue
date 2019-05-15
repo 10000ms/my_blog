@@ -20,6 +20,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import EndBlogMenu from '../components/end/EndBlogMenu.vue';
     import BlogFooter from '../components/main/BlogFooter';
 
@@ -56,6 +58,13 @@
                         message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
+        },
+
+        computed: {
+            ...mapState('auth', {
+                userId: state => state.id,
+                isSuperuser: state => state.isSuperuser,
+            }),
         },
     };
 </script>

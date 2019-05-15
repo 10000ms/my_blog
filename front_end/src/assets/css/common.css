@@ -149,4 +149,7 @@ a {
   width: 100%;
   border-radius: 5px;
 }
+.clear-div {
+  clear: both;
+}
 /*# sourceMappingURL=common.css.map */

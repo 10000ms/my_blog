@@ -1,5 +1,6 @@
 <template>
     <div class="thin-content-div height-min-height-div">
+        <span class="content-title-items">总览</span>
         <div>
             <div class="index-header-child-div">
                 <infor-card shadow :color="infor1.color" :icon="infor1.icon" :icon-size="36">
@@ -38,11 +39,18 @@
                 </infor-card>
             </div>
         </div>
-        <div>
-            <div id="id-allmap"></div>
+        <div class="clear-div"></div>
+        <div class="monitor-block-div">
+            <span class="content-title-items">七天情况总览</span>
+            <div>
+                <blog-chart style="height: 310px;margin-top: 40px"></blog-chart>
+            </div>
         </div>
-        <div>
-            <blog-chart style="height: 310px;margin-top: 40px"></blog-chart>
+        <div class="monitor-block-div">
+            <span class="content-title-items">七天热度图</span>
+            <div>
+                <div id="id-allmap"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -127,7 +135,7 @@
 
             randomColor() {
                 let color = [
-                    '#aac721',
+                    '#c7b289',
                     '#FAFA32',
                     '#f8983a',
                     '#6EE7FF',
@@ -250,7 +258,6 @@
             mapData() {
                 let res = [];
                 for (let i = 0; i < this.region.length; i++) {
-                    this.$log('region__count', this.region[i].region__count);
                     res.push(this.createMapDict(
                         this.region[i].region__city,
                         this.region[i].region__lat,
@@ -277,5 +284,15 @@
     #id-allmap {
         width: 100%;
         height: 700px;
+    }
+
+    .monitor-block-div {
+        margin-top: 40px;
+        border-top: 2px solid rgba(235, 150, 72, 0.7);
+    }
+
+    .content-title-items {
+        display: block;
+        margin: 20px;
     }
 </style>

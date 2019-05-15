@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from '../store/index';
+
 import Index from '../pages/front_page/Index';
 import searchMode from '../pages/front_page/searchMode';
 import Archive from '../pages/front_page/Archive';
@@ -22,7 +24,7 @@ import ManageWebsite from '../pages/end_page/ManageWebsite';
 Vue.use(Router);
 
 
-export default new Router({
+export const router = new Router({
     routes: [
         {
             path: '/',
@@ -132,4 +134,24 @@ export default new Router({
             ],
         },
     ],
+});
+
+
+/**
+ * 未登录和不是管理员不允许进入后台管理界面
+ */
+router.beforeEach((to, from, next) => {
+    let isLogin = store.state.auth.id;
+    let isSuperuser = store.state.auth.isSuperuser;
+    const regex = '^/admin.*$';
+    if (!isLogin || ! isSuperuser) {
+        if (to.path.search(regex) !== -1) {
+            Vue.prototype.$Message.error('没有对应页面访问权限');
+            next({path: '/'});
+        }else {
+            next();
+        }
+    }else {
+        next();
+    }
 });

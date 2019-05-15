@@ -2566,7 +2566,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
     }
     if (BUGGY_ZERO || HASNT_CHAINING) fixMethod(ADDER);
     // weak collections should not contains .clear method
-    if (IS_WEAK && proto.clear) delete proto.clear;
+    if (IS_WEAK && proto.clearDiv) delete proto.clearDiv;
   }
 
   setToStringTag(C, NAME);
@@ -5647,7 +5647,7 @@ var PointOverlay = function (_Parameter) {
             var _this2 = this;
 
             if (this._batchesData) {
-                this._batchesData.clear();
+                this._batchesData.clearDiv();
                 this._batchesData.setUsable(false);
             }
 
@@ -5795,7 +5795,7 @@ var PointOverlay = function (_Parameter) {
             this._clearCanvas();
             this._mouseLayer._canvasResize();
             if (this._batchesData) {
-                this._batchesData.clear();
+                this._batchesData.clearDiv();
                 this._batchesData.action(this._workerData, this._loopDraw, this._ctx);
             } else {
                 this._loopDraw(this._ctx, this._workerData, false);
@@ -5916,7 +5916,7 @@ var PointOverlay = function (_Parameter) {
     }, {
         key: '_Tdispose',
         value: function _Tdispose() {
-            this._batchesData && this._batchesData.clear();
+            this._batchesData && this._batchesData.clearDiv();
             this._map.removeOverlay(this._mouseLayer);
             this._mouseLayer.dispose();
         }
@@ -12555,7 +12555,7 @@ var BatchesData = function () {
                 _ref$splitCount = _ref.splitCount,
                 splitCount = _ref$splitCount === undefined ? 1500 : _ref$splitCount;
 
-            this.clear();
+            this.clearDiv();
             this.interval = interval;
             this.splitCount = splitCount;
         }
@@ -12565,7 +12565,7 @@ var BatchesData = function () {
             this.usable = val;
         }
     }, {
-        key: 'clear',
+        key: 'clear-div',
         value: function clear() {
             this.splitArray = [];
             this.index = 0;
@@ -12579,7 +12579,7 @@ var BatchesData = function () {
             var _this = this;
 
             if (this.usable) {
-                this.clear();
+                this.clearDiv();
             } else {
                 return;
             }
@@ -12591,7 +12591,7 @@ var BatchesData = function () {
 
             var loop = function loop() {
                 if (!_this.usable) {
-                    _this.clear();
+                    _this.clearDiv();
                     return;
                 }
                 var item = _this.splitArray[_this.index];
@@ -12600,7 +12600,7 @@ var BatchesData = function () {
                 _this.index++;
 
                 if (_this.index >= _this.splitArray.length) {
-                    _this.clear();
+                    _this.clearDiv();
                 } else {
                     _this.intervalId = setTimeout(loop, interval);
                 }
@@ -17171,7 +17171,7 @@ var $export = __webpack_require__(0);
 var $task = __webpack_require__(95);
 $export($export.G + $export.B, {
   setImmediate: $task.set,
-  clearImmediate: $task.clear
+  clearImmediate: $task.clearDiv
 });
 
 

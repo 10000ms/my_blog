@@ -2,7 +2,7 @@
  * 请求拦截、相应拦截、错误统一处理
  */
 import axios from 'axios';
-import router from '../router/index';
+import { router } from '../router/index';
 
 import {log} from '../utils/console';
 import cookie from '../utils/cookie';
@@ -94,13 +94,6 @@ export const axiosConfig = function(message) {
             // 开发环境行对返回进行debug输出
             if (process.env.NODE_ENV === 'development') {
                 log('in development error response', error.response);
-            }
-            if (error.response.status && 499 < error.response.status && error.response.status < 600) {
-                message.error(codeMsg[500]);
-            } else if (error.response.status === 404) {
-                message.error(codeMsg[404]);
-            } else if (error.response.status === 403) {
-                message.error(codeMsg[403]);
             }
             return Promise.reject(error.response);
         },

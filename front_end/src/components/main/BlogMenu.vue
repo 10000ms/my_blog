@@ -139,16 +139,18 @@
                         break;
                 }
             },
+
             logout() {
                 this.$api.logout()
                     .then(() => {
                         this.$store.commit('auth/commitInit', []);
-                        this.$Message.info('已退出登录')
+                        this.$Message.info('已退出登录');
                     })
                     .catch(error => {
                         message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
+
             selectMethod(key) {
                 // 換頁
                 this.$router.push({name: key});

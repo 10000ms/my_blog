@@ -82,7 +82,7 @@
                         <div>
                             <DropdownItem :disabled="true">
                                 <span class="dropdown-item color-common-white-items">
-                                    欢迎：{{userName}}
+                                    欢迎：{{getFullName}}
                                 </span>
                             </DropdownItem>
                             <DropdownItem name="index">
@@ -90,7 +90,7 @@
                                     返回首页
                                 </span>
                             </DropdownItem>
-                            <DropdownItem>
+                            <DropdownItem name="logout">
                                 <span class="dropdown-item color-common-white-items">
                                     退出登录
                                 </span>
@@ -104,6 +104,9 @@
 </template>
 
 <script>
+    import { mapState, mapGetters } from 'vuex';
+
+    import message from '../../utils/message';
 
     export default {
         name: 'BlogMenu',
@@ -118,8 +121,7 @@
                     'background-color': 'rgba(235, 150, 72, 0.7)',
                     'color': 'rgba(255, 255, 255, 1)',
                 },
-                // TODO： 放入vuex
-                userName: 123456,
+                // TODO： 增加这个功能
                 avatarURL: null,
             };
         },
@@ -130,13 +132,38 @@
                     case 'index':
                         this.$router.push({name: 'index'});
                         break;
+                    case 'logout':
+                        this.logout();
+                        break;
                 }
             },
+
+            logout() {
+                this.$api.logout()
+                    .then(() => {
+                        this.$store.commit('auth/commitInit', []);
+                        this.$Message.info('已退出登录');
+                        this.$router.push({name: 'index'});
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                    });
+            },
+
             selectMethod(key) {
                 // 換頁
                 this.$router.push({name: key});
             },
+        },
 
+        computed: {
+            ...mapState('auth', {
+                userId: state => state.id,
+            }),
+
+            ...mapGetters('auth', [
+                'getFullName',
+            ]),
         },
     }
 </script>

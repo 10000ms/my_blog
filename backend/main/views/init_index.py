@@ -110,11 +110,16 @@ class InitIndex(APIView, PageNumberPagination):
             }
         elif mode == 'end':
             # 后台模式
-            d = {
-                'website_manage': self._website_manage_from_cache(c),
-                'user': user_serializer.data,
-                'count_data': self._count_data_from_cache(),
-            }
+            # 确定用户权限
+            auth = bool(request.user.pk and request.user.is_staff)
+            if auth:
+                d = {
+                    'website_manage': self._website_manage_from_cache(c),
+                    'user': user_serializer.data,
+                    'count_data': self._count_data_from_cache(),
+                }
+            else:
+                d = None
         else:
             d = None
         return Response(create_response(data=d))
