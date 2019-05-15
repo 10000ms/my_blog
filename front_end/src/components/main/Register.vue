@@ -39,6 +39,8 @@
 </template>
 
 <script>
+    import message from '../../utils/message';
+
     export default {
         name: 'Register',
         data() {
@@ -87,7 +89,7 @@
                             this.$Message.info('注册成功');
                         })
                         .catch(error => {
-                            this.$Message.warning(error.msg);
+                            message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 } else {
                     this.$Message.warning('请完整输入信息');

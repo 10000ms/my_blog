@@ -76,13 +76,18 @@
             <div class="avatar-div">
                 <Dropdown trigger="click" @on-click="handleClick">
                     <a href="#">
-                        <Avatar icon="md-person" :style="avatarStyle" size="large" :src="avatarURL"/>
+                        <Avatar icon="md-person" :style="avatarStyle" size="large" :src="profile"/>
                     </a>
                     <DropdownMenu slot="list">
                         <div>
                             <DropdownItem :disabled="true">
                                 <span class="dropdown-item color-common-white-items">
                                     欢迎：{{getFullName}}
+                                </span>
+                            </DropdownItem>
+                            <DropdownItem name="user-center">
+                                <span class="dropdown-item color-common-white-items">
+                                    个人中心
                                 </span>
                             </DropdownItem>
                             <DropdownItem name="index">
@@ -100,6 +105,7 @@
                 </Dropdown>
             </div>
         </Menu>
+        <user-center ref="UserCenterModel"></user-center>
     </div>
 </template>
 
@@ -108,8 +114,14 @@
 
     import message from '../../utils/message';
 
+    import UserCenter from '../main/UserCenter';
+
     export default {
         name: 'BlogMenu',
+
+        components: {
+            UserCenter,
+        },
 
         data() {
             return {
@@ -121,8 +133,6 @@
                     'background-color': 'rgba(235, 150, 72, 0.7)',
                     'color': 'rgba(255, 255, 255, 1)',
                 },
-                // TODO： 增加这个功能
-                avatarURL: null,
             };
         },
 
@@ -134,6 +144,9 @@
                         break;
                     case 'logout':
                         this.logout();
+                        break;
+                    case 'user-center':
+                        this.$refs.UserCenterModel.openModal();
                         break;
                 }
             },
@@ -159,6 +172,7 @@
         computed: {
             ...mapState('auth', {
                 userId: state => state.id,
+                profile: state => state.profile,
             }),
 
             ...mapGetters('auth', [

@@ -6,7 +6,7 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.rest.user.UserViewSet)
+router.register(r'user', views.rest.user.UserViewSet)
 router.register(r'blog', views.rest.blog.BlogViewSet)
 router.register(r'category', views.rest.category.CategoryViewSet)
 router.register(r'comment', views.rest.comment.CommentViewSet)

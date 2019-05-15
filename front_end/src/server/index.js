@@ -2,6 +2,7 @@ import { get, post, put, deleteAjax } from './api.js';
 
 export default {
     index: p => get('api/init-index/', p),
+    changeUserData: (id, p) => put(`api/user/${id}/`, p),
     blog: id => get(`api/blog/${id}/`, null),
     blogs: (p=null) => get('api/blog/', p),
     heart: p => post('api/blog/heart/', p),
@@ -9,9 +10,9 @@ export default {
     createComment: p => post(`api/comment/`, p),
     changeComment: (id, p) => put(`api/comment/${id}/`, p),
     deleteComment: id => deleteAjax(`api/comment/${id}/`, null),
-    login: p => post('api/users/login/', p),
-    register: p => post('api/users/register/', p),
-    logout: () => post('api/users/logout/', null),
+    login: p => post('api/user/login/', p),
+    register: p => post('api/user/register/', p),
+    logout: () => post('api/user/logout/', null),
     tab: (id=null) => {
         let url;
         if (id) {

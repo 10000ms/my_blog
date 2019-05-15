@@ -34,7 +34,7 @@
             <div class="avatar-div content-content-items">
                 <Dropdown trigger="click" @on-click="handleClick">
                     <a href="#">
-                        <Avatar icon="md-person" :style="avatarStyle" size="large" :src="avatarURL"/>
+                        <Avatar icon="md-person" :style="avatarStyle" size="large" :src="profile"/>
                     </a>
                     <DropdownMenu slot="list">
                         <div v-if="! userId">
@@ -55,6 +55,11 @@
                                     欢迎：{{getFullName}}
                                 </span>
                             </DropdownItem>
+                            <DropdownItem name="user-center">
+                                <span class="dropdown-item color-common-white-items">
+                                    个人中心
+                                </span>
+                            </DropdownItem>
                             <DropdownItem name="admin" v-show="isSuperuser">
                                 <span class="dropdown-item color-common-white-items">
                                     管理中心
@@ -72,6 +77,7 @@
         </Menu>
         <login ref="loginModel"></login>
         <register ref="registerModel"></register>
+        <user-center ref="UserCenterModel"></user-center>
     </div>
 </template>
 
@@ -80,6 +86,7 @@
 
     import Login from './Login';
     import Register from './Register';
+    import UserCenter from '../main/UserCenter';
     import message from '../../utils/message';
 
     export default {
@@ -87,6 +94,7 @@
         components: {
             Register,
             Login,
+            UserCenter,
         },
 
         data() {
@@ -99,8 +107,6 @@
                     'background-color': 'rgba(235, 150, 72, 0.7)',
                     'color': 'rgba(255, 255, 255, 1)',
                 },
-                // TODO： 增加这个功能
-                avatarURL: null,
             };
         },
 
@@ -108,6 +114,7 @@
             ...mapState('auth', {
                 userId: state => state.id,
                 isSuperuser: state => state.isSuperuser,
+                profile: state => state.profile,
             }),
             ...mapState('website', {
                 openRegister: state => state.openRegister,
@@ -136,6 +143,9 @@
                         break;
                     case 'logout':
                         this.logout();
+                        break;
+                    case 'user-center':
+                        this.$refs.UserCenterModel.openModal();
                         break;
                 }
             },

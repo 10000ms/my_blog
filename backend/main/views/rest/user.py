@@ -31,6 +31,8 @@ class UserViewSet(ModelViewSet):
         """
         if self.request.user.is_staff:
             self.queryset = self.queryset_manage
+        elif self.request.user.id:
+            self.queryset = User.objects.get(id=self.request.user.id)
 
         assert self.queryset is not None, (
             "'%s' should either include a `queryset` attribute, "

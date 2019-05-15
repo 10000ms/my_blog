@@ -1,6 +1,7 @@
 const state = {
     id: 0,
     email: '',
+    profile: '',
     firstName: '',
     lastName: '',
     phone: '',
@@ -21,6 +22,7 @@ const getters = {
 const mutations = {
     commitInit(state, user) {
         state.id = user['id'];
+        state.profile = user['profile'];
         state.email = user['email'];
         state.firstName = user['first_name'];
         state.lastName = user['last_name'];

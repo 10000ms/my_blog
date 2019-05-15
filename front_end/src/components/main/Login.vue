@@ -24,6 +24,8 @@
 </template>
 
 <script>
+    import message from '../../utils/message';
+
     export default {
         name: 'Login',
 
@@ -63,7 +65,7 @@
                             this.show = false;
                         })
                         .catch(error => {
-                            this.$Message.warning(error.msg);
+                            message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 }
                 // 关闭这一轮的loading，并且保证下一轮存在loading
