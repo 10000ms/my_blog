@@ -1,0 +1,79 @@
+@menu-height: 50px;
+
+
+@media screen and (max-width: 1100px) {
+    .side-bar-div {
+        display: none;
+    }
+
+    .right-main-div {
+        left: 0;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .ivu-layout-header {
+        height: @menu-height;
+        position: fixed;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .ivu-layout-content {
+        margin-top: @menu-height;
+    }
+
+    .main-content {
+        min-height: 620px;
+    }
+
+    .iview-ui-menu {
+        height: @menu-height;
+
+        .avatar-div {
+            line-height: @menu-height;
+        }
+
+        .profile-small-icon {
+            display: block;
+
+        }
+
+        .profile-large-icon {
+            display: none;
+        }
+
+        .menu-menu {
+            font-size: 8px;
+            padding-right: 5px !important;
+            padding-left: 5px !important;
+            line-height: @menu-height !important;
+
+            .menu-icon {
+                display: none;
+            }
+
+            :hover {
+                font-size: 9px;
+            }
+        }
+    }
+
+    .phone-title-items-span {
+        font-size: 15px;
+    }
+
+    .thin-content-div {
+        width: 95%;
+    }
+
+    .iview-simple-page {
+        display: block;
+    }
+
+    .iview-main-page {
+        display: none;
+    }
+
+}

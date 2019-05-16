@@ -3,13 +3,22 @@
         <timeline>
             <timeline-item v-for="b in blogs" :key="b.id" bg-color="rgba(246, 141, 66, 1)" icon-size="large">
                 <router-link :to="'/blog/' + b.id + '/'">
-                    <span class="time-span content-content-items">{{getTime(b.create_time)}}:</span>
-                    <span class="content-title-items">{{b.title}}</span>
+                    <span class="time-span content-content-items phone-title-items-span">{{getTime(b.create_time)}}:</span>
+                    <span class="content-title-items phone-title-items-span">{{b.title}}</span>
                 </router-link>
             </timeline-item>
         </timeline>
         <div class="text-align-center-div">
             <Page
+                    class="iview-simple-page"
+                    :current="currentPage"
+                    :total="blogsPage['count']"
+                    v-if="blogsPage['count'] > 10"
+                    @on-change="changePage"
+                    simple
+            />
+            <Page
+                    class="iview-main-page"
                     :total="blogsPage['count']"
                     :current="currentPage"
                     @on-change="changePage"

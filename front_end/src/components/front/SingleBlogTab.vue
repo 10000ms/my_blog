@@ -7,7 +7,9 @@
             </div>
             <div class="blog-title-div">
       <span class="blog-title-span color-common-black-items">
-        <router-link :to="'/blog/' + blogData.id + '/'">{{blogData.title}}</router-link>
+        <router-link :to="'/blog/' + blogData.id + '/'">
+            <span class="phone-blog-title-items-span">{{blogData.title}}</span>
+        </router-link>
       </span>
             </div>
             <time class="time">
@@ -68,7 +70,42 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+    @phone-margin-left: 50px;
+
+    @media screen and (max-width: 700px) {
+        .blog-header-div {
+            margin-left: @phone-margin-left !important;
+        }
+
+        .single-blog-main-content-div {
+            margin-left: @phone-margin-left !important;
+            min-height: 80px !important;
+        }
+
+        .time {
+            left: -@phone-margin-left !important;
+        }
+
+        .day {
+            font-size: 1em !important;
+        }
+
+        .tabs-container {
+            left: -@phone-margin-left !important;
+        }
+
+        .read-count-div {
+            right: 5px !important;
+            font-size: 15px !important;
+        }
+
+        .phone-blog-title-items-span {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+
     .single-content-div {
         width: 95%;
         margin: 0 auto 20px auto;

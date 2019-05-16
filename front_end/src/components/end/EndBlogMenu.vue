@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Menu mode="horizontal" active-name="1" :style="menuStyle" @on-select="selectMethod">
+        <Menu mode="horizontal" active-name="1" class="iview-ui-menu" @on-select="selectMethod">
             <MenuItem name="endIndex" class="menu-menu content-content-items">
                 <span class="span-menu">
                     <Icon type="ios-speedometer" size="16"/>
@@ -125,10 +125,6 @@
 
         data() {
             return {
-                menuStyle: {
-                    'background-image': 'linear-gradient(to left,#cc2b5e,#753a88)',
-                    'height': '65px',
-                },
                 avatarStyle: {
                     'background-color': 'rgba(235, 150, 72, 0.7)',
                     'color': 'rgba(255, 255, 255, 1)',

@@ -5,12 +5,14 @@
             <span>友情链接</span>
         </div>
         <div class="thin-content-div">
-            <div v-for="f in getFriendshipLink" :key="f.id" class="link-div">
-                <a class="color-common-white-items" :href="f.link"><span>{{f.link}}</span></a>
+            <div v-for="f in getFriendshipLink" :key="f.id">
+                <div class="link-div">
+                    <a class="color-common-white-items" :href="f.link"><span>{{f.link}}</span></a>
+                </div>
             </div>
+            <div class="clear-div"></div>
         </div>
         <div class="thin-content-div text-align-center-div content-content-items color-common-white-items">{{ICPNumber}}</div>
-
     </div>
 </template>
 
@@ -47,9 +49,8 @@
 
     .link-div {
         float: left;
-        width: 20%;
-        margin: 0 15%;
+        width: 40%;
+        margin: 0 5%;
         font-size: 16px;
-        text-align: left;
     }
 </style>

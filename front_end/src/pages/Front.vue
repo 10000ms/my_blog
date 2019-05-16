@@ -22,8 +22,8 @@
         </div>
 
         <!--返回顶部-->
-        <BackTop :height="50" :bottom="100" :right="15">
-            <Icon type="ios-arrow-dropup-circle" size="60" color="rgba(246, 141, 66, 1)"/>
+        <BackTop :height="50" :bottom="50" :right="10">
+            <Icon type="ios-arrow-dropup-circle" size="60" color="rgba(246, 141, 66, 0.7)"/>
         </BackTop>
     </div>
 </template>

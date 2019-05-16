@@ -4,7 +4,7 @@
             <div class="color-common-black-items">
                 <router-link :to="'/search/' + mode + '/' + c.id + '/'">
                     <span v-html="printLevel(getLevel(c.id))" class="count-span"></span>
-                    {{c.title}}
+                    <span class="phone-title-items-span">{{c.title}}</span>
                     <span class="count-span">({{c.count}})</span>
                 </router-link>
             </div>

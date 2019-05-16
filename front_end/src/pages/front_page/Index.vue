@@ -2,6 +2,15 @@
     <div>
         <single-blog-tab v-for="b in blogs" :blogData="b" :key="b.id"></single-blog-tab>
         <Page
+                class="iview-simple-page"
+                :current="currentPage"
+                :total="indexPage['count']"
+                v-if="indexPage['count'] > 10"
+                @on-change="changePage"
+                simple
+        />
+        <Page
+                class="iview-main-page"
                 :total="indexPage['count']"
                 :current="currentPage"
                 @on-change="changePage"

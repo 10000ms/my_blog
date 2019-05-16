@@ -14,10 +14,10 @@ import ServerIndex from './server/index';
 
 import './assets/css/common.less'
 import './assets/css/theme.less'
+import './assets/css/phone-common.less'
 
 Vue.config.productionTip = false;
 Vue.prototype.$log = log;
-Vue.prototype.$bus = new Vue();
 Vue.prototype.$secret = Secret;
 Vue.prototype.$api = ServerIndex;
 

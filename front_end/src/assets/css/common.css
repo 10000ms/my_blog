@@ -60,13 +60,18 @@ a {
 .dialog-single-input-div {
   margin: 20px;
 }
-.menu-menu {
+.iview-ui-menu {
+  background-image: linear-gradient(to left, #cc2b5e, #753a88);
+  height: 65px;
+}
+.iview-ui-menu .profile-small-icon {
+  display: none;
+}
+.iview-ui-menu .menu-menu {
+  color: rgba(255, 255, 255, 0.9) !important;
   cursor: pointer;
 }
-.menu-menu {
-  color: rgba(255, 255, 255, 0.9) !important;
-}
-.menu-menu :hover {
+.iview-ui-menu .menu-menu :hover {
   color: #2d8cf0 !important;
   font-size: 17px;
 }
@@ -151,5 +156,8 @@ a {
 }
 .clear-div {
   clear: both;
+}
+.iview-simple-page {
+  display: none;
 }
 /*# sourceMappingURL=common.css.map */

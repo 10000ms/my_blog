@@ -1,40 +1,45 @@
 <template>
     <div>
-        <Menu mode="horizontal" active-name="1" :style="menuStyle" @on-select="selectMethod">
+        <Menu mode="horizontal" active-name="1" class="iview-ui-menu" @on-select="selectMethod">
             <MenuItem name="index" class="menu-menu content-content-items">
                 <span class="span-menu">
-                    <Icon type="ios-home" size="16"/>
+                    <Icon class="menu-icon" type="ios-home" size="16"/>
                     Index
                 </span>
             </MenuItem>
             <MenuItem name="tabs" class="menu-menu content-content-items">
                 <span class="span-menu">
-                    <Icon type="md-pricetags" size="16"/>
+                    <Icon class="menu-icon" type="md-pricetags" size="16"/>
                     Tabs
                 </span>
             </MenuItem>
             <MenuItem name="categories" class="menu-menu content-content-items">
                 <span class="span-menu">
-                    <Icon type="md-filing" size="16"/>
+                    <Icon class="menu-icon" type="md-filing" size="16"/>
                     Categories
                 </span>
             </MenuItem>
             <MenuItem name="archive" class="menu-menu content-content-items">
                 <span class="span-menu">
-                    <Icon type="md-clock" size="16"/>
+                    <Icon class="menu-icon" type="md-clock" size="16"/>
                     Archive
                 </span>
             </MenuItem>
             <MenuItem name="aboutMe" class="menu-menu content-content-items">
                 <span class="span-menu">
-                    <Icon type="ios-quote" size="16"/>
+                    <Icon class="menu-icon" type="ios-quote" size="16"/>
                     About Me
                 </span>
             </MenuItem>
             <div class="avatar-div content-content-items">
                 <Dropdown trigger="click" @on-click="handleClick">
                     <a href="#">
-                        <Avatar icon="md-person" :style="avatarStyle" size="large" :src="profile"/>
+                        <div class="profile-large-icon">
+                            <Avatar icon="md-person" :style="avatarStyle" size="large" :src="profile"/>
+                        </div>
+                        <div class="profile-small-icon">
+                            <Avatar icon="md-person" :style="avatarStyle" size="small" :src="profile"/>
+                        </div>
                     </a>
                     <DropdownMenu slot="list">
                         <div v-if="! userId">
@@ -99,10 +104,6 @@
 
         data() {
             return {
-                menuStyle: {
-                    'background-image': 'linear-gradient(to left,#cc2b5e,#753a88)',
-                    'height': '65px',
-                },
                 avatarStyle: {
                     'background-color': 'rgba(235, 150, 72, 0.7)',
                     'color': 'rgba(255, 255, 255, 1)',

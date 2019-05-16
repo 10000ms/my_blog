@@ -87,16 +87,22 @@ a {
     margin: 20px;
 }
 
-.menu-menu {
-    cursor: pointer;
-}
+.iview-ui-menu {
+    background-image: linear-gradient(to left, rgb(204, 43, 94), rgb(117, 58, 136));
+    height: 65px;
 
-.menu-menu {
-    color: rgba(255, 255, 255, 0.9) !important;
+    .profile-small-icon {
+        display: none;
+    }
 
-    :hover {
-        color: rgb(45, 140, 240) !important;
-        font-size: 17px;
+    .menu-menu {
+        color: rgba(255, 255, 255, 0.9) !important;
+        cursor: pointer;
+
+        :hover {
+            color: rgb(45, 140, 240) !important;
+            font-size: 17px;
+        }
     }
 }
 
@@ -198,4 +204,8 @@ a {
 
 .clear-div {
     clear: both;
+}
+
+.iview-simple-page {
+    display: none;
 }
