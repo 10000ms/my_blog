@@ -19,6 +19,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'phone',
             'is_author',
             'is_superuser',
+            'is_demo_user',
         )
         # 用户资料修改不是全部统一修改
         extra_kwargs = {

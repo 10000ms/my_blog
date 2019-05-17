@@ -11,6 +11,7 @@ export default {
     changeComment: (id, p) => put(`api/comment/${id}/`, p),
     deleteComment: id => deleteAjax(`api/comment/${id}/`, null),
     login: p => post('api/user/login/', p),
+    demoLogin: () => post('api/user/demo/', null),
     register: p => post('api/user/register/', p),
     logout: () => post('api/user/logout/', null),
     tab: (id=null) => {

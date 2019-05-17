@@ -8,6 +8,7 @@ const state = {
     username: '',
     isAuthor: '',
     isSuperuser: '',
+    isDemo: false,
 };
 
 
@@ -30,6 +31,7 @@ const mutations = {
         state.username = user['username'];
         state.isAuthor = user['is_author'];
         state.isSuperuser = user['is_superuser'];
+        state.isDemo = user['is_demo_user'];
     },
 };
 

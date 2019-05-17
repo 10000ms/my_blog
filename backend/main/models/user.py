@@ -12,6 +12,7 @@ class User(AbstractUser):
     phone = models.CharField('电话号码', max_length=30, blank=True, unique=True)
     profile = models.URLField('头像', default='')
     is_author = models.BooleanField('是否是作者', default=False)
+    is_demo_user = models.BooleanField('是否是使用用户', default=False)
 
     objects = user.CustomUserManager()
 

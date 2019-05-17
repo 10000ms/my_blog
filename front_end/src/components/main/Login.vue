@@ -2,10 +2,6 @@
     <Modal
         v-model="show"
         title="Common Modal dialog box title"
-        @on-ok="wantLogin"
-        ok-text="登陆"
-        cancel-text="取消"
-        :loading="loading"
         :closable="true"
         scrollable
     >
@@ -20,10 +16,19 @@
                 <i-input v-model="password" placeholder="密码" type="password"/>
             </div>
         </div>
+        <div slot="footer">
+            <Button size="large" @click="close">取消</Button>
+            <Button v-if="demoModel" type="info" size="large" :loading="loading" @click="wantDemoLogin">
+                <span>demo模式登录</span>
+            </Button>
+            <Button type="primary" size="large" :loading="loading" @click="wantLogin">登陆</Button>
+        </div>
     </Modal>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import message from '../../utils/message';
 
     export default {
@@ -41,13 +46,33 @@
                 },
                 account: '',
                 password: '',
-                loading: true,
+                loading: false,
             };
         },
 
         methods: {
             openModal() {
                 this.show = true;
+            },
+
+            close() {
+                this.show = false;
+                this.loading = false;
+            },
+
+            wantDemoLogin() {
+                this.loading = true;
+                this.$api.demoLogin()
+                    .then(res => {
+                        this.$store.commit('auth/commitInit', res.data);
+                        this.$Message.info('登陆成功');
+                        this.show = false;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        message.dealReturnMessage(error.msg, this, 'warning');
+                        this.loading = false;
+                    });
             },
 
             wantLogin() {
@@ -58,22 +83,26 @@
                         username: this.account,
                         password: this.password,
                     };
+                    this.loading = true;
                     this.$api.login(d)
                         .then(res => {
                             this.$store.commit('auth/commitInit', res.data);
                             this.$Message.info('登陆成功');
                             this.show = false;
+                            this.loading = false;
                         })
                         .catch(error => {
                             message.dealReturnMessage(error.msg, this, 'warning');
+                            this.loading = false;
                         });
                 }
-                // 关闭这一轮的loading，并且保证下一轮存在loading
-                this.loading = false;
-                this.$nextTick(() => {
-                    this.loading = true;
-                });
             },
+        },
+
+        computed: {
+            ...mapState('website', {
+                demoModel: state => state.demoModel,
+            }),
         },
     }
 </script>

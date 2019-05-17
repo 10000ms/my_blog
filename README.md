@@ -3,6 +3,18 @@
 1. 前后端分离：前端vue，后端django
 2. 使用更多的其他技术增加blog功能
 
+# 运行说明
+
+1. 启动后端
+```
+python manage.py runserver 8000
+```
+2. 后端目录下启动celery
+```
+celery -A my_blog worker -l info -P eventlet
+```
+
+
 
 # 返回码定义
 

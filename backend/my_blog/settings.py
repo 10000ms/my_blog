@@ -188,3 +188,21 @@ RECORD_REGION = True
 
 # 百度AK密匙，用于获取IP的经纬度
 BAIDU_AK = secret.BAIDU_AK
+
+
+# celery配置
+
+# Broker settings.
+# 说明使用的redis的0号队列，如果有多个celery任务都使用同一个队列，则会造成任务混乱。最好是celery实例单独使用一个队列。
+BROKER_URL = 'redis://localhost/0'
+
+# Using the database to store task state and results.
+CELERY_RESULT_BACKEND = 'redis://localhost/0'
+
+CELERY_ANNOTATIONS = {'*': {'rate_limit': '100/s'}}
+
+#: Only add pickle to this list if your broker is secured
+#: from unwanted access (see userguide/security.html)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

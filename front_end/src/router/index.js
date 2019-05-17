@@ -143,8 +143,9 @@ export const router = new Router({
 router.beforeEach((to, from, next) => {
     let isLogin = store.state.auth.id;
     let isSuperuser = store.state.auth.isSuperuser;
+    let isDemo = Boolean(store.state.website.demoModel && store.state.auth.isDemo);
     const regex = '^/admin.*$';
-    if (!isLogin || ! isSuperuser) {
+    if (! ((isLogin && isSuperuser) || isDemo)) {
         if (to.path.search(regex) !== -1) {
             Vue.prototype.$Message.error('没有对应页面访问权限');
             next({path: '/'});

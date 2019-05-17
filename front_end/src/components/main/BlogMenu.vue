@@ -65,7 +65,7 @@
                                     个人中心
                                 </span>
                             </DropdownItem>
-                            <DropdownItem name="admin" v-show="isSuperuser">
+                            <DropdownItem name="admin" v-show="manageCenter">
                                 <span class="dropdown-item color-common-white-items">
                                     管理中心
                                 </span>
@@ -119,11 +119,16 @@
             }),
             ...mapState('website', {
                 openRegister: state => state.openRegister,
+                demoModel: state => state.demoModel,
             }),
 
             ...mapGetters('auth', [
                 'getFullName',
             ]),
+
+            manageCenter() {
+                return this.isSuperuser || this.demoModel
+            },
         },
 
         methods: {

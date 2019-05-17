@@ -55,6 +55,14 @@ class UserViewSet(ModelViewSet):
             raise ValidationError('登陆失败')
 
     @action(detail=False, methods=['post'])
+    def demo(self, request):
+        if User.objects.demo_login(request) is True:
+            res = UserSerializer(request.user, context={'request': request}).data
+            return Response(create_response(data=res))
+        else:
+            raise ValidationError('登陆失败')
+
+    @action(detail=False, methods=['post'])
     def logout(self, request):
         if request.user.is_authenticated:
             logout(request)

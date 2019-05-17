@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import date, timedelta
+from random import randint
 
 from django.db import models
 
@@ -53,6 +54,34 @@ class DateRecordManager(models.Manager):
                 'read_count': read_count,
                 'like_count': like_count,
                 'comment_count': comment_count,
+            }
+            seven_day.append(temp_dict)
+        r = {
+            'total': total,
+            'seven_day': seven_day,
+        }
+        return r
+
+    @staticmethod
+    def end_index_demo_data():
+        """
+        生成demo用的展示数据
+        """
+        random_read_count = randint(200000, 1000000)
+        total = {
+            'read_count': random_read_count,
+            'like_count': randint(50000, random_read_count),
+            'comment_count': randint(50000, random_read_count),
+        }
+        seven_day = []
+        for d in range(1, 8):
+            random_day_read_count = randint(500, 2000)
+            temp_date = date.today() - timedelta(days=d)
+            temp_dict = {
+                'date': str(temp_date),
+                'read_count': random_day_read_count,
+                'like_count': randint(100, random_day_read_count),
+                'comment_count': randint(100, random_day_read_count),
             }
             seven_day.append(temp_dict)
         r = {

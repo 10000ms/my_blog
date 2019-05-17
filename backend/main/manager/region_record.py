@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 from datetime import date, timedelta
+from random import (
+    randint,
+    sample,
+)
 
 from django.db import models
 
-from ip_region import search
+from ip_region import (
+    search,
+    region_loaction,
+)
 
 
 class RegionRecordManager(models.Manager):
@@ -46,3 +53,27 @@ class RegionRecordManager(models.Manager):
             .values('region__city', 'region__lat', 'region__lng')\
             .annotate(count=models.Sum('count'))\
             .order_by('region__city')
+
+    @staticmethod
+    def _demo_data_model(city, lat, lng):
+        """
+        生成demo用的展示单条数据
+        """
+        return {
+            'region__city': city,
+            'region__lat': lat,
+            'region__lng': lng,
+            'count': randint(2, 50),
+        }
+
+    def end_index_demo_data(self):
+        """
+        生成demo用的展示数据集合
+        """
+        key = region_loaction.demo_location.keys()
+        choice_city = sample(list(key), 40)
+        res = []
+        for c in choice_city:
+            d = region_loaction.demo_location[c]
+            res.append(self._demo_data_model(c, d[1], d[0]))
+        return res

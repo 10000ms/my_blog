@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
+from ...tasks import main as celery_task
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 
 from ...serializers.comment import CommentSerializer
 from ...models.comment import Comment
-from ...models.date_record import DateRecord
-from ...permissions import IsCreatorOrReadOnly
+from ...permissions import (
+    IsCreatorOrReadOnly,
+    NoDemoUser,
+)
 
 
 class CommentViewSet(ModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (IsCreatorOrReadOnly, )
+    permission_classes = (IsCreatorOrReadOnly, NoDemoUser)
 
     def create(self, request, *args, **kwargs):
         # 合计评论计数
-        DateRecord.objects.add_comment_count()
+        celery_task.add_comment_count.delay()
         return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):

@@ -71,17 +71,27 @@ class InitIndex(APIView, PageNumberPagination):
         return w
 
     @staticmethod
-    def _count_data_from_cache():
+    def _count_data_from_cache(demo=False):
         """
         获取统计信息缓存
+        :param demo: 是否是demo模式
         """
-        c = cache.get('cache_init_index_count_data')
-        if not c:
-            c = {
-                'day': DateRecord.objects.end_index_data(),
-                'region': RegionRecord.objects.end_index_data(),
-            }
-            cache.set('cache_init_index_count_data', c, 60 * settings.CACHE_TIME)
+        if demo:
+            c = cache.get('cache_init_index_count_demo_data')
+            if not c:
+                c = {
+                    'day': DateRecord.objects.end_index_demo_data(),
+                    'region': RegionRecord.objects.end_index_demo_data(),
+                }
+                cache.set('cache_init_index_count_demo_data', c, 60 * settings.CACHE_TIME)
+        else:
+            c = cache.get('cache_init_index_count_data')
+            if not c:
+                c = {
+                    'day': DateRecord.objects.end_index_data(),
+                    'region': RegionRecord.objects.end_index_data(),
+                }
+                cache.set('cache_init_index_count_data', c, 60 * settings.CACHE_TIME)
         return c
 
     def get(self, request):
@@ -117,6 +127,13 @@ class InitIndex(APIView, PageNumberPagination):
                     'website_manage': self._website_manage_from_cache(c),
                     'user': user_serializer.data,
                     'count_data': self._count_data_from_cache(),
+                }
+            elif request.user.is_demo_user:
+                # 展示用户模式
+                d = {
+                    'website_manage': self._website_manage_from_cache(c),
+                    'user': user_serializer.data,
+                    'count_data': self._count_data_from_cache(True),
                 }
             else:
                 d = None
