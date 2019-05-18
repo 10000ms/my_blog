@@ -147,7 +147,6 @@ router.beforeEach((to, from, next) => {
     const regex = '^/admin.*$';
     if (! ((isLogin && isSuperuser) || isDemo)) {
         if (to.path.search(regex) !== -1) {
-            Vue.prototype.$Message.error('没有对应页面访问权限');
             next({path: '/'});
         }else {
             next();

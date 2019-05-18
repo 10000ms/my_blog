@@ -161,16 +161,10 @@
                 }
                 if (number === 1) {
                     res = 1;
-                } else if (number < 10) {
-                    res = 4;
-                } else if (number < 100) {
-                    res = 10;
-                } else if (number < 1000) {
-                    res = 25;
-                } else if (number < 10000) {
-                    res = 40;
+                } else if (number < 200) {
+                    res = parseInt((Math.log(number) * 5).toString());
                 } else {
-                    res = 50;
+                    res = 27;
                 }
                 return res
             },
@@ -184,7 +178,7 @@
                     },
                     style: {
                         color: this.randomColor(),
-                        speed: 1,
+                        speed: 0.5,
                         size: this.mapSize(size),
                     }
                 };

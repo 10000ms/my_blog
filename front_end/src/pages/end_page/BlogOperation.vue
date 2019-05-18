@@ -107,6 +107,15 @@
                         .catch(error => {
                             message.dealReturnMessage(error.msg, this, 'warning');
                         });
+                } else {
+                    this.id = null;
+                    this.title = '';
+                    this.brief = '';
+                    this.content = '';
+                    this.author = '';
+                    this.autoBrief = true;
+                    this.selectTabs = [];
+                    this.selectCategories = null;
                 }
             },
 
@@ -193,7 +202,13 @@
                 if (this.autoBrief) {
                     this.brief = this.getBrief(val);
                 }
-            }
+            },
+            /**
+             * 地址改变的时候重新初始化
+             */
+            '$route'() {
+                this.init()
+            },
         },
 
         computed: {

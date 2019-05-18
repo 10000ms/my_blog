@@ -36,6 +36,9 @@
                         .catch(error => {
                             message.dealReturnMessage(error.msg, this, 'warning');
                         });
+                } else {
+                    this.id = null;
+                    this.tab = '';
                 }
             },
 
@@ -73,6 +76,15 @@
                 } else if (this.mode === 'change') {
                     this.changeSubmit();
                 }
+            },
+        },
+
+        watch: {
+            /**
+             * 地址改变的时候重新初始化
+             */
+            '$route'() {
+                this.init()
             },
         },
 

@@ -42,7 +42,7 @@ class NoDemoUser(permissions.BasePermission):
     demo用户不允许使用非安全方法
     """
 
-    def has_object_permission(self, request, view, obj):
+    def has_permission(self, request, view):
         # 允许所有非修改的安全方法
         if request.method in permissions.SAFE_METHODS:
             return True

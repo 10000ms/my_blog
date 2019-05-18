@@ -30,6 +30,5 @@ def add_like_count(blog_id):
 
 
 @shared_task
-def add_comment_count(blog_id):
-    DateRecord.objects.add_like_count()
-    Blog.objects.heart(blog_id)
+def add_comment_count():
+    DateRecord.objects.add_comment_count()

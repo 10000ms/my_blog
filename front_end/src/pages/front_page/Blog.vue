@@ -111,6 +111,7 @@
                         this.$Loading.finish();
                     })
                     .catch(error => {
+                        this.$Loading.error();
                         message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },
@@ -155,6 +156,7 @@
                         this.$Loading.finish();
                     })
                     .catch(error => {
+                        this.$Loading.error();
                         message.dealReturnMessage(error.msg, this, 'warning');
                     });
             },

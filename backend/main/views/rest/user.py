@@ -7,7 +7,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.exceptions import (
     AuthenticationFailed,
-    PermissionDenied,
     ValidationError,
 )
 from rest_framework.parsers import JSONParser
@@ -73,7 +72,7 @@ class UserViewSet(ModelViewSet):
         # 是否开放注册
         p = WebsiteManage.objects.all()[:1]
         if len(p) == 0 or not p.open_register:
-            raise PermissionDenied('本网站不开放注册')
+            raise ValidationError('本网站不开放注册')
         if User.objects.custom_register(request) is True:
             res = UserSerializer(request.user, context={'request': request}).data
             return Response(create_response(data=res))

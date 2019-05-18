@@ -9,10 +9,7 @@ from django.contrib.auth import (
     login,
 )
 
-from rest_framework.exceptions import (
-    AuthenticationFailed,
-    ValidationError,
-)
+from rest_framework.exceptions import ValidationError
 
 from ..validator.auth import (
     validate_name,
@@ -61,7 +58,7 @@ class CustomUserManager(UserManager):
             if user:
                 login(request, user)
             else:
-                raise AuthenticationFailed('用户名或密码错误')
+                raise ValidationError('用户名或密码错误')
         return True
 
     def custom_register(self, request):

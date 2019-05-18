@@ -85,7 +85,7 @@ export const axiosConfig = function(message) {
                         return Promise.reject(response);
                     case 500:
                         message.error(m);
-                        return
+                        return ;
                 }
             }
             return Promise.resolve(response);
@@ -94,6 +94,19 @@ export const axiosConfig = function(message) {
             // 开发环境行对返回进行debug输出
             if (process.env.NODE_ENV === 'development') {
                 log('in development error response', error.response);
+            }
+            if (error.response.status < 200 || error.response.status > 299) {
+                switch (error.response.data.code) {
+                    case 403:
+                        message.warning(codeMsg[error.response.data.code]);
+                        return ;
+                    case 404:
+                        message.warning(codeMsg[error.response.data.code]);
+                        return ;
+                    case 500:
+                        message.error(codeMsg[error.response.data.code]);
+                        return ;
+                }
             }
             return Promise.reject(error.response);
         },
