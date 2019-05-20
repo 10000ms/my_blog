@@ -1,0 +1,23 @@
+# 表示这是 compose 配置文件第三版
+version: '3'
+
+# 每个服务都是一个 Docker 容器
+# 所以必须用 image 指定服务的镜像名或者从 Dockerfile 中 build 镜像
+services:
+  pyweb:
+    # build 指定了 Dockerfile 所在的路径
+    build: .
+    # ports 指定暴露的端口，9000 是宿主机，5000 是容器
+    # 可以指定多个暴露端口
+    ports:
+      - "9000:5000"
+    # depends_on 设定了依赖，这里 redisdemo 会先于 pyweb 启动
+    # 但是如果 redisdemo 启动时间长于 pyweb
+    # 那么 pyweb 运行的时候 redisdemo 未必可用
+    depends_on:
+      - redisdemo
+
+  redisdemo:
+    # 每个服务必须用 image 指定镜像名或者从 Dockerfile 中 build
+    # 这里用 image 指定镜像，redis:alpine 是 redis 项目的官方 Docker 镜像
+    image: "redis:alpine"

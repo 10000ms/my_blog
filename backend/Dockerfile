@@ -1,4 +1,8 @@
 FROM ubuntu:18.04
+# 输出不缓存
+ENV PYTHONUNBUFFERED 1
+# 安装时不报ssl错误
+ENV PYTHONWARNINGS ignore:Unverified HTTPS request
 
 # 使用阿里云的 apt 源
 COPY sources.list /etc/apt/sources.list
@@ -20,3 +24,6 @@ WORKDIR /code
 
 # 启动django服务
 CMD ["python3", "manage.py", "runserver", "8000"]
+
+# 暴露端口
+EXPOSE 8000
