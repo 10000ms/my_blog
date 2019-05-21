@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  webapp:
+    # 创建超级用户
+    # 因为改过默认的user model，所以要从新的默认user model中调用方法
+    # 用户名默认admin，密码默认123456，创建后可自行改密码
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        /backend/wait-for-it.sh mysql:3306
+        echo "from main.models.user import User; User.objects.create_superuser('admin', 'admin@eadmin.com', '123456')" | python3 manage.py shell

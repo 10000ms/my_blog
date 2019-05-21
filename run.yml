@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+
+  webapp:
+    command: ["/backend/wait-for-it.sh", "mysql:3306", "--", "python3", "manage.py", "runserver", "0.0.0.0:8000"]
+    ports:
+      - "8890:8000"
+    depends_on:
+      - redis
+      - mysql
+
+  celery:
+    build: backend
+    depends_on:
+      - redis
+      - mysql
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        /backend/wait-for-it.sh mysql:3306
+        celery -A my_blog worker -l info -P eventlet
+
+  redis:
+    image: "redis:5.0-alpine"

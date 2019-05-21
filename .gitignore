@@ -16,3 +16,6 @@ vcs.xml
 venv
 secret.*
 package-lock.json
+
+# 数据库volumn卷不同步
+volumn/mysql/data/*

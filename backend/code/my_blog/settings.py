@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'my_blog',
         'USER': secret.DATABASE_ACCOUNT,
         'PASSWORD': secret.DATABASE_PASSWORD,
-        'HOST': '127.0.0.1',
+        'HOST': 'mysql',
         'PORT': '3306',
     }
 }
@@ -194,10 +194,10 @@ BAIDU_AK = secret.BAIDU_AK
 
 # Broker settings.
 # 说明使用的redis的0号队列，如果有多个celery任务都使用同一个队列，则会造成任务混乱。最好是celery实例单独使用一个队列。
-BROKER_URL = 'redis://localhost/0'
+BROKER_URL = 'redis://redis:6379/0'
 
 # Using the database to store task state and results.
-CELERY_RESULT_BACKEND = 'redis://localhost/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 CELERY_ANNOTATIONS = {'*': {'rate_limit': '100/s'}}
 
