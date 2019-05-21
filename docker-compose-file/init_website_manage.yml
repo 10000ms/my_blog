@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+  webapp:
+    # 创建基础的website manage
+    # 创建后可自行修改
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        /backend/wait-for-it.sh mysql:3306
+        echo "from main.models.website_manage import WebsiteManage; WebsiteManage.objects.create(website_name='', ICP_number='', website_image='https://p.ssl.qhimg.com/dmfd/400_300_/t0120b2f23b554b8402.jpg', ad_1='https://p.ssl.qhimg.com/dmfd/400_300_/t0120b2f23b554b8402.jpg', ad_1_url='https://www.qq.com/', ad_2='https://p.ssl.qhimg.com/dmfd/400_300_/t0120b2f23b554b8402.jpg', ad_2_url='https://www.qq.com/', github='https://www.qq.com/', email='admin@admin.com', friendship_link='')" | python3 manage.py shell

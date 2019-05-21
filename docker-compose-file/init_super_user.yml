@@ -11,4 +11,4 @@ services:
       - -c
       - |
         /backend/wait-for-it.sh mysql:3306
-        echo "from main.models.user import User; User.objects.create_superuser('admin', 'admin@eadmin.com', '123456')" | python3 manage.py shell
+        echo "from main.models.user import User; User.objects.create_superuser('admin123', 'admin@eadmin.com', '123456')" | python3 manage.py shell

@@ -38,6 +38,13 @@ celery -A my_blog worker -l info -P eventlet
 CREATE DATABASE  `my_blog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
+# docker
+
+1. 项目针对docker做了调整
+2. docker-compose.yml 是基础的构建文件
+3. dokcer-compose-file文件夹内的文件为不同需求的时候使用的构筑文件
+4. 在部分操作系统下，可能会遇到权限问题，则应该赋予本项目的bash类文件相应的执行权限，再进行构筑
+
 # 备注
 ## 百度地图AK
 直接百度地图开发者中心注册帐号，创建应用即可获得AK
