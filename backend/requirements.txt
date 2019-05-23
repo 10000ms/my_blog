@@ -8,6 +8,7 @@ django-filter==2.1.0
 django-redis==4.10.0
 djangorestframework==3.9.2
 dnspython==1.16.0
+elasticsearch==7.0.1
 eventlet==0.24.1
 greenlet==0.4.15
 idna==2.8

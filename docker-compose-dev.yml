@@ -53,3 +53,12 @@ services:
     ports:
       - "33306:3306"
 
+ elasticsearch:
+    build: elasticsearch
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
+      - "ES_JAVA_OPTS=-Xms100m -Xmx100m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"

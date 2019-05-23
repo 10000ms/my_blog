@@ -218,3 +218,6 @@ CACHES = {
         }
     }
 }
+
+# ELASTICSEARCH的设置
+ELASTICSEARCH_HOST = ['elasticsearch:9200']
