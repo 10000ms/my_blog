@@ -13,7 +13,30 @@ class ESControl(Elasticsearch):
         super().__init__(hosts, transport_class, **kwargs)
 
     def index(self, index, body, doc_type='_doc', doc_id=None, params=None):
-        super().index(index, body, id=doc_id, params=params)
+        return super().index(index, body, id=doc_id, params=params)
+
+    def create(self, index, doc_id, body, doc_type='_doc', params=None):
+        return super().create(index, body, id=doc_id, params=params)
+
+    def delete(self, index, doc_id, doc_type='_doc', params=None):
+        super().delete(index, id=doc_id, params=None)
+
+    def update(self, index, doc_id, doc_type='_doc', body=None, params=None):
+        super().update(index, id=doc_id, body=None, params=None)
+
+    def auto_id_search(self, index, content):
+        body = {
+            'query': {
+                'multi_match': {
+                    'query': content,
+                    'fields': ['*'],
+                },
+            },
+            'size': 1000,
+            'stored_fields': ['_id'],
+        }
+        raw_res = super().search(index, body=body)
+        return [hit['_id'] for hit in raw_res['hits']['hits']]
 
     @staticmethod
     def _add_analyzer_to_field_dict(field_dict, analyzer='ik_max_word', search_analyzer='ik_smart'):

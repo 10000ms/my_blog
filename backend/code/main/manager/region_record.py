@@ -29,7 +29,7 @@ class RegionRecordManager(models.Manager):
         """
         因为可能存在一些未知的情况，所以即使没有成功添加，也不会报错，影响正常使用
         """
-        ip = '58.128.0.1'
+        # ip = '58.128.0.1'
         s = search.Ip2Region().search(ip)
         city_id = s['city_id']
         if city_id != 0 and city_id != 1:
