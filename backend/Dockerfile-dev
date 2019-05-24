@@ -4,12 +4,20 @@ ENV PYTHONUNBUFFERED 1
 # 安装时不报ssl错误
 ENV PYTHONWARNINGS ignore:Unverified HTTPS request
 
+# 解决source命令不生效的错误
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 # 使用阿里云的 apt 源
 COPY sources.list /etc/apt/sources.list
 RUN apt update
-RUN apt -y install python3 python3-pip
+RUN apt -y install python3 python3-pip locales
 # mysql依赖库
 RUN apt-get -y install libmysqlclient-dev libmysqld-dev default-libmysqlclient-dev python-dev python-setuptools
+
+# 设置中文环境
+RUN locale-gen en_US.UTF-8
+RUN echo "export LC_ALL=en_US.UTF-8" >> /root/.bashrc
+RUN source /etc/profile
 
 # 使用阿里云的 pip 源
 COPY pip.conf /root/.pip/pip.conf

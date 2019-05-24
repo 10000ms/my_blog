@@ -73,7 +73,7 @@
                   网站管理
                 </span>
             </MenuItem>
-            <div class="avatar-div">
+            <div class="menu-right-div">
                 <Dropdown trigger="click" @on-click="handleClick">
                     <a href="#">
                         <Avatar icon="md-person" :style="avatarStyle" size="large" :src="profile"/>

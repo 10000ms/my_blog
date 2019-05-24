@@ -43,7 +43,15 @@ class Blog(models.Model):
             'brief': self.brief,
             'content': self.content,
         }
-        es.update('blog', doc_id=self.id, body=es_body)
+        print('title 1', type(self.title))
+        print('title 2', self.title.encode().decode())
+        print('title 3', self.title)
+        print('author', self.author)
+        print('create_time', self.create_time)
+        print('last_change_time', self.last_change_time)
+        print('brief', self.brief)
+        print('content', self.content)
+        es.update('blog', id=self.id, body=es_body)
         return res
 
     def delete(self, using=None, keep_parents=False):
@@ -53,7 +61,7 @@ class Blog(models.Model):
         i = self.id
         res = super().delete(using=using, keep_parents=keep_parents)
         es = ESControl()
-        es.delete('blog', doc_id=i)
+        es.delete('blog', id=i)
         return res
 
     def __str__(self):

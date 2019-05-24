@@ -5,6 +5,7 @@ export default {
     changeUserData: (id, p) => put(`api/user/${id}/`, p),
     blog: id => get(`api/blog/${id}/`, null),
     blogs: (p=null) => get('api/blog/', p),
+    search: p => get('api/blog/search/', p),
     heart: p => post('api/blog/heart/', p),
     blogComment: p => get('api/comment/blog/', p),
     createComment: p => post(`api/comment/`, p),

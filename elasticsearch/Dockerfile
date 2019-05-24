@@ -1,13 +1,15 @@
 FROM elasticsearch:7.1.0
 
 # 换源
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+RUN wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+RUN yum makecache
 
 # 升级
-RUN apt-get update && apt-get install zip 
+RUN yum update -y && yum install unzip
 
-# 创建目录
-RUN mkdir -p /usr/share/elasticsearch/plugins/ik 
+# ik分词器复制进去
+COPY elasticsearch-analysis-ik-7.1.0.zip /root/elasticsearch-analysis-ik-7.1.0.zip
 
 # 安装分析器
-RUN /elasticsearch/bin/elasticsearch install elasticsearch-analysis-ik-5.1.1.zip
+RUN cd /usr/share/elasticsearch/plugins && mkdir ik
+RUN unzip /root/elasticsearch-analysis-ik-7.1.0.zip -d /usr/share/elasticsearch/plugins/ik

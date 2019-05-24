@@ -12,7 +12,7 @@
     }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 740px) {
     .ivu-layout-header {
         height: @menu-height;
         position: fixed;
@@ -31,7 +31,8 @@
     .iview-ui-menu {
         height: @menu-height;
 
-        .avatar-div {
+        .menu-right-div {
+            margin-right: 10px;
             line-height: @menu-height;
         }
 
@@ -49,6 +50,10 @@
             padding-right: 5px !important;
             padding-left: 5px !important;
             line-height: @menu-height !important;
+
+            .search-menu-icon {
+                font-size: 10px !important;
+            }
 
             .menu-icon {
                 display: none;

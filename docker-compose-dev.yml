@@ -10,7 +10,13 @@ services:
       - mysql
     volumes:
       - ./backend/code/:/backend/code
-    command: ["/backend/wait-for-it.sh", "mysql:3306", "--", "python3", "manage.py", "runserver", "0.0.0.0:8000"]
+    command:
+      - /bin/sh
+      - -c
+      - |
+        /backend/wait-for-it.sh mysql:3306
+        /backend/wait-for-it.sh elasticsearch:9200
+        python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
 
@@ -28,6 +34,7 @@ services:
       - -c
       - |
         /backend/wait-for-it.sh mysql:3306
+        /backend/wait-for-it.sh elasticsearch:9200
         celery -A my_blog worker -l info -P eventlet
 
   redis:
@@ -53,12 +60,14 @@ services:
     ports:
       - "33306:3306"
 
- elasticsearch:
+  elasticsearch:
     build: elasticsearch
     environment:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
-      - "ES_JAVA_OPTS=-Xms100m -Xmx100m"
+      - "ES_JAVA_OPTS=-Xms250m -Xmx250m"
+    volumes:
+      - ./volumn/elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"

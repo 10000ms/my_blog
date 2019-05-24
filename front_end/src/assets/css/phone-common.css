@@ -7,7 +7,7 @@
     width: 100%;
   }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 740px) {
   .ivu-layout-header {
     height: 50px;
     position: fixed;
@@ -23,7 +23,8 @@
   .iview-ui-menu {
     height: 50px;
   }
-  .iview-ui-menu .avatar-div {
+  .iview-ui-menu .menu-right-div {
+    margin-right: 10px;
     line-height: 50px;
   }
   .iview-ui-menu .profile-small-icon {
@@ -37,6 +38,9 @@
     padding-right: 5px !important;
     padding-left: 5px !important;
     line-height: 50px !important;
+  }
+  .iview-ui-menu .menu-menu .search-menu-icon {
+    font-size: 10px !important;
   }
   .iview-ui-menu .menu-menu .menu-icon {
     display: none;

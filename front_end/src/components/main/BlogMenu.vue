@@ -31,7 +31,12 @@
                     About Me
                 </span>
             </MenuItem>
-            <div class="avatar-div content-content-items">
+            <div class="menu-right-div content-content-items">
+                <div class="menu-menu content-content-items search-menu">
+                    <span class="span-menu" @click="clickSearch">
+                        <Icon class="search-menu-icon" type="ios-search" size="20"/>
+                    </span>
+                </div>
                 <Dropdown trigger="click" @on-click="handleClick">
                     <a href="#">
                         <div class="profile-large-icon">
@@ -82,7 +87,8 @@
         </Menu>
         <login ref="loginModel"></login>
         <register ref="registerModel"></register>
-        <user-center ref="UserCenterModel"></user-center>
+        <user-center ref="userCenterModel"></user-center>
+        <search ref="searchModel"></search>
     </div>
 </template>
 
@@ -91,6 +97,7 @@
 
     import Login from './Login';
     import Register from './Register';
+    import Search from './Search';
     import UserCenter from '../main/UserCenter';
     import message from '../../utils/message';
 
@@ -100,6 +107,7 @@
             Register,
             Login,
             UserCenter,
+            Search,
         },
 
         data() {
@@ -151,9 +159,13 @@
                         this.logout();
                         break;
                     case 'user-center':
-                        this.$refs.UserCenterModel.openModal();
+                        this.$refs.userCenterModel.openModal();
                         break;
                 }
+            },
+
+            clickSearch() {
+                this.$refs.searchModel.openModal();
             },
 
             logout() {
@@ -176,5 +188,9 @@
 </script>
 
 <style scoped>
+    .search-menu {
+        display: inline;
+        margin-right: 30px;
+    }
 
 </style>

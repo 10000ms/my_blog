@@ -17,6 +17,10 @@ export default {
             for (let i = 0; i < message.length; i++) {
                 this.dealReturnMessage(message[i], thisObject, sender);
             }
+        } else if (! message) {
+            // 空白信息直接发送
+            log(`Message ${sender}: 未知错误`);
+            thisObject.$Message[sender]('未知错误')
         } else {
             // 其他对象直接发送
             log(`Message ${sender}: ${message}`);
