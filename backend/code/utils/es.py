@@ -12,12 +12,12 @@ class ESControl(Elasticsearch):
     def __init__(self, hosts=settings.ELASTICSEARCH_HOST, transport_class=Transport, **kwargs):
         super().__init__(hosts, transport_class, **kwargs)
 
-    def auto_id_search(self, index, content):
+    def auto_id_search(self, index, content, fields):
         body = {
             'query': {
                 'multi_match': {
                     'query': content,
-                    'fields': ['*'],
+                    'fields': fields,
                 },
             },
             'size': 1000,
@@ -68,12 +68,10 @@ def start_task():
         'blog': {
             'title': 'text',
             'author': 'text',
-            'create_time': 'date',
-            'last_change_time': 'date',
             'brief': 'text',
             'content': 'text',
         },
     }
     for c in check:
-        if es.indices.exists(index=c):
+        if not es.indices.exists(index=c):
             es.create_index(c, check[c])

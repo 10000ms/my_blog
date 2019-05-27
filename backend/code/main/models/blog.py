@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.db import transaction
 
 from ..middleware.current_user import get_current_user
 from ..manager import blog
@@ -24,34 +25,54 @@ class Blog(models.Model):
 
     objects = blog.BlogManager()
 
+    def set_now_value(self):
+        """
+        把旧值记录起来，方便es更新时确定
+        :return:
+        """
+        self._title = self.title
+        self._author = self.author
+        self._brief = self.brief
+        self._content = self.content
+
+    def __init__(self, *args, **kwargs):
+        super(Blog, self).__init__(*args, **kwargs)
+        self.set_now_value()
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         """
         重写save方法，支持es搜索功能
         """
-        res = super().save(
-            force_insert=force_insert,
-            force_update=force_update,
-            using=using,
-            update_fields=update_fields
-        )
-        es = ESControl()
-        es_body = {
-            'title': self.title,
-            'author': self.author,
-            'create_time': self.create_time,
-            'last_change_time': self.last_change_time,
-            'brief': self.brief,
-            'content': self.content,
-        }
-        print('title 1', type(self.title))
-        print('title 2', self.title.encode().decode())
-        print('title 3', self.title)
-        print('author', self.author)
-        print('create_time', self.create_time)
-        print('last_change_time', self.last_change_time)
-        print('brief', self.brief)
-        print('content', self.content)
-        es.update('blog', id=self.id, body=es_body)
+        # 区分创建和修改
+        if not self.pk:
+            create_mode = True
+        else:
+            create_mode = False
+        with transaction.atomic():
+            res = super().save(
+                force_insert=force_insert,
+                force_update=force_update,
+                using=using,
+                update_fields=update_fields
+            )
+            es = ESControl()
+            es_body = {
+                'title': self.title,
+                'author': self.author,
+                'brief': self.brief,
+                'content': self.content,
+            }
+            if create_mode:
+                es.create('blog', id=self.id, body=es_body)
+            elif self._title != self.title \
+                    or self._author != self.author \
+                    or self._brief != self.brief \
+                    or self._content != self.content:
+                # 只有这些值改变才进行es数据库的修改
+                # 根据文档，增加格式
+                es_body = {'doc': es_body}
+                es.update('blog', id=self.id, body=es_body)
+        self.set_now_value()
         return res
 
     def delete(self, using=None, keep_parents=False):
@@ -59,9 +80,10 @@ class Blog(models.Model):
         重写delete方法，支持es搜索功能
         """
         i = self.id
-        res = super().delete(using=using, keep_parents=keep_parents)
         es = ESControl()
-        es.delete('blog', id=i)
+        with transaction.atomic():
+            res = super().delete(using=using, keep_parents=keep_parents)
+            es.delete('blog', id=i, ignore=404)
         return res
 
     def __str__(self):

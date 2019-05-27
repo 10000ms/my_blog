@@ -73,7 +73,7 @@ class BlogViewSet(ModelViewSet):
         """
         search_content = request.query_params.get('query')
         es = ESControl()
-        id_list = es.auto_id_search('blog', search_content)
+        id_list = es.auto_id_search('blog', search_content, ['title', 'author', 'brief', 'content'])
         blog = Blog.objects.filter(pk__in=id_list)
         page_class = self.pagination_class()
         blog_page = page_class.paginate_queryset(blog, request)

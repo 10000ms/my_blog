@@ -37,6 +37,7 @@
                             message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 } else {
+                    this.mode = 'create';
                     this.id = null;
                     this.tab = '';
                 }

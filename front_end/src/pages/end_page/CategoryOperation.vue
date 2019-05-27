@@ -60,6 +60,7 @@
                             message.dealReturnMessage(error.msg, this, 'warning');
                         });
                 } else {
+                    this.mode = 'create';
                     this.id = null;
                     this.category = '';
                     this.selectCategories = null;
