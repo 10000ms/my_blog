@@ -12,6 +12,11 @@ services:
       - elasticsearch
     volumes:
       - ./backend/code/:/backend/code
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '10'
     command:
       - /bin/sh
       - -c
@@ -38,6 +43,11 @@ services:
       - elasticsearch
     volumes:
       - ./backend/code/:/backend/code
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '10'
     command: 
       - /bin/sh
       - -c
@@ -56,6 +66,11 @@ services:
     image: "redis:5.0-alpine"
     ports:
       - "36379:6379"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '10'
     command:
       - /bin/sh
       - -c
@@ -75,6 +90,11 @@ services:
     restart: always
     volumes:
       - ./volumn/mysql/data:/var/lib/mysql
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '10'
     environment:
       # 根目录密码默认123456，可以根据需求改密码
       # 修改的时候要同时修改serect文件的密码
@@ -93,6 +113,11 @@ services:
       - "ES_JAVA_OPTS=-Xms250m -Xmx250m"
     volumes:
       - ./volumn/elasticsearch/data:/usr/share/elasticsearch/data
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '10'
     ports:
       - "9200:9200"
       - "9300:9300"
