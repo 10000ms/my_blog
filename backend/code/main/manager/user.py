@@ -38,6 +38,15 @@ class CustomUserManager(UserManager):
         login(request, u)
         return True
 
+    def create_superuser(self, username, email, password, **extra_fields):
+        """
+        重写改方法，使得superuser自动成为author
+        """
+        r = super().create_superuser(username, email, password, **extra_fields)
+        r.is_author = True
+        r.save()
+        return r
+
     @staticmethod
     def custom_login(request):
         """
