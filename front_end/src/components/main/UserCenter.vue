@@ -16,6 +16,13 @@
         <div class="dialog-single-input-div">
             <i-input v-model="profile" placeholder="头像图片URL地址"/>
         </div>
+        <div class="dialog-single-input-div" v-if="isSuperuser">
+            <span>是否是作者： </span>
+            <i-switch v-model="tempIsAuthor" size="large">
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+            </i-switch>
+        </div>
     </Modal>
 </template>
 
@@ -44,12 +51,14 @@
                 },
                 loading: true,
                 profile: this.oldProfile ? this.oldProfile : '',
+                tempIsAuthor: false,
             };
         },
 
         methods: {
             openModal() {
                 this.show = true;
+                this.tempIsAuthor = this.isAuthor;
             },
 
             changeUserData() {
@@ -58,6 +67,7 @@
                 } else {
                     let d = {
                         profile: xss(this.profile),
+                        is_author: this.tempIsAuthor,
                     };
                     this.$api.changeUserData(this.userId, d)
                         .then(res => {
@@ -88,6 +98,8 @@
             ...mapState('auth', {
                 userId: state => state.id,
                 oldProfile: state => state.profile,
+                isAuthor: state => state.isAuthor,
+                isSuperuser: state => state.isSuperuser,
             }),
         },
     }
