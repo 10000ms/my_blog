@@ -40,6 +40,8 @@ services:
       - redis
       - mysql
       - elasticsearch
+    environment:
+      - DJANGO_SETTINGS_MODULE=my_blog.test_settings
     volumes:
       - ./backend/code/:/backend/code
     logging:

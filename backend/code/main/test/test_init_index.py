@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.test import Client
-
 from ._base import BaseModelTest
 
 
@@ -56,9 +54,7 @@ class TestInitIndex(BaseModelTest):
         """
         普通用户进入前台的行为检测
         """
-        c = Client()
-        c.login(username=self.user_username, password=self.user_password)
-        res = c.get(self.front_url)
+        res = self.user_client.get(self.front_url)
         self._base_front_check(res)
         user = res.json()['data']['user']
         self.check_key_in_dict(self.user_data_key, user)
@@ -70,9 +66,7 @@ class TestInitIndex(BaseModelTest):
         """
         超级用户进入前台的行为检测
         """
-        c = Client()
-        c.login(username=self.superuser_username, password=self.superuser_password)
-        res = c.get(self.front_url)
+        res = self.superuser_client.get(self.front_url)
         self._base_front_check(res)
         user = res.json()['data']['user']
         self.check_key_in_dict(self.user_data_key, user)
@@ -84,26 +78,21 @@ class TestInitIndex(BaseModelTest):
         """
         游客进入前台的行为检测
         """
-        c = Client()
-        res = c.get(self.front_url)
+        res = self.not_login_user_client.get(self.front_url)
         self._base_front_check(res, False)
 
     def test_user_end(self):
         """
         普通用户进入后台的行为检测
         """
-        c = Client()
-        c.login(username=self.user_username, password=self.user_password)
-        res = c.get(self.end_url)
-        self.assertEqual(res.status_code, 404)
+        res = self.user_client.get(self.end_url)
+        self.check_not_found(res)
 
     def test_superuser_end(self):
         """
         超级用户进入后台的行为检测
         """
-        c = Client()
-        c.login(username=self.superuser_username, password=self.superuser_password)
-        res = c.get(self.end_url)
+        res = self.superuser_client.get(self.end_url)
         self.base_response_check(res)
         self.check_key_in_dict(self.base_end_data_key, res.json()['data'])
 
@@ -111,6 +100,5 @@ class TestInitIndex(BaseModelTest):
         """
         游客用户进入后台的行为检测
         """
-        c = Client()
-        res = c.get(self.end_url)
-        self.assertEqual(res.status_code, 404)
+        res = self.not_login_user_client.get(self.end_url)
+        self.check_not_found(res.status_code)

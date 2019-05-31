@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
 
-from django.test import TestCase
+from django.test import (
+    TestCase,
+    Client,
+)
 
 from ..models import (
     user,
@@ -14,6 +17,10 @@ class BaseModelTest(TestCase):
     superuser = None
     user = None
 
+    user_client = None
+    superuser_client = None
+    not_login_user_client = None
+
     user_username = 'user123'
     user_password = '123456'
 
@@ -21,6 +28,8 @@ class BaseModelTest(TestCase):
     superuser_password = '123456'
 
     base_response_key = ['code', 'data', 'msg']
+
+    json_content_type = 'application/json'
 
     @classmethod
     def setUpTestData(cls):
@@ -60,6 +69,12 @@ class BaseModelTest(TestCase):
                                 'http://www.1.com;'
                                 'http://www.1.com'
             )
+        # 预先建立client
+        cls.user_client = Client()
+        cls.user_client.login(username=cls.user_username, password=cls.user_password)
+        cls.superuser_client = Client()
+        cls.superuser_client.login(username=cls.superuser_username, password=cls.superuser_password)
+        cls.not_login_user_client = Client()
 
     def check_key_in_dict(self, key_list, check_dict):
         """
@@ -82,12 +97,36 @@ class BaseModelTest(TestCase):
             .format(error_key, key_list, check_dict.keys())
         self.assertTrue(res, msg=error_msg)
 
+    def response_success_check(self, response):
+        """
+        返回成功检测，200-299都判断为成功
+        :param response: 原始的返回
+        """
+        s = response.status_code
+        self.assertIsInstance(s, int)
+        self.assertGreaterEqual(s, 200)
+        self.assertLessEqual(s, 299)
+
     def base_response_check(self, response):
         """
         基本的返回检测
         :param response: 原始的返回
         """
         # 返回码200
-        self.assertEqual(response.status_code, 200)
+        self.response_success_check(response.status_code)
         # 对应的数据结果
         self.check_key_in_dict(self.base_response_key, response.json())
+
+    def check_not_found(self, response):
+        """
+        检测返回的请求是找不到
+        :param response: 原始的返回
+        """
+        self.assertEqual(response.status_code, 404)
+
+    def check_not_auth(self, response):
+        """
+        检测返回的请求是没有对应请求权限
+        :param response: 原始的返回
+        """
+        self.assertEqual(response.status_code, 403)
