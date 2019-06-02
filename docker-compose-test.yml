@@ -21,16 +21,9 @@ services:
       - /bin/sh
       - -c
       - |
-        # 确定mysql启动
-        /backend/wait-for-it.sh mysql:3306
-        # 确定elasticsearch启动
-        /backend/wait-for-it.sh elasticsearch:9200
-        # 确定redis启动
-        /backend/wait-for-it.sh redis:6379
-        # 等待20秒保证启动
-        sleep 20
-        # 启动测试
-        python3 runtests.py
+        # 确定服务启动
+        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 python3 runtests.py
+        
 
   celery:
     build:
@@ -53,20 +46,11 @@ services:
       - /bin/sh
       - -c
       - |
-        # 确定mysql启动
-        /backend/wait-for-it.sh mysql:3306
-        # 确定elasticsearch启动
-        /backend/wait-for-it.sh elasticsearch:9200
-        # 确定redis启动
-        /backend/wait-for-it.sh redis:6379
-        # 等待20秒保证启动
-        sleep 20
-        celery -A my_blog worker -l info -P eventlet
+        # 确定服务启动
+        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 celery -A my_blog worker -l info -P eventlet
 
   redis:
     image: "redis:5.0-alpine"
-    ports:
-      - "36379:6379"
     logging:
       driver: json-file
       options:
@@ -103,8 +87,6 @@ services:
       # 这个选项会自动创建数据库
       - MYSQL_DATABASE=my_blog
       - TZ=Asia/Shanghai
-    ports:
-      - "33306:3306"
 
   elasticsearch:
     build: elasticsearch
@@ -119,6 +101,3 @@ services:
       options:
         max-size: 10m
         max-file: '10'
-    ports:
-      - "9200:9200"
-      - "9300:9300"

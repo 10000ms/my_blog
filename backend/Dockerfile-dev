@@ -33,7 +33,7 @@ COPY requirements.txt /backend/requirements.txt
 RUN pip3 install -r /backend/requirements.txt
 
 # 复制wait-for-it进镜像
-COPY wait-for-it.sh /backend/wait-for-it.sh
+COPY wait-for-it.py /backend/wait-for-it.py
 
 # 将所有文件复制进/code/
 # COPY code/ /backend/code/
