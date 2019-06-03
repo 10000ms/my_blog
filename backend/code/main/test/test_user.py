@@ -28,8 +28,8 @@ class TestUser(BaseModelTest):
         d = self._base_get_user_check(self.superuser_client)
         self.assertGreaterEqual(len(d), 2)
 
-    def test_not_login_user_get_category(self):
-        d = self._base_get_user_check(self.user_client)
+    def test_not_login_user_get_user(self):
+        d = self._base_get_user_check(self.not_login_user_client)
         self.assertEqual(len(d), 0)
 
     def test_create_user(self):
@@ -49,11 +49,5 @@ class TestUser(BaseModelTest):
         pass
 
     def test_not_login_user_change_user(self):
-        pass
-
-    def test_superuser_change_user(self):
-        """
-        超级用户应该能修改自己所有的信息
-        :return:
-        """
-        pass
+        res = self.not_login_user_client.put(self._restful_url(self.user.id), {}, self.json_content_type)
+        self.check_not_found(res)
