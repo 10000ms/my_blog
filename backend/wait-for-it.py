@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import datetime
 import os
-import socket
 import time
 from sys import argv
 
 # 两次尝试时间间隔
-time_interval = 1
+time_interval = 3
 # 尝试次数
-try_time = 3
+try_time = 20
 # 本地的ip地地址
 default_address = '127.0.0.1'
 
@@ -24,7 +23,6 @@ class Manage:
     connect_socket = None
 
     def __init__(self):
-        self.socket = socket.socket()
         self.argv = argv[1:]
         self.address = []
         self.command = []
@@ -42,9 +40,7 @@ class Manage:
                 i += 1
             else:
                 break
-        if i == len(self.argv):
-            raise Exception('没有可执行的指令')
-        else:
+        if i != len(self.argv):
             self.command = self.argv[i:]
 
     @staticmethod
@@ -59,7 +55,11 @@ class Manage:
         """
         创建address
         """
-        return str(address), int(port)
+        d = {
+            'address': str(address),
+            'port': int(port),
+        }
+        return d
 
     def check_is_address_or_port(self, item):
         """
@@ -78,31 +78,45 @@ class Manage:
             return self.create_address(default_address, item)
         return False
 
-    def _test_connect(self, address):
-        t = 0
-        print('{}:尝试连接地址: <{}>'.format(str(datetime.datetime.now()), address))
-        while t < try_time:
-            status = self.socket.connect_ex(address)
+    @staticmethod
+    def _test_connect(address, port):
+        """
+        测试连接
+        """
+        t = 1
+        while t <= try_time:
+            print('{}:第{}尝试连接地址: <{}:{}>'.format(str(datetime.datetime.now()), t, address, port))
+            status = os.system('(echo > /dev/tcp/{}/{}) >/dev/null 2>&1'.format(address, port))
             if status == 0:
                 return True
             t += 1
             time.sleep(time_interval)
-        raise Exception('连接地址: <{}> 失败，尝试次数：<{}>'.format(address, t))
+        raise Exception('连接地址: <{}> 失败，总共尝试次数：<{}>'.format(address, t))
 
     def check_connect(self):
+        """
+        检测所有要连接的是否都连接上了
+        """
         for a in self.address:
-            self._test_connect(a)
+            self._test_connect(a['address'], a['port'])
         return True
 
     def exec(self):
-        os.system(' '.join(self.command))
+        """
+        执行命令
+        """
+        if len(self.command) != 0:
+            os.system(' '.join(self.command))
 
     def check_connect_and_exec(self):
+        """
+        检测所有连接成功后执行命令
+        """
         self.check_connect()
         self.exec()
 
+
 def main():
-    print(all_argv)
     m = Manage()
     m.check_connect_and_exec()
 

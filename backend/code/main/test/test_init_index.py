@@ -23,21 +23,6 @@ class TestInitIndex(BaseModelTest):
         'is_superuser',
     ]
 
-    website_manage_data_key = [
-        'ICP_number',
-        'ad_1',
-        'ad_1_url',
-        'ad_2',
-        'ad_2_url',
-        'demo_model',
-        'email',
-        'friendship_link',
-        'github',
-        'open_register',
-        'website_image',
-        'website_name',
-    ]
-
     def _base_front_check(self, response, user=True):
         self.base_response_check(response)
         data = response.json()['data']
@@ -50,29 +35,33 @@ class TestInitIndex(BaseModelTest):
             self.assertIsInstance(user_id, int)
             self.assertGreater(user_id, 0)
 
+    def _base_front(self, client, super_user=False):
+        res = client.get(self.front_url)
+        self._base_front_check(res)
+        user = res.json()['data']['user']
+        self.check_key_in_dict(self.user_data_key, user)
+        if super_user:
+            self.assertEqual(user['id'], self.superuser.id)
+            # 超级用户应该具有特殊权限
+            self.assertTrue(user['is_author'])
+            self.assertTrue(user['is_superuser'])
+        else:
+            self.assertEqual(user['id'], self.user.id)
+            # 普通用户不应该具有特殊权限
+            self.assertFalse(user['is_author'])
+            self.assertFalse(user['is_superuser'])
+
     def test_user_front(self):
         """
         普通用户进入前台的行为检测
         """
-        res = self.user_client.get(self.front_url)
-        self._base_front_check(res)
-        user = res.json()['data']['user']
-        self.check_key_in_dict(self.user_data_key, user)
-        # 普通用户不应该具有特殊权限
-        self.assertFalse(user['is_author'])
-        self.assertFalse(user['is_superuser'])
+        self._base_front(self.user_client)
 
     def test_superuser_front(self):
         """
         超级用户进入前台的行为检测
         """
-        res = self.superuser_client.get(self.front_url)
-        self._base_front_check(res)
-        user = res.json()['data']['user']
-        self.check_key_in_dict(self.user_data_key, user)
-        # 超级用户应该具有特殊权限
-        self.assertTrue(user['is_author'])
-        self.assertTrue(user['is_superuser'])
+        self._base_front(self.superuser_client, True)
 
     def test_not_login_user_front(self):
         """
@@ -101,4 +90,4 @@ class TestInitIndex(BaseModelTest):
         游客用户进入后台的行为检测
         """
         res = self.not_login_user_client.get(self.end_url)
-        self.check_not_found(res.status_code)
+        self.check_not_found(res)

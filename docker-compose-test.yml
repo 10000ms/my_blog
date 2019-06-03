@@ -11,7 +11,7 @@ services:
       - mysql
       - elasticsearch
     volumes:
-      - ./backend/code/:/backend/code
+      - ./backend/:/backend
     logging:
       driver: json-file
       options:
@@ -36,7 +36,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=my_blog.test_settings
     volumes:
-      - ./backend/code/:/backend/code
+      - ./backend/:/backend
     logging:
       driver: json-file
       options:

@@ -7,11 +7,12 @@ from ..models.tab import Tab
 
 class TestTab(BaseModelTest):
 
-    tab_url = '/api/tab/'
+    item_url = '/api/tab/'
 
     tab_key = [
         'id',
         'title',
+        'count',
     ]
 
     def setUp(self):
@@ -19,17 +20,11 @@ class TestTab(BaseModelTest):
         # 添加一个原始数据，保证数据库内的Tab不是空的
         Tab.objects.create(title=self._random_title())
 
-    def _restful_url(self, tab_id=None):
-        if tab_id:
-            return '{}{}/'.format(self.tab_url, str(tab_id))
-        else:
-            return self.tab_url
-
     @staticmethod
     def _random_title():
         return '测试标签{}'.format(uuid4().hex[:6])
 
-    def create_tab_test_date(self):
+    def create_tab_test_data(self):
         return {
             'title': self._random_title(),
         }
@@ -47,7 +42,7 @@ class TestTab(BaseModelTest):
             c = Tab.objects.filter(title=title)
             self.assertTrue(c.exists())
         else:
-            self.check_not_auth(response.status_code)
+            self.check_not_auth(response)
             c = Tab.objects.filter(title=title)
             self.assertFalse(c.exists())
 
@@ -75,7 +70,7 @@ class TestTab(BaseModelTest):
         """
         基础的创建tab检测
         """
-        t = self.create_tab_test_date()
+        t = self.create_tab_test_data()
         res = client.post(self._restful_url(), t, self.json_content_type)
         self._need_create_change_check(need_create, res, t['title'])
 
@@ -96,7 +91,7 @@ class TestTab(BaseModelTest):
         title = self._random_title()
         temp_tab = Tab.objects.create(title=title)
         # 再生成一个用于修改的信息
-        t = self.create_tab_test_date()
+        t = self.create_tab_test_data()
         res = client.put(self._restful_url(temp_tab.id), t, self.json_content_type)
         self._need_create_change_check(need_change, res, t['title'])
 
@@ -107,7 +102,7 @@ class TestTab(BaseModelTest):
         self._base_change_test(self.superuser_client, True)
 
     def test_not_login_user_change_tab(self):
-        self._base_change_test(self.not_login_user_client.delete)
+        self._base_change_test(self.not_login_user_client)
 
     def _base_delete_test(self, client, need_delete=False):
         """
@@ -118,11 +113,11 @@ class TestTab(BaseModelTest):
         temp_tab = Tab.objects.create(title=title)
         res = client.delete(self._restful_url(temp_tab.id))
         if need_delete:
-            self.base_response_check(res)
+            self.check_success_response(res)
             c = Tab.objects.filter(title=title)
             self.assertFalse(c.exists())
         else:
-            self.check_not_auth(res.status_code)
+            self.check_not_auth(res)
             c = Tab.objects.filter(title=title)
             self.assertTrue(c.exists())
 
@@ -133,4 +128,4 @@ class TestTab(BaseModelTest):
         self._base_delete_test(self.superuser_client, True)
 
     def test_not_login_user_delete_tab(self):
-        self._base_delete_test(self.not_login_user_client.delete)
+        self._base_delete_test(self.not_login_user_client)

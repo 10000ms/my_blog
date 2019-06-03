@@ -11,7 +11,7 @@ services:
       - mysql
       - elasticsearch
     volumes:
-      - ./backend/code/:/backend/code
+      - ./backend/:/backend
     logging:
       driver: json-file
       options:
@@ -21,15 +21,8 @@ services:
       - /bin/sh
       - -c
       - |
-        # 确定mysql启动
-        /backend/wait-for-it.sh mysql:3306
-        # 确定elasticsearch启动
-        /backend/wait-for-it.sh elasticsearch:9200
-        # 确定redis启动
-        /backend/wait-for-it.sh redis:6379
-        # 等待20秒保证启动
-        sleep 20
-        python3 manage.py runserver 0.0.0.0:8000
+        # 确定服务启动
+        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
 
@@ -42,7 +35,7 @@ services:
       - mysql
       - elasticsearch
     volumes:
-      - ./backend/code/:/backend/code
+      - ./backend/:/backend
     logging:
       driver: json-file
       options:
@@ -52,15 +45,8 @@ services:
       - /bin/sh
       - -c
       - |
-        # 确定mysql启动
-        /backend/wait-for-it.sh mysql:3306
-        # 确定elasticsearch启动
-        /backend/wait-for-it.sh elasticsearch:9200
-        # 确定redis启动
-        /backend/wait-for-it.sh redis:6379
-        # 等待20秒保证启动
-        sleep 20
-        celery -A my_blog worker -l info -P eventlet
+        # 确定服务启动
+        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 celery -A my_blog worker -l info -P eventlet
 
   redis:
     image: "redis:5.0-alpine"

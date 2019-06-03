@@ -31,6 +31,25 @@ class BaseModelTest(TestCase):
 
     json_content_type = 'application/json'
 
+    item_url = ''
+
+    website_manage_data_key = [
+        'ICP_number',
+        'ad_1',
+        'ad_1_url',
+        'ad_2',
+        'ad_2_url',
+        'demo_model',
+        'email',
+        'friendship_link',
+        'github',
+        'open_register',
+        'website_image',
+        'website_name',
+    ]
+
+    website_manage = None
+
     @classmethod
     def setUpTestData(cls):
         """
@@ -52,7 +71,7 @@ class BaseModelTest(TestCase):
         # 创建website_manage
         old_website_manage = website_manage.WebsiteManage.objects.all()
         if not old_website_manage.exists():
-            website_manage.WebsiteManage.objects.create(
+            cls.website_manage = website_manage.WebsiteManage.objects.create(
                 website_name='测试',
                 ICP_number='测试123456',
                 website_image='https://p.ssl.qhimg.com/dmfd/400_300_/t0120b2f23b554b8402.jpg',
@@ -97,7 +116,7 @@ class BaseModelTest(TestCase):
             .format(error_key, key_list, check_dict.keys())
         self.assertTrue(res, msg=error_msg)
 
-    def response_success_check(self, response):
+    def check_success_response(self, response):
         """
         返回成功检测，200-299都判断为成功
         :param response: 原始的返回
@@ -113,9 +132,23 @@ class BaseModelTest(TestCase):
         :param response: 原始的返回
         """
         # 返回码200
-        self.response_success_check(response.status_code)
+        self.check_success_response(response)
         # 对应的数据结果
         self.check_key_in_dict(self.base_response_key, response.json())
+
+    def check_bad_request(self, response):
+        """
+        检测返回的请求是错误请求
+        :param response: 原始的返回
+        """
+        self.assertEqual(response.status_code, 400)
+
+    def check_not_auth(self, response):
+        """
+        检测返回的请求是没有对应请求权限
+        :param response: 原始的返回
+        """
+        self.assertEqual(response.status_code, 403)
 
     def check_not_found(self, response):
         """
@@ -124,9 +157,8 @@ class BaseModelTest(TestCase):
         """
         self.assertEqual(response.status_code, 404)
 
-    def check_not_auth(self, response):
-        """
-        检测返回的请求是没有对应请求权限
-        :param response: 原始的返回
-        """
-        self.assertEqual(response.status_code, 403)
+    def _restful_url(self, item_id=None):
+        if item_id:
+            return '{}{}/'.format(self.item_url, str(item_id))
+        else:
+            return self.item_url

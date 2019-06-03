@@ -14,18 +14,18 @@ class TestOther(BaseModelTest):
         正式环境下test的url应该被关闭
         """
         res = self.superuser_client.get('/api/test/')
-        self.check_not_found(res.status_code)
+        self.check_not_found(res)
 
     def test_admin_url(self):
         """
         正式环境下admin的url应该被关闭
         """
         res = self.superuser_client.get('/admin/')
-        self.check_not_found(res.status_code)
+        self.check_not_found(res)
 
     def test_api_auth_url(self):
         """
         正式环境下api-auth的url应该被关闭
         """
         res = self.superuser_client.get('/api-auth/')
-        self.check_not_found(res.status_code)
+        self.check_not_found(res)
