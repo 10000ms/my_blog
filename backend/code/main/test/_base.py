@@ -95,6 +95,14 @@ class BaseModelTest(TestCase):
         cls.superuser_client.login(username=cls.superuser_username, password=cls.superuser_password)
         cls.not_login_user_client = Client()
 
+    def _renew_data(self):
+        """
+        有些逻辑可能需要重新获取基础数据
+        """
+        self.user = user.User.objects.get(id=self.user.id)
+        self.superuser = user.User.objects.get(id=self.superuser.id)
+        self.website_manage = website_manage.WebsiteManage.objects.get(id=self.website_manage.id)
+
     def check_key_in_dict(self, key_list, check_dict):
         """
         检测key是否在dict里面
@@ -157,8 +165,8 @@ class BaseModelTest(TestCase):
         """
         self.assertEqual(response.status_code, 404)
 
-    def _restful_url(self, item_id=None):
-        if item_id:
-            return '{}{}/'.format(self.item_url, str(item_id))
+    def _restful_url(self, item=None):
+        if item:
+            return '{}{}/'.format(self.item_url, str(item))
         else:
             return self.item_url

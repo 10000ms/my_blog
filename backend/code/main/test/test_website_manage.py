@@ -47,7 +47,7 @@ class TestWebsiteManage(BaseModelTest):
         )
         if superuser:
             self.check_success_response(res)
-            w = WebsiteManage.objects.all()[:1]
+            w = WebsiteManage.objects.all()[0]
             self.assertEqual(e, w.email)
         else:
             self.check_not_auth(res)

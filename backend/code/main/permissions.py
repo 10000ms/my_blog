@@ -47,3 +47,12 @@ class NoDemoUser(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return not request.user.is_demo_user
+
+
+class UserCannotDelete(permissions.BasePermission):
+    """
+    普通用户没有删除权限
+    """
+
+    def has_permission(self, request, view):
+        return not (request.method == 'DELETE' and not request.user.is_staff)
