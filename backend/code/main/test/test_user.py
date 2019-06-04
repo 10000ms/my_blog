@@ -21,10 +21,23 @@ class TestUser(BaseModelTest):
         self.assertIsInstance(data, list)
         return data
 
+    def _user_login_check(self, data, user=None):
+        """
+        通过获取的数据检查是否为登陆的user
+        """
+        self.assertEqual(len(data), 1)
+        if user:
+            self.assertEqual(data[0]['id'], user.id)
+
+    def _not_login_check(self, data):
+        """
+        通过获取的数据检查是否为未登陆的
+        """
+        self.assertEqual(len(data), 0)
+
     def test_user_get_user(self):
         d = self._base_get_user_check(self.user_client)
-        self.assertEqual(len(d), 1)
-        self.assertEqual(d[0]['id'], self.user.id)
+        self._user_login_check(d, self.user)
 
     def test_superuser_get_user(self):
         d = self._base_get_user_check(self.superuser_client)
@@ -32,7 +45,7 @@ class TestUser(BaseModelTest):
 
     def test_not_login_user_get_user(self):
         d = self._base_get_user_check(self.not_login_user_client)
-        self.assertEqual(len(d), 0)
+        self._not_login_check(d)
 
     def test_create_user(self):
         # 即使是超级用户也不能调用create接口
@@ -103,8 +116,7 @@ class TestUser(BaseModelTest):
         self.check_success_response(res)
         # 验证是否成功登录
         d = self._base_get_user_check(c)
-        self.assertEqual(len(d), 1)
-        self.assertEqual(d[0]['id'], self.user.id)
+        self._user_login_check(d, self.user)
 
     def test_logout(self):
         c = Client()
@@ -113,7 +125,7 @@ class TestUser(BaseModelTest):
         self.check_success_response(res)
         # 验证是否成功登出
         d = self._base_get_user_check(c)
-        self.assertEqual(len(d), 0)
+        self._not_login_check(d)
 
     def test_demo(self):
         """
@@ -127,14 +139,14 @@ class TestUser(BaseModelTest):
         res_1 = c.post(self._restful_url('demo'), {}, self.json_content_type)
         self.check_bad_request(res_1)
         d = self._base_get_user_check(c)
-        self.assertEqual(len(d), 0)
+        self._not_login_check(d)
         # 开启demo再测试
         self.website_manage.demo_model = True
         self.website_manage.save()
         res_2 = c.post(self._restful_url('demo'), {}, self.json_content_type)
         self.base_response_check(res_2)
         d = self._base_get_user_check(c)
-        self.assertEqual(len(d), 1)
+        self._user_login_check(d)
 
     def test_register(self):
         """
@@ -156,6 +168,8 @@ class TestUser(BaseModelTest):
         c = Client()
         res_1 = c.post(self._restful_url('register'), user_dict, self.json_content_type)
         self.check_bad_request(res_1)
+        d = self._base_get_user_check(c)
+        self._not_login_check(d)
         # 开启register再测试
         self.website_manage.open_register = True
         self.website_manage.save()
@@ -163,5 +177,4 @@ class TestUser(BaseModelTest):
         self.base_response_check(res_2)
         u = User.objects.get(email=email)
         d = self._base_get_user_check(c)
-        self.assertEqual(len(d), 1)
-        self.assertEqual(d[0]['id'], u.id)
+        self._user_login_check(d, u)
