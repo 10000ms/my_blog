@@ -18,7 +18,7 @@ class TestTab(BaseModelTest):
     def setUp(self):
         super().setUp()
         # 添加一个原始数据，保证数据库内的Tab不是空的
-        Tab.objects.create(title=self._random_title())
+        self.tab = self._add_tab_to_db()
 
     @staticmethod
     def _random_title():
@@ -37,13 +37,12 @@ class TestTab(BaseModelTest):
         :param response: 原始返回
         :param title: 检查的tab title
         """
+        c = Tab.objects.filter(title=title)
         if need:
             self.base_response_check(response)
-            c = Tab.objects.filter(title=title)
             self.assertTrue(c.exists())
         else:
             self.check_not_auth(response)
-            c = Tab.objects.filter(title=title)
             self.assertFalse(c.exists())
 
     def _base_get_tab_check(self, client):
@@ -112,13 +111,12 @@ class TestTab(BaseModelTest):
         title = self._random_title()
         temp_tab = Tab.objects.create(title=title)
         res = client.delete(self._restful_url(temp_tab.id))
+        c = Tab.objects.filter(title=title)
         if need_delete:
             self.check_success_response(res)
-            c = Tab.objects.filter(title=title)
             self.assertFalse(c.exists())
         else:
             self.check_not_auth(res)
-            c = Tab.objects.filter(title=title)
             self.assertTrue(c.exists())
 
     def test_user_delete_tab(self):

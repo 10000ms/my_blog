@@ -23,7 +23,7 @@ class TestCategory(BaseModelTest):
     def setUp(self):
         super().setUp()
         # 添加一个原始数据，保证数据库内的Category不是空的,并且作为父类型
-        self.base_category = Category.objects.create(title=self._random_title())
+        self.base_category = self._add_category_to_db()
 
     @staticmethod
     def _random_title():
@@ -44,13 +44,12 @@ class TestCategory(BaseModelTest):
         :param response: 原始返回
         :param title: 检查的category title
         """
+        c = Category.objects.filter(title=title)
         if need:
             self.base_response_check(response)
-            c = Category.objects.filter(title=title)
             self.assertTrue(c.exists())
         else:
             self.check_not_auth(response)
-            c = Category.objects.filter(title=title)
             self.assertFalse(c.exists())
 
     def _base_get_category_check(self, client):
@@ -119,13 +118,12 @@ class TestCategory(BaseModelTest):
         title = self._random_title()
         temp_tab = Category.objects.create(title=title)
         res = client.delete(self._restful_url(temp_tab.id))
+        c = Category.objects.filter(title=title)
         if need_delete:
             self.check_success_response(res)
-            c = Category.objects.filter(title=title)
             self.assertFalse(c.exists())
         else:
             self.check_not_auth(res)
-            c = Category.objects.filter(title=title)
             self.assertTrue(c.exists())
 
     def test_user_delete_category(self):

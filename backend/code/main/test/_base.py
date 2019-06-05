@@ -9,6 +9,9 @@ from django.test import (
 from ..models import (
     user,
     website_manage,
+    blog,
+    category,
+    tab,
 )
 
 
@@ -103,6 +106,44 @@ class BaseModelTest(TestCase):
         self.superuser = user.User.objects.get(id=self.superuser.id)
         self.website_manage = website_manage.WebsiteManage.objects.get(id=self.website_manage.id)
 
+    @staticmethod
+    def _add_tab_to_db(title=None):
+        """
+        向数据库添加一个tab
+        :param title:
+        """
+        if not title:
+            title = '测试标签{}'.format(uuid4().hex[:6])
+        return tab.Tab.objects.create(title=title)
+
+    @staticmethod
+    def _add_category_to_db(title=None):
+        """
+        向数据库添加一个category
+        :param title:
+        """
+        if not title:
+            title = '测试类型{}'.format(uuid4().hex[:6])
+        return category.Category.objects.create(title=title)
+
+    def _add_blog_to_db(self, title):
+        """
+        向数据库添加一个blog
+        :param title:
+        """
+        t = self._add_tab_to_db()
+        c = self._add_category_to_db()
+        b = blog.Blog.objects.create(
+            title=title,
+            creator=self.superuser,
+            author=self.superuser.username,
+            category=c,
+            brief=uuid4().hex,
+            content=uuid4().hex,
+        )
+        b.tabs.add(t)
+        return b
+
     def check_key_in_dict(self, key_list, check_dict):
         """
         检测key是否在dict里面
@@ -124,16 +165,6 @@ class BaseModelTest(TestCase):
             .format(error_key, key_list, check_dict.keys())
         self.assertTrue(res, msg=error_msg)
 
-    def check_success_response(self, response):
-        """
-        返回成功检测，200-299都判断为成功
-        :param response: 原始的返回
-        """
-        s = response.status_code
-        self.assertIsInstance(s, int)
-        self.assertGreaterEqual(s, 200)
-        self.assertLessEqual(s, 299)
-
     def base_response_check(self, response):
         """
         基本的返回检测
@@ -143,6 +174,16 @@ class BaseModelTest(TestCase):
         self.check_success_response(response)
         # 对应的数据结果
         self.check_key_in_dict(self.base_response_key, response.json())
+
+    def check_success_response(self, response):
+        """
+        返回成功检测，200-299都判断为成功
+        :param response: 原始的返回
+        """
+        s = response.status_code
+        self.assertIsInstance(s, int)
+        self.assertGreaterEqual(s, 200)
+        self.assertLessEqual(s, 299)
 
     def check_bad_request(self, response):
         """
@@ -165,8 +206,20 @@ class BaseModelTest(TestCase):
         """
         self.assertEqual(response.status_code, 404)
 
-    def _restful_url(self, item=None):
+    def _restful_url(self, item=None, **kwargs):
+        """
+        创建restful的url
+        :param item: 附加项目，id或者是方法名
+        :param kwargs: url query参数
+        """
         if item:
-            return '{}{}/'.format(self.item_url, str(item))
+            res = '{}{}/'.format(self.item_url, str(item))
         else:
-            return self.item_url
+            res = self.item_url
+        if kwargs:
+            args = []
+            for k in kwargs:
+                args.append('{}={}'.format(k, kwargs[k]))
+            args_string = '&'.join(args)
+            res = '{}?{}'.format(res, args_string)
+        return res

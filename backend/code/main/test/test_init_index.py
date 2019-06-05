@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from ._base import BaseModelTest
 
+from django.test import Client
+
 
 class TestInitIndex(BaseModelTest):
 
@@ -84,6 +86,25 @@ class TestInitIndex(BaseModelTest):
         res = self.superuser_client.get(self.end_url)
         self.base_response_check(res)
         self.check_key_in_dict(self.base_end_data_key, res.json()['data'])
+
+    def test_demo_user_end(self):
+        """
+        demo用户进入后台的行为检测
+        """
+        try:
+            # 开启demo再测试
+            self.website_manage.demo_model = True
+            self.website_manage.save()
+            c = Client()
+            login_res = c.post('/api/user/demo/', {}, self.json_content_type)
+            self.base_response_check(login_res)
+            res = c.get(self.end_url)
+            self.base_response_check(res)
+            self.check_key_in_dict(self.base_end_data_key, res.json()['data'])
+        finally:
+            # 测试关闭demo
+            self.website_manage.demo_model = False
+            self.website_manage.save()
 
     def test_not_login_user_end(self):
         """

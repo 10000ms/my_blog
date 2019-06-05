@@ -89,13 +89,12 @@ services:
       - TZ=Asia/Shanghai
 
   elasticsearch:
+    # 测试时不挂载volumn
     build: elasticsearch
     environment:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
       - "ES_JAVA_OPTS=-Xms250m -Xmx250m"
-    volumes:
-      - ./volumn/elasticsearch/data:/usr/share/elasticsearch/data
     logging:
       driver: json-file
       options:

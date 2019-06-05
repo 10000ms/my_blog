@@ -46,7 +46,7 @@ class NoDemoUser(permissions.BasePermission):
         # 允许所有非修改的安全方法
         if request.method in permissions.SAFE_METHODS:
             return True
-        return not request.user.is_demo_user
+        return request.user.pk and not request.user.is_demo_user
 
 
 class UserCannotDelete(permissions.BasePermission):

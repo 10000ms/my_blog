@@ -140,13 +140,18 @@ class TestUser(BaseModelTest):
         self.check_bad_request(res_1)
         d = self._base_get_user_check(c)
         self._not_login_check(d)
-        # 开启demo再测试
-        self.website_manage.demo_model = True
-        self.website_manage.save()
-        res_2 = c.post(self._restful_url('demo'), {}, self.json_content_type)
-        self.base_response_check(res_2)
-        d = self._base_get_user_check(c)
-        self._user_login_check(d)
+        try:
+            # 开启demo再测试
+            self.website_manage.demo_model = True
+            self.website_manage.save()
+            res_2 = c.post(self._restful_url('demo'), {}, self.json_content_type)
+            self.base_response_check(res_2)
+            d = self._base_get_user_check(c)
+            self._user_login_check(d)
+        finally:
+            # 测试关闭demo
+            self.website_manage.demo_model = False
+            self.website_manage.save()
 
     def test_register(self):
         """
@@ -170,11 +175,16 @@ class TestUser(BaseModelTest):
         self.check_bad_request(res_1)
         d = self._base_get_user_check(c)
         self._not_login_check(d)
-        # 开启register再测试
-        self.website_manage.open_register = True
-        self.website_manage.save()
-        res_2 = c.post(self._restful_url('register'), user_dict, self.json_content_type)
-        self.base_response_check(res_2)
-        u = User.objects.get(email=email)
-        d = self._base_get_user_check(c)
-        self._user_login_check(d, u)
+        try:
+            # 开启register再测试
+            self.website_manage.open_register = True
+            self.website_manage.save()
+            res_2 = c.post(self._restful_url('register'), user_dict, self.json_content_type)
+            self.base_response_check(res_2)
+            u = User.objects.get(email=email)
+            d = self._base_get_user_check(c)
+            self._user_login_check(d, u)
+        finally:
+            # 测试关闭register
+            self.website_manage.open_register = False
+            self.website_manage.save()
