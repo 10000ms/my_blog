@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
+from time import sleep
 
 from ._base import BaseModelTest
 from ..models.comment import Comment
+from ..models.date_record import DateRecord
 
 
 class TestComment(BaseModelTest):
@@ -19,12 +21,16 @@ class TestComment(BaseModelTest):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.blog = None
+        # 同时测试date_record部分的
+        self.today_record = None
 
     def setUp(self):
         super().setUp()
         # 添加一个原始数据，保证数据库内有blog
         self.blog = self._add_blog_to_db(uuid4().hex[:6])
         self._add_comment_to_db()
+        # 获取今天的记录
+        self.today_record = DateRecord.objects.today_record()
 
     def _add_comment_to_db(self, title=uuid4().hex[:6], user=None):
         if not user:
@@ -73,8 +79,12 @@ class TestComment(BaseModelTest):
         """
         title = uuid4().hex[:6]
         t = self.create_comment_test_data(title)
+        old_count = self.today_record.comment_count
         res = client.post(self._restful_url(), t, self.json_content_type)
         self._need_create_change_check(need_create, res, t['title'], user)
+        if need_create:
+            sleep(self.sleep_time)
+            self.assertEqual(self.today_record.comment_count, old_count + 1)
 
     def test_user_create_comment(self):
         self._base_create_test(self.user_client, self.user, True)

@@ -7,7 +7,7 @@ from sys import argv
 # 两次尝试时间间隔
 time_interval = 3
 # 尝试次数
-try_time = 20
+try_time = 60
 # 本地的ip地地址
 default_address = '127.0.0.1'
 

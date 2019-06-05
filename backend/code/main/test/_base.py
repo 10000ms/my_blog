@@ -53,6 +53,9 @@ class BaseModelTest(TestCase):
 
     website_manage = None
 
+    # 异步test暂停时间，方便统一控制
+    sleep_time = 3
+
     @classmethod
     def setUpTestData(cls):
         """

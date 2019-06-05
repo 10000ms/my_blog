@@ -7,7 +7,7 @@ from django.db import models
 
 class DateRecordManager(models.Manager):
 
-    def _today_record(self):
+    def today_record(self):
         c = self.filter(date=date.today())
         if not c.exists():
             m = self.create()
@@ -16,17 +16,17 @@ class DateRecordManager(models.Manager):
         return m
 
     def add_like_count(self):
-        m = self._today_record()
+        m = self.today_record()
         m.like_count += 1
         m.save()
 
     def add_comment_count(self):
-        m = self._today_record()
+        m = self.today_record()
         m.comment_count += 1
         m.save()
 
     def add_read_count(self):
-        m = self._today_record()
+        m = self.today_record()
         m.read_count += 1
         m.save()
 
