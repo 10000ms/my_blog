@@ -27,8 +27,11 @@ class DateRecordManager(models.Manager):
 
     def add_read_count(self):
         m = self.today_record()
+        print('add_read_count', m.id)
+        print('add_read_count', m.read_count)
         m.read_count += 1
         m.save()
+        print('add_read_count', m.read_count)
 
     def end_index_data(self):
         total = {

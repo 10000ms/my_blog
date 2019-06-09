@@ -12,7 +12,9 @@ from ..models import (
     blog,
     category,
     tab,
+    date_record,
 )
+from my_blog.celery import app
 
 
 class BaseModelTest(TestCase):
@@ -53,14 +55,16 @@ class BaseModelTest(TestCase):
 
     website_manage = None
 
-    # 异步test暂停时间，方便统一控制
-    sleep_time = 3
+    # 同时测试date_record部分的
+    today_record = None
 
     @classmethod
     def setUpTestData(cls):
         """
         重写方法增加初始信息创建
         """
+        # 设置celery为马上写入
+        app.conf.update(task_always_eager=True)
         # 创建用户
         cls.superuser = user.User.objects.create_superuser(
             cls.superuser_username,
@@ -100,6 +104,8 @@ class BaseModelTest(TestCase):
         cls.superuser_client = Client()
         cls.superuser_client.login(username=cls.superuser_username, password=cls.superuser_password)
         cls.not_login_user_client = Client()
+        # 获取今天的记录
+        cls.today_record = date_record.DateRecord.objects.today_record()
 
     def _renew_data(self):
         """

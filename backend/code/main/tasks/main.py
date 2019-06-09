@@ -15,16 +15,19 @@ def add_ip(ip):
 
 @shared_task
 def blog_add_read_count(blog_id):
+    print('in blog_add_read_count')
     Blog.objects.add_read_count(blog_id)
 
 
 @shared_task
 def add_read_count():
+    print('in add_read_count')
     DateRecord.objects.add_read_count()
 
 
 @shared_task
 def add_like_count(blog_id):
+    print('in add_like_count')
     DateRecord.objects.add_like_count()
     Blog.objects.heart(blog_id)
 

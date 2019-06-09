@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
-from time import sleep
 
 from ._base import BaseModelTest
 from ..models.blog import Blog
-from ..models.date_record import DateRecord
 
 
 class TestBlog(BaseModelTest):
@@ -32,8 +30,6 @@ class TestBlog(BaseModelTest):
         self.tab = None
         self.category = None
         self.blog = None
-        # 同时测试date_record部分的
-        self.today_record = None
 
     def setUp(self):
         super().setUp()
@@ -41,22 +37,21 @@ class TestBlog(BaseModelTest):
         self.tab = self._add_tab_to_db()
         self.category = self._add_category_to_db()
         self.blog = self._add_blog_to_db(uuid4().hex[:6])
-        # 获取今天的记录
-        self.today_record = DateRecord.objects.today_record()
 
     def _base_get_blog_check(self, client):
         """
         基础的获取blog检测
         """
-        old_count = self.today_record.read_count
+        old_day_count = self.today_record.read_count
+        old_blog_count = self.blog.read_count
         res = client.get(self._restful_url())
         self.base_response_check(res)
         data = res.json()['data']
         self.assertIsInstance(data, list)
         # 只测试其中一个即可
         self.check_key_in_dict(self.blog_key, data[0])
-        sleep(self.sleep_time)
-        self.assertGreater(self.today_record.comment_count, old_count)
+        self.assertGreater(self.blog.read_count, old_blog_count)
+        self.assertGreater(self.today_record.read_count, old_day_count)
 
     def test_user_get_blog(self):
         self._base_get_blog_check(self.user_client)
@@ -157,7 +152,8 @@ class TestBlog(BaseModelTest):
         self._base_delete_blog_check(self.not_login_user_client)
 
     def test_like(self):
-        old_like = self.today_record.like_count
+        old_day_like = self.today_record.like_count
+        old_blog_like = self.blog.like_count
         self.not_login_user_client.post(self._restful_url('heart'), {'id': self.blog.id}, self.json_content_type)
-        sleep(self.sleep_time)
-        self.assertEqual(self.today_record.like_count, old_like + 1)
+        self.assertEqual(self.blog.like_count, old_blog_like + 1)
+        self.assertEqual(self.today_record.like_count, old_day_like + 1)
