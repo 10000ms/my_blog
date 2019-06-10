@@ -16,7 +16,7 @@ class TestUser(BaseModelTest):
         基础的获取category检测
         """
         res = client.get(self._restful_url())
-        self.base_response_check(res)
+        self._base_response_check(res)
         data = res.json()['data']
         self.assertIsInstance(data, list)
         return data
@@ -50,7 +50,7 @@ class TestUser(BaseModelTest):
     def test_create_user(self):
         # 即使是超级用户也不能调用create接口
         res = self.superuser_client.post(self._restful_url(), {}, self.json_content_type)
-        self.check_not_auth(res)
+        self._check_not_auth(res)
 
     @staticmethod
     def _create_email():
@@ -71,8 +71,8 @@ class TestUser(BaseModelTest):
             {'profile': profile},
             self.json_content_type,
         )
-        self.check_success_response(res_1)
-        self._renew_data()
+        self._check_success_response(res_1)
+        self.user.refresh_from_db()
         self.assertEqual(self.user.profile, profile)
         # 修改其他人头像
         res_2 = self.user_client.put(
@@ -80,8 +80,8 @@ class TestUser(BaseModelTest):
             {'profile': profile},
             self.json_content_type,
         )
-        self.check_not_found(res_2)
-        self._renew_data()
+        self._check_not_found(res_2)
+        self.user.refresh_from_db()
         self.assertNotEqual(self.superuser.profile, profile)
         # 修改自己其他字段
         email = self._create_email()
@@ -90,21 +90,21 @@ class TestUser(BaseModelTest):
             {'email': email},
             self.json_content_type,
         )
-        self.check_not_auth(res_3)
-        self._renew_data()
+        self._check_not_auth(res_3)
+        self.user.refresh_from_db()
         self.assertNotEqual(self.user.email, email)
 
     def test_not_login_user_change_user(self):
         res = self.not_login_user_client.put(self._restful_url(self.user.id), {}, self.json_content_type)
-        self.check_not_found(res)
+        self._check_not_found(res)
 
     def test_user_delete_user(self):
         res = self.user_client.delete(self._restful_url(self.user.id))
-        self.check_not_auth(res)
+        self._check_not_auth(res)
 
     def test_not_login_user_delete_user(self):
         res = self.not_login_user_client.delete(self._restful_url(self.user.id))
-        self.check_not_auth(res)
+        self._check_not_auth(res)
 
     def test_login(self):
         c = Client()
@@ -113,7 +113,7 @@ class TestUser(BaseModelTest):
             'password': self.user_password,
         }
         res = c.post(self._restful_url('login'), login_dict, self.json_content_type)
-        self.check_success_response(res)
+        self._check_success_response(res)
         # 验证是否成功登录
         d = self._base_get_user_check(c)
         self._user_login_check(d, self.user)
@@ -122,7 +122,7 @@ class TestUser(BaseModelTest):
         c = Client()
         c.login(username=self.user_username, password=self.user_password)
         res = c.post(self._restful_url('logout'), content_type=self.json_content_type)
-        self.check_success_response(res)
+        self._check_success_response(res)
         # 验证是否成功登出
         d = self._base_get_user_check(c)
         self._not_login_check(d)
@@ -137,7 +137,7 @@ class TestUser(BaseModelTest):
         # 先测试没开放demo的情况
         c = Client()
         res_1 = c.post(self._restful_url('demo'), {}, self.json_content_type)
-        self.check_bad_request(res_1)
+        self._check_bad_request(res_1)
         d = self._base_get_user_check(c)
         self._not_login_check(d)
         try:
@@ -145,7 +145,7 @@ class TestUser(BaseModelTest):
             self.website_manage.demo_model = True
             self.website_manage.save()
             res_2 = c.post(self._restful_url('demo'), {}, self.json_content_type)
-            self.base_response_check(res_2)
+            self._base_response_check(res_2)
             d = self._base_get_user_check(c)
             self._user_login_check(d)
         finally:
@@ -172,7 +172,7 @@ class TestUser(BaseModelTest):
         }
         c = Client()
         res_1 = c.post(self._restful_url('register'), user_dict, self.json_content_type)
-        self.check_bad_request(res_1)
+        self._check_bad_request(res_1)
         d = self._base_get_user_check(c)
         self._not_login_check(d)
         try:
@@ -180,7 +180,7 @@ class TestUser(BaseModelTest):
             self.website_manage.open_register = True
             self.website_manage.save()
             res_2 = c.post(self._restful_url('register'), user_dict, self.json_content_type)
-            self.base_response_check(res_2)
+            self._base_response_check(res_2)
             u = User.objects.get(email=email)
             d = self._base_get_user_check(c)
             self._user_login_check(d, u)

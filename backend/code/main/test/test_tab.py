@@ -39,10 +39,10 @@ class TestTab(BaseModelTest):
         """
         c = Tab.objects.filter(title=title)
         if need:
-            self.base_response_check(response)
+            self._base_response_check(response)
             self.assertTrue(c.exists())
         else:
-            self.check_not_auth(response)
+            self._check_not_auth(response)
             self.assertFalse(c.exists())
 
     def _base_get_tab_check(self, client):
@@ -50,11 +50,11 @@ class TestTab(BaseModelTest):
         基础的获取tab检测
         """
         res = client.get(self._restful_url())
-        self.base_response_check(res)
+        self._base_response_check(res)
         data = res.json()['data']
         self.assertIsInstance(data, list)
         # 只测试其中一个即可
-        self.check_key_in_dict(self.tab_key, data[0])
+        self._check_key_in_dict(self.tab_key, data[0])
 
     def test_user_get_tab(self):
         self._base_get_tab_check(self.user_client)
@@ -113,10 +113,10 @@ class TestTab(BaseModelTest):
         res = client.delete(self._restful_url(temp_tab.id))
         c = Tab.objects.filter(title=title)
         if need_delete:
-            self.check_success_response(res)
+            self._check_success_response(res)
             self.assertFalse(c.exists())
         else:
-            self.check_not_auth(res)
+            self._check_not_auth(res)
             self.assertTrue(c.exists())
 
     def test_user_delete_tab(self):

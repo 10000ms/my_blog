@@ -26,13 +26,13 @@ class TestInitIndex(BaseModelTest):
     ]
 
     def _base_front_check(self, response, user=True):
-        self.base_response_check(response)
+        self._base_response_check(response)
         data = response.json()['data']
-        self.check_key_in_dict(self.base_front_data_key, data)
-        self.check_key_in_dict(self.website_manage_data_key, data['website_manage'])
+        self._check_key_in_dict(self.base_front_data_key, data)
+        self._check_key_in_dict(self.website_manage_data_key, data['website_manage'])
         # 如果是用户模式，则检测用户相关的内容
         if user:
-            self.check_key_in_dict(self.user_data_key, data['user'])
+            self._check_key_in_dict(self.user_data_key, data['user'])
             user_id = data['user']['id']
             self.assertIsInstance(user_id, int)
             self.assertGreater(user_id, 0)
@@ -41,7 +41,7 @@ class TestInitIndex(BaseModelTest):
         res = client.get(self.front_url)
         self._base_front_check(res)
         user = res.json()['data']['user']
-        self.check_key_in_dict(self.user_data_key, user)
+        self._check_key_in_dict(self.user_data_key, user)
         if super_user:
             self.assertEqual(user['id'], self.superuser.id)
             # 超级用户应该具有特殊权限
@@ -77,15 +77,15 @@ class TestInitIndex(BaseModelTest):
         普通用户进入后台的行为检测
         """
         res = self.user_client.get(self.end_url)
-        self.check_not_found(res)
+        self._check_not_found(res)
 
     def test_superuser_end(self):
         """
         超级用户进入后台的行为检测
         """
         res = self.superuser_client.get(self.end_url)
-        self.base_response_check(res)
-        self.check_key_in_dict(self.base_end_data_key, res.json()['data'])
+        self._base_response_check(res)
+        self._check_key_in_dict(self.base_end_data_key, res.json()['data'])
 
     def test_demo_user_end(self):
         """
@@ -97,10 +97,10 @@ class TestInitIndex(BaseModelTest):
             self.website_manage.save()
             c = Client()
             login_res = c.post('/api/user/demo/', {}, self.json_content_type)
-            self.base_response_check(login_res)
+            self._base_response_check(login_res)
             res = c.get(self.end_url)
-            self.base_response_check(res)
-            self.check_key_in_dict(self.base_end_data_key, res.json()['data'])
+            self._base_response_check(res)
+            self._check_key_in_dict(self.base_end_data_key, res.json()['data'])
         finally:
             # 测试关闭demo
             self.website_manage.demo_model = False
@@ -111,4 +111,4 @@ class TestInitIndex(BaseModelTest):
         游客用户进入后台的行为检测
         """
         res = self.not_login_user_client.get(self.end_url)
-        self.check_not_found(res)
+        self._check_not_found(res)

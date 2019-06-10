@@ -107,14 +107,6 @@ class BaseModelTest(TestCase):
         # 获取今天的记录
         cls.today_record = date_record.DateRecord.objects.today_record()
 
-    def _renew_data(self):
-        """
-        有些逻辑可能需要重新获取基础数据
-        """
-        self.user = user.User.objects.get(id=self.user.id)
-        self.superuser = user.User.objects.get(id=self.superuser.id)
-        self.website_manage = website_manage.WebsiteManage.objects.get(id=self.website_manage.id)
-
     @staticmethod
     def _add_tab_to_db(title=None):
         """
@@ -153,7 +145,7 @@ class BaseModelTest(TestCase):
         b.tabs.add(t)
         return b
 
-    def check_key_in_dict(self, key_list, check_dict):
+    def _check_key_in_dict(self, key_list, check_dict):
         """
         检测key是否在dict里面
         :param key_list: 待检测的key的list
@@ -174,17 +166,17 @@ class BaseModelTest(TestCase):
             .format(error_key, key_list, check_dict.keys())
         self.assertTrue(res, msg=error_msg)
 
-    def base_response_check(self, response):
+    def _base_response_check(self, response):
         """
         基本的返回检测
         :param response: 原始的返回
         """
         # 返回码200
-        self.check_success_response(response)
+        self._check_success_response(response)
         # 对应的数据结果
-        self.check_key_in_dict(self.base_response_key, response.json())
+        self._check_key_in_dict(self.base_response_key, response.json())
 
-    def check_success_response(self, response):
+    def _check_success_response(self, response):
         """
         返回成功检测，200-299都判断为成功
         :param response: 原始的返回
@@ -194,21 +186,21 @@ class BaseModelTest(TestCase):
         self.assertGreaterEqual(s, 200)
         self.assertLessEqual(s, 299)
 
-    def check_bad_request(self, response):
+    def _check_bad_request(self, response):
         """
         检测返回的请求是错误请求
         :param response: 原始的返回
         """
         self.assertEqual(response.status_code, 400)
 
-    def check_not_auth(self, response):
+    def _check_not_auth(self, response):
         """
         检测返回的请求是没有对应请求权限
         :param response: 原始的返回
         """
         self.assertEqual(response.status_code, 403)
 
-    def check_not_found(self, response):
+    def _check_not_found(self, response):
         """
         检测返回的请求是找不到
         :param response: 原始的返回

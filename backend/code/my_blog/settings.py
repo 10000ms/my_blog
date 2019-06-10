@@ -80,9 +80,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'my_blog',
-        'TEST': {
-               'NAME': 'test_my_blog',
-        },
+        # 'TEST': {
+        #        'NAME': 'test_my_blog',
+        # },
         'USER': secret.DATABASE_ACCOUNT,
         'PASSWORD': secret.DATABASE_PASSWORD,
         'HOST': 'mysql',

@@ -39,9 +39,9 @@ class TestComment(BaseModelTest):
 
     def test_get_comment(self):
         res = self.not_login_user_client.get(self._restful_url('blog', id=self.blog.id))
-        self.base_response_check(res)
+        self._base_response_check(res)
         single_comment = res.json()['data'][0]
-        self.check_key_in_dict(self.comment_key, single_comment)
+        self._check_key_in_dict(self.comment_key, single_comment)
 
     def _need_create_change_check(self, need, response, title, creator=None):
         """
@@ -53,11 +53,11 @@ class TestComment(BaseModelTest):
         """
         c = Comment.objects.filter(title=title)
         if need:
-            self.base_response_check(response)
+            self._base_response_check(response)
             self.assertTrue(c.exists())
             self.assertEqual(c[0].creator.id, creator.id)
         else:
-            self.check_not_auth(response)
+            self._check_not_auth(response)
             self.assertFalse(c.exists())
 
     def create_comment_test_data(self, title=uuid4().hex[:6]):
@@ -77,6 +77,7 @@ class TestComment(BaseModelTest):
         res = client.post(self._restful_url(), t, self.json_content_type)
         self._need_create_change_check(need_create, res, t['title'], user)
         if need_create:
+            self.today_record.refresh_from_db()
             self.assertEqual(self.today_record.comment_count, old_count + 1)
 
     def test_user_create_comment(self):
@@ -118,10 +119,10 @@ class TestComment(BaseModelTest):
         res = client.delete(self._restful_url(temp_title.id))
         c = Comment.objects.filter(title=title)
         if need_delete:
-            self.check_success_response(res)
+            self._check_success_response(res)
             self.assertFalse(c.exists())
         else:
-            self.check_not_auth(res)
+            self._check_not_auth(res)
             self.assertTrue(c.exists())
 
     def test_user_delete_comment(self):

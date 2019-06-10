@@ -50,10 +50,8 @@ class BlogViewSet(ModelViewSet):
         """
         blog_id = int(kwargs[self.lookup_field])
         with transaction.atomic():
-            # 自身的阅读计数
-            celery_task.blog_add_read_count.delay(blog_id)
-            # 合计的阅读计数
-            celery_task.add_read_count.delay()
+            # 阅读计数
+            celery_task.add_read_count.delay(blog_id)
             if settings.RECORD_REGION:
                 # 增加来源地址的统计
                 ip = self.get_client_ip(request)

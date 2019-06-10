@@ -14,7 +14,7 @@ class TestWebsiteManage(BaseModelTest):
         基础创建website_manage测试
         """
         res = client.post(self._restful_url(), {}, self.json_content_type)
-        self.check_not_auth(res)
+        self._check_not_auth(res)
 
     def test_user_create_website_manage(self):
         self._base_create_website_manage_check(self.user_client)
@@ -27,7 +27,7 @@ class TestWebsiteManage(BaseModelTest):
         基础删除website_manage测试
         """
         res = client.delete(self._restful_url(self.website_manage.id))
-        self.check_not_auth(res)
+        self._check_not_auth(res)
 
     def test_user_delete_website_manage(self):
         self._base_delete_website_manage_check(self.user_client)
@@ -46,11 +46,11 @@ class TestWebsiteManage(BaseModelTest):
             self.json_content_type
         )
         if superuser:
-            self.check_success_response(res)
+            self._check_success_response(res)
             w = WebsiteManage.objects.all()[0]
             self.assertEqual(e, w.email)
         else:
-            self.check_not_auth(res)
+            self._check_not_auth(res)
 
     def test_user_change_website_manage(self):
         self._base_change_website_manage_check(self.user_client)

@@ -42,14 +42,16 @@ class TestBlog(BaseModelTest):
         """
         基础的获取blog检测
         """
+        self.today_record.refresh_from_db()
         old_day_count = self.today_record.read_count
         old_blog_count = self.blog.read_count
-        res = client.get(self._restful_url())
-        self.base_response_check(res)
+        res = client.get(self._restful_url(self.blog.id))
+        self._base_response_check(res)
         data = res.json()['data']
-        self.assertIsInstance(data, list)
         # 只测试其中一个即可
-        self.check_key_in_dict(self.blog_key, data[0])
+        self.blog.refresh_from_db()
+        self.today_record.refresh_from_db()
+        self._check_key_in_dict(self.blog_key, data)
         self.assertGreater(self.blog.read_count, old_blog_count)
         self.assertGreater(self.today_record.read_count, old_day_count)
 
@@ -72,11 +74,11 @@ class TestBlog(BaseModelTest):
         """
         c = Blog.objects.filter(title=title)
         if need:
-            self.base_response_check(response)
+            self._base_response_check(response)
             self.assertTrue(c.exists())
             self.assertEqual(c[0].creator.id, creator.id)
         else:
-            self.check_not_auth(response)
+            self._check_not_auth(response)
             self.assertFalse(c.exists())
 
     def _base_create_blog_check(self, client, create=None, need_create=False):
@@ -136,10 +138,10 @@ class TestBlog(BaseModelTest):
         res = client.delete(self._restful_url(b.id))
         c = Blog.objects.filter(title=title)
         if need_delete:
-            self.check_success_response(res)
+            self._check_success_response(res)
             self.assertFalse(c.exists())
         else:
-            self.check_not_auth(res)
+            self._check_not_auth(res)
             self.assertTrue(c.exists())
 
     def test_user_delete_blog(self):
@@ -155,5 +157,7 @@ class TestBlog(BaseModelTest):
         old_day_like = self.today_record.like_count
         old_blog_like = self.blog.like_count
         self.not_login_user_client.post(self._restful_url('heart'), {'id': self.blog.id}, self.json_content_type)
+        self.blog.refresh_from_db()
+        self.today_record.refresh_from_db()
         self.assertEqual(self.blog.like_count, old_blog_like + 1)
         self.assertEqual(self.today_record.like_count, old_day_like + 1)
