@@ -22,7 +22,8 @@ services:
       - -c
       - |
         # 确定服务启动
-        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 python3 runtests.py
+        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 coverage run --source='.' runtests.py
+        coverage report
         
 
   celery:
