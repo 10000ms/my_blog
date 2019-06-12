@@ -3,11 +3,27 @@ FROM ubuntu:18.04
 ENV PYTHONUNBUFFERED 1
 # 安装时不报ssl错误
 ENV PYTHONWARNINGS ignore:Unverified HTTPS request
+# 中文编码问题
+ENV LANG C.UTF-8
 
-# 使用阿里云的 apt 源
+# 解决source命令不生效的错误
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# 解决ca问题
+RUN apt update
+RUN apt install -y ca-certificates
+RUN update-ca-certificates
+
+# 使用国内的 apt 源
 COPY sources.list /etc/apt/sources.list
 RUN apt update
 RUN apt -y install python3 python3-pip
+
+# 使用东8时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt install -y tzdata
+
 # mysql依赖库
 RUN apt-get -y install libmysqlclient-dev libmysqld-dev default-libmysqlclient-dev python-dev python-setuptools
 
@@ -17,7 +33,7 @@ COPY requirements.txt /backend/requirements.txt
 RUN pip3 install -r /backend/requirements.txt
 
 # 复制wait-for-it进镜像
-COPY wait-for-it.sh /backend/wait-for-it.sh
+COPY wait-for-it.py /backend/wait-for-it.py
 
 # 将所有文件复制进/code/
 COPY code/ /backend/code/

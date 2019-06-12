@@ -3,4 +3,9 @@ version: '3'
 services:
 
   webapp:
-    command: ["/backend/wait-for-it.sh", "mysql:3306", "--", "python3", "manage.py", "migrate"]
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        # 确定服务启动
+        python3 /backend/wait-for-it.py mysql:3306 python3 manage.py migrate

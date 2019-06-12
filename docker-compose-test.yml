@@ -64,7 +64,6 @@ services:
         apk add tzdata
         redis-server
 
-
   mysql:
     image: mysql:8.0
     command: 
