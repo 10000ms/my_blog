@@ -24,7 +24,7 @@ services:
         # 确定服务启动
         python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 coverage run --source='.' runtests.py
         coverage report
-        
+        flake8 . --ignore E501,F401
 
   celery:
     build:

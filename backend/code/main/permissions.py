@@ -8,11 +8,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return bool(
-            request.method in permissions.SAFE_METHODS or
-            request.user.pk and
-            request.user.is_author
-        )
+        return bool(request.method in permissions.SAFE_METHODS or request.user.pk and request.user.is_author)
 
 
 class ReadOnly(permissions.BasePermission):
