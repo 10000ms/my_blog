@@ -17,7 +17,7 @@ RUN update-ca-certificates
 # 使用国内的 apt 源
 COPY sources.list /etc/apt/sources.list
 RUN apt update
-RUN apt -y install python3 python3-pip
+RUN apt -y install python3 python3-pip supervisor
 
 # 使用东8时区
 ENV TZ=Asia/Shanghai
@@ -31,6 +31,10 @@ RUN apt-get -y install libmysqlclient-dev libmysqld-dev default-libmysqlclient-d
 COPY pip.conf /root/.pip/pip.conf
 COPY requirements.txt /backend/requirements.txt
 RUN pip3 install -r /backend/requirements.txt
+RUN pip3 install gunicorn
+
+# 将supervisor配置复制进去
+COPY supervisor.conf /etc/supervisor/conf.d/my_blog.conf
 
 # 复制wait-for-it进镜像
 COPY wait-for-it.py /backend/wait-for-it.py
@@ -42,8 +46,8 @@ COPY code/ /backend/code/
 WORKDIR /backend/code
 
 
-# 启动django服务
-#CMD ["python3", "manage.py", "runserver", "8000"]
+ 启动django服务
+CMD ["service", "supervisor", "restart"]
 
 # 暴露端口
 EXPOSE 8000
