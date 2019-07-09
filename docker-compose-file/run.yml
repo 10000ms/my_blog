@@ -63,7 +63,7 @@ services:
     environment:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
-      - "ES_JAVA_OPTS=-Xms250m -Xmx250m"
+      - "ES_JAVA_OPTS=-Xms350m -Xmx350m"
     volumes:
       - ./volumn/elasticsearch/data:/usr/share/elasticsearch/data
     logging:
@@ -91,6 +91,10 @@ services:
       options:
         max-size: 10m
         max-file: "10"
+
+  mysql:
+    networks:
+      - my-blog-network
 
 networks:
    my-blog-network:
