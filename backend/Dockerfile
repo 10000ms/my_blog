@@ -46,7 +46,7 @@ COPY code/ /backend/code/
 WORKDIR /backend/code
 
 
- 启动django服务
+# 启动django服务
 CMD ["service", "supervisor", "restart"]
 
 # 暴露端口
