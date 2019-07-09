@@ -23,7 +23,7 @@ services:
       - ./volumn/mysql/data:/var/lib/mysql
     environment:
       # 根目录密码默认123456，可以根据需求改密码
-      # 修改的时候要同时修改serect文件的密码
+      # 修改的时候要同时修改secret文件的密码
       - MYSQL_ROOT_PASSWORD=123456
       # 这个选项会自动创建数据库
       - MYSQL_DATABASE=my_blog
