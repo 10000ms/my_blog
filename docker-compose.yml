@@ -1,14 +1,17 @@
-version: '3'
+version: "3"
 
 services:
 
   webapp:
     build: backend
+    image: my_blog_webapp
     logging:
       driver: json-file
       options:
         max-size: 10m
-        max-file: '10'
+        max-file: "10"
+    volumes:
+      - ./backend/:/backend
     depends_on:
       - mysql
 
@@ -32,4 +35,4 @@ services:
       driver: json-file
       options:
         max-size: 10m
-        max-file: '10'
+        max-file: "10"

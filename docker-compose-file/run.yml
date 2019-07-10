@@ -8,15 +8,15 @@ services:
       - -c
       - |
         # 确定服务启动
-        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379 service supervisor restart
+        python3 /backend/wait-for-it.py mysql:3306 elasticsearch:9200 redis:6379
+        /usr/local/bin/gunicorn my_blog.wsgi --bind 0.0.0.0:8000
     networks:
       - my-blog-network
     depends_on:
       - redis
       - mysql
       - elasticsearch
-    volumes:
-      - ./volumn/backend:/var/log/supervisor
+    restart: always
 
   celery:
     build: backend
@@ -29,6 +29,9 @@ services:
       options:
         max-size: 10m
         max-file: "10"
+    volumes:
+      - ./backend/:/backend
+    restart: always
     networks:
       - my-blog-network
     command: 
@@ -47,14 +50,7 @@ services:
         max-file: "10"
     networks:
       - my-blog-network
-    command:
-      - /bin/sh
-      - -c
-      - |
-        # 设置时区
-        ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
-        apk add tzdata
-        redis-server
+    restart: always
 
   elasticsearch:
     build: elasticsearch
@@ -63,7 +59,7 @@ services:
     environment:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
-      - "ES_JAVA_OPTS=-Xms350m -Xmx350m"
+      - "ES_JAVA_OPTS=-Xms400m -Xmx400m"
     volumes:
       - ./volumn/elasticsearch/data:/usr/share/elasticsearch/data
     logging:
@@ -71,6 +67,7 @@ services:
       options:
         max-size: 10m
         max-file: "10"
+    restart: always
 
   nginx:
     image: nginx:1.17
@@ -91,6 +88,7 @@ services:
       options:
         max-size: 10m
         max-file: "10"
+    restart: always
 
   mysql:
     networks:
