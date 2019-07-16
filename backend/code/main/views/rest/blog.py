@@ -18,7 +18,7 @@ from ...serializers.blog import (
 from ...permissions import IsAuthorOrReadOnly
 from ...models.blog import Blog
 from utils.api_common import create_response
-from utils.es import ESControl
+# from utils.es import ESControl
 
 
 class BlogViewSet(ModelViewSet):
@@ -68,10 +68,10 @@ class BlogViewSet(ModelViewSet):
         """
         搜索
         """
-        search_content = request.query_params.get('query')
-        es = ESControl()
-        id_list = es.auto_id_search('blog', search_content, ['title', 'author', 'brief', 'content'])
-        blog = Blog.objects.filter(pk__in=id_list)
+        # search_content = request.query_params.get('query')
+        # es = ESControl()
+        # id_list = es.auto_id_search('blog', search_content, ['title', 'author', 'brief', 'content'])
+        blog = Blog.objects.all()
         page_class = self.pagination_class()
         blog_page = page_class.paginate_queryset(blog, request)
         blog_serializer = BlogSerializer(blog_page, many=True, context={'request': request})
