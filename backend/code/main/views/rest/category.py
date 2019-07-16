@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db.models.deletion import ProtectedError
 
 from rest_framework.response import Response

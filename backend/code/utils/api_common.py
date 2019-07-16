@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def create_response(code=200, msg=None, data=None, **kwargs):
     """
     創建通用的返回dict

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from rest_framework.views import exception_handler
 
 from utils.api_common import create_response

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def str_for_model(model):
     """
     更改默认打印，更可读

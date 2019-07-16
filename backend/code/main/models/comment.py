@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 
 from ..middleware.current_user import get_current_user

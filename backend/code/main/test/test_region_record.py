@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ._base import BaseModelTest
 
 from ..models.region_record import RegionRecord

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from rest_framework.renderers import JSONRenderer
 
 from utils.api_common import create_response

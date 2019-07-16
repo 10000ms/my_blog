@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ...tasks import main as celery_task
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action

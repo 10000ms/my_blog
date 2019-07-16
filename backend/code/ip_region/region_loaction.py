@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 demo_location = {
     '合肥': [
         117.17,

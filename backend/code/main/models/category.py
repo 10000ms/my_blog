@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 
 from utils.model_str import str_for_model
