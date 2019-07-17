@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.conf import settings
 from django.db import transaction
 
-from ...tasks import main as celery_task
+# from ...tasks import main as celery_task
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -48,13 +48,13 @@ class BlogViewSet(ModelViewSet):
         重写blog这个方法，增加阅读计数功能以及缓存支持
         """
         blog_id = int(kwargs[self.lookup_field])
-        with transaction.atomic():
-            # 阅读计数
-            celery_task.add_read_count.delay(blog_id)
-            if settings.RECORD_REGION:
-                # 增加来源地址的统计
-                ip = self.get_client_ip(request)
-                celery_task.add_ip.delay(ip)
+        # with transaction.atomic():
+        #     # 阅读计数
+        #     celery_task.add_read_count.delay(blog_id)
+        #     if settings.RECORD_REGION:
+        #         # 增加来源地址的统计
+        #         ip = self.get_client_ip(request)
+        #         celery_task.add_ip.delay(ip)
         b = cache.get('blog_{}'.format(blog_id))
         if not b:
             o = self.get_object()
@@ -87,9 +87,9 @@ class BlogViewSet(ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def heart(self, request):
-        blog_id = int(request.data['id'])
-        # 合计的点赞计数
-        celery_task.add_like_count.delay(blog_id)
+        # blog_id = int(request.data['id'])
+        # # 合计的点赞计数
+        # celery_task.add_like_count.delay(blog_id)
         return Response(create_response())
 
     @action(detail=False, methods=['post'], url_path='add-recommend', permission_classes=[IsAdminUser])
