@@ -1,15 +1,15 @@
 # 基于django和Vue的demo项目：个人Blog
 
-项目展示地址：[blog.tot.moe](http://blog.tot.moe) （小水管服务器，首次打开会比较慢......）
+项目展示地址：[http://182.254.192.145/](http://182.254.192.145/) （小水管服务器，首次打开会比较慢......）
 
 项目说明
 
-1. 项目使用前后端分离：前端使用Vue全家桶；后端django+Django REST framework
-2. 使用MySQL数据库进行数据的存储；使用Redis数据库提供缓存支持和Celery的任务队列；使用elasticsearch数据库提供全文搜索的支持
-3. 使用docker compose方便的进行部署和开发；使用nginx进行内部的反向代理，分离静态文件请求和api请求；使用gunicorn作为django对接的WSGI服务器，提供更好的性能和异步IO的支持；内含Jenkinsfile提供CD支持
-4. 后端实现了完整的blog功能逻辑：完整的blog及相关内容增删改查功能；动态的管理网站的logo等信息；网站的整体状况统计（每日的访客，点赞，评论数，以及访客所在地址）；demo模式：方便直接浏览后台却没有修改权限；使用缓存降低MySQL数据库的访问次数并提高访问效率；Celery异步任务：将ip地址查询和统计信息任务分离出去不影响访问效率；完整的单元测试确保代码可靠
-5. 美观好用的前端：使用vue-cli构筑的Vue作为前端框架；iView作为主要UI库；vue-router作为SPA的路由控制器；Vuex进行前端全局的数据管理；Echart提供前端图表化展示数据；可以支持不同设备的页面自适配
-6. 本地内置[ip2region](https://github.com/lionsoul2014/ip2region)数据库直接查询ip来源地址，节省网络资源。使用Baidu Map的Api进行地址和经纬度的对应，以及配合Inmap进行前端的可视化来源地图的展示
+1. 项目使用前后端分离：前端使用Vue全家桶；后端Django+Django REST framework
+2. 使用MySQL数据库进行数据的存储；使用Redis数据库提供缓存支持和Celery的任务队列；使用Elasticsearch数据库提供全文搜索的支持
+3. 使用Docker Compose方便的进行部署和开发；使用nginx进行内部的反向代理，分离静态文件请求和api请求；使用Gunicorn作为Django对接的WSGI服务器，提供更好的性能和异步IO的支持；内含Jenkinsfile提供CD支持
+4. 后端实现了完整的blog功能逻辑：完整的blog及相关内容增删改查功能；动态的管理网站的logo等信息；网站的整体状况统计（每日的访客，点赞，评论数，以及访客所在地址）；demo模式：方便直接浏览后台却没有修改权限；使用缓存降低MySQL数据库的访问次数并提高访问效率；Celery异步任务：将IP地址查询和统计信息任务分离出去不影响访问效率；完整的单元测试确保代码可靠
+5. 美观好用的前端：使用Vue Cli构筑的Vue作为前端框架；iView作为主要UI库；Vue Router作为SPA的路由控制器；Vuex进行前端全局的数据管理；Echart提供前端图表化展示数据；可以支持不同设备的页面自适配
+6. 本地内置[ip2region](https://github.com/lionsoul2014/ip2region)数据库直接查询IP来源地址，节省网络资源。使用Baidu Map的API进行地址和经纬度的对应，以及配合inMap进行前端的可视化来源地图的展示
 
 ## 图片
 1. 前台
