@@ -15,7 +15,7 @@
     "iview": "^3.2.2",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "marked": "^0.6.2",
+    "marked": "^1.1.1",
     "remove-markdown": "^0.3.0",
     "vue": "^2.5.22",
     "vue-cute-timeline": "^1.2.8",
